@@ -1,0 +1,7 @@
+﻿namespace DomainHelpers.Profiles;
+
+public record PersonalName(string FirstName, string LastName) {
+    public string? MiddleName { get; init; }
+
+    public string FullName => $"{this.FirstName} {this.LastName}";
+}
