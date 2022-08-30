@@ -1,71 +1,69 @@
-
-
-namespace DomainHelpers.Core.Validations.Validators;
-
-using System;
-using System.Collections.Generic;
 using System.Reflection;
 
-public class EqualValidator<T, TProperty> : PropertyValidator<T, TProperty>, IEqualValidator {
-    readonly Func<T, TProperty> _func;
-    private readonly string _memberDisplayName;
-    readonly IEqualityComparer<TProperty> _comparer;
+namespace DomainHelpers.Core.Validations.Validators {
+    public class EqualValidator<T, TProperty> : PropertyValidator<T, TProperty>, IEqualValidator {
+        private readonly IEqualityComparer<TProperty> _comparer;
+        private readonly Func<T, TProperty> _func;
+        private readonly string _memberDisplayName;
 
-    public override string Name => "EqualValidator";
 
-
-    public EqualValidator(TProperty valueToCompare, IEqualityComparer<TProperty> comparer = null) {
-        ValueToCompare = valueToCompare;
-        _comparer = comparer;
-    }
-
-    public EqualValidator(Func<T, TProperty> comparisonProperty, MemberInfo member, string memberDisplayName, IEqualityComparer<TProperty> comparer = null) {
-        _func = comparisonProperty;
-        _memberDisplayName = memberDisplayName;
-        MemberToCompare = member;
-        _comparer = comparer;
-    }
-
-    public override bool IsValid(ValidationContext<T> context, TProperty value) {
-        var comparisonValue = GetComparisonValue(context);
-        bool success = Compare(comparisonValue, value);
-
-        if (!success) {
-            context.MessageFormatter.AppendArgument("ComparisonValue", comparisonValue);
-            context.MessageFormatter.AppendArgument("ComparisonProperty", _memberDisplayName ?? "");
-
-            return false;
+        public EqualValidator(TProperty valueToCompare, IEqualityComparer<TProperty> comparer = null) {
+            ValueToCompare = valueToCompare;
+            _comparer = comparer;
         }
 
-        return true;
-    }
-
-    private TProperty GetComparisonValue(ValidationContext<T> context) {
-        if (_func != null) {
-            return _func(context.InstanceToValidate);
+        public EqualValidator(Func<T, TProperty> comparisonProperty, MemberInfo member, string memberDisplayName,
+            IEqualityComparer<TProperty> comparer = null) {
+            _func = comparisonProperty;
+            _memberDisplayName = memberDisplayName;
+            MemberToCompare = member;
+            _comparer = comparer;
         }
 
-        return ValueToCompare;
-    }
+        public TProperty ValueToCompare { get; }
 
-    public Comparison Comparison => Comparison.Equal;
+        public override string Name => "EqualValidator";
 
-    public MemberInfo MemberToCompare { get; private set; }
-    public TProperty ValueToCompare { get; private set; }
+        public Comparison Comparison => Comparison.Equal;
 
-    object IComparisonValidator.ValueToCompare => ValueToCompare;
+        public MemberInfo MemberToCompare { get; }
 
-    protected bool Compare(TProperty comparisonValue, TProperty propertyValue) {
-        if (_comparer != null) {
-            return _comparer.Equals(comparisonValue, propertyValue);
+        object IComparisonValidator.ValueToCompare => ValueToCompare;
+
+        public override bool IsValid(ValidationContext<T> context, TProperty value) {
+            TProperty comparisonValue = GetComparisonValue(context);
+            bool success = Compare(comparisonValue, value);
+
+            if (!success) {
+                context.MessageFormatter.AppendArgument("ComparisonValue", comparisonValue);
+                context.MessageFormatter.AppendArgument("ComparisonProperty", _memberDisplayName ?? "");
+
+                return false;
+            }
+
+            return true;
         }
 
-        return Equals(comparisonValue, propertyValue);
+        private TProperty GetComparisonValue(ValidationContext<T> context) {
+            if (_func != null) {
+                return _func(context.InstanceToValidate);
+            }
+
+            return ValueToCompare;
+        }
+
+        protected bool Compare(TProperty comparisonValue, TProperty propertyValue) {
+            if (_comparer != null) {
+                return _comparer.Equals(comparisonValue, propertyValue);
+            }
+
+            return Equals(comparisonValue, propertyValue);
+        }
+
+        protected override string GetDefaultMessageTemplate(string errorCode) {
+            return Localized(errorCode, Name);
+        }
     }
 
-    protected override string GetDefaultMessageTemplate(string errorCode) {
-        return Localized(errorCode, Name);
-    }
+    public interface IEqualValidator : IComparisonValidator { }
 }
-
-public interface IEqualValidator : IComparisonValidator { }

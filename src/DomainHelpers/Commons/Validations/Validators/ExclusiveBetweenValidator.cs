@@ -1,23 +1,20 @@
-namespace DomainHelpers.Core.Validations.Validators;
+namespace DomainHelpers.Core.Validations.Validators {
+    /// <summary>
+    ///     Performs range validation where the property value must be between the two specified values (exclusive).
+    /// </summary>
+    public class ExclusiveBetweenValidator<T, TProperty> : RangeValidator<T, TProperty> {
+        public ExclusiveBetweenValidator(TProperty from, TProperty to, IComparer<TProperty> comparer) : base(from, to,
+            comparer) { }
 
-using System.Collections.Generic;
+        public override string Name => "ExclusiveBetweenValidator";
 
-/// <summary>
-/// Performs range validation where the property value must be between the two specified values (exclusive).
-/// </summary>
-public class ExclusiveBetweenValidator<T, TProperty> : RangeValidator<T, TProperty> {
-
-    public override string Name => "ExclusiveBetweenValidator";
-
-    public ExclusiveBetweenValidator(TProperty from, TProperty to, IComparer<TProperty> comparer) : base(from, to, comparer) {
+        protected override bool HasError(TProperty value) {
+            return Compare(value, From) <= 0 || Compare(value, To) >= 0;
+        }
     }
 
-    protected override bool HasError(TProperty value) {
-        return Compare(value, From) <= 0 || Compare(value, To) >= 0;
+    public interface IBetweenValidator : IPropertyValidator {
+        object From { get; }
+        object To { get; }
     }
-}
-
-public interface IBetweenValidator : IPropertyValidator {
-    object From { get; }
-    object To { get; }
 }

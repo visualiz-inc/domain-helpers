@@ -1,16 +1,13 @@
-﻿namespace DomainHelpers.Core.Validations.Validators;
+﻿namespace DomainHelpers.Core.Validations.Validators {
+    internal class ComparableComparer<T> : IComparer<T> where T : IComparable<T> {
+        static ComparableComparer() {
+            Instance = new ComparableComparer<T>();
+        }
 
-using System;
-using System.Collections.Generic;
+        internal static ComparableComparer<T> Instance { get; }
 
-internal class ComparableComparer<T> : IComparer<T> where T : IComparable<T> {
-    internal static ComparableComparer<T> Instance { get; }
-
-    static ComparableComparer() {
-        Instance = new ComparableComparer<T>();
-    }
-
-    public int Compare(T x, T y) {
-        return x.CompareTo(y);
+        public int Compare(T x, T y) {
+            return x.CompareTo(y);
+        }
     }
 }

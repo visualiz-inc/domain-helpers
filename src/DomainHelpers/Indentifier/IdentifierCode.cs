@@ -1,68 +1,68 @@
-﻿namespace DomainHelpers.Indentifier;
-
-public abstract class IdentifierCode {
-    public abstract string Vocabs { get; }
-
-    public abstract string Separator { get; }
-
-    public abstract ImmutableArray<int> Digits { get; }
-
-    public abstract string Prefix { get; }
-
-    public int CharacterLengthWithoutSeparator => this.Digits.Aggregate(0, (x, y) => x + y);
-
-    public int TotalCharcterLength => this.Digits.Aggregate(0, (x, y) => x + y + this.Separator.Length);
-
-    public string Pattern => this.Digits
-        .Select(d => "x".Repeat(d))
-        .JoinStrings(this.Separator);
-
-    protected ImmutableArray<string> Values { get; set; }
-
-    public IdentifierCode(string src) {
-        this.Values = src switch {
-            var s when Validate(s) => this.Parse(s),
-            _ => throw new ArgumentException("srcは0-9の数値または-のみで構成されている必要があります。", nameof(src)),
-        };
-    }
-
-    public string? this[int i] => i < this.Values.Length ? this.Values[i] : null;
-
-    protected virtual bool Validate(string src) {
-        foreach (var c in src) {
-            if (Vocabs.Contains(c) is false) {
-                return false;
-            }
+﻿namespace DomainHelpers.Indentifier {
+    public abstract class IdentifierCode {
+        public IdentifierCode(string src) {
+            Values = src switch {
+                var s when Validate(s) => Parse(s),
+                _ => throw new ArgumentException("srcは0-9の数値または-のみで構成されている必要があります。", nameof(src))
+            };
         }
 
-        return true;
-    }
+        public abstract string Vocabs { get; }
 
-    protected virtual ImmutableArray<string> Parse(string source) {
-        var blocks = source.Split(this.Separator);
+        public abstract string Separator { get; }
 
-        foreach (var i in 0..this.Vocabs.Length) {
-            if (i >= blocks.Length
-                || blocks[i].Length != this.Vocabs[i]
-                || this.CheckVocabContains(blocks[i]) is false) {
-                throw new Exception();
+        public abstract ImmutableArray<int> Digits { get; }
+
+        public abstract string Prefix { get; }
+
+        public int CharacterLengthWithoutSeparator => Digits.Aggregate(0, (x, y) => x + y);
+
+        public int TotalCharcterLength => Digits.Aggregate(0, (x, y) => x + y + Separator.Length);
+
+        public string Pattern => Digits
+            .Select(d => "x".Repeat(d))
+            .JoinStrings(Separator);
+
+        protected ImmutableArray<string> Values { get; set; }
+
+        public string? this[int i] => i < Values.Length ? Values[i] : null;
+
+        protected virtual bool Validate(string src) {
+            foreach (char c in src) {
+                if (Vocabs.Contains(c) is false) {
+                    return false;
+                }
             }
+
+            return true;
         }
 
-        return blocks.ToImmutableArray();
-    }
+        protected virtual ImmutableArray<string> Parse(string source) {
+            string[] blocks = source.Split(Separator);
 
-    bool CheckVocabContains(string text) {
-        foreach (var c in text) {
-            if (this.Vocabs.Contains(c) is false) {
-                return false;
+            foreach (int i in ..Vocabs.Length) {
+                if (i >= blocks.Length
+                    || blocks[i].Length != Vocabs[i]
+                    || CheckVocabContains(blocks[i]) is false) {
+                    throw new Exception();
+                }
             }
+
+            return blocks.ToImmutableArray();
         }
 
-        return true;
-    }
+        private bool CheckVocabContains(string text) {
+            foreach (char c in text) {
+                if (Vocabs.Contains(c) is false) {
+                    return false;
+                }
+            }
 
-    public override string ToString() {
-        return this.Values.JoinStrings(this.Separator);
+            return true;
+        }
+
+        public override string ToString() {
+            return Values.JoinStrings(Separator);
+        }
     }
 }

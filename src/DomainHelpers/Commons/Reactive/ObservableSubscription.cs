@@ -1,15 +1,15 @@
-﻿namespace System;
+﻿namespace System {
+    public record ObservableSubscription : IDisposable {
+        public ObservableSubscription(Action action) {
+            Action = action;
+        }
 
-public record ObservableSubscription : IDisposable {
-    private Action? Action { get; } = null;
+        private Action? Action { get; }
 
-    public bool IsDisposed => this.Action is null;
+        public bool IsDisposed => Action is null;
 
-    public ObservableSubscription(Action action) {
-        this.Action = action;
-    }
-
-    public void Dispose() {
-        this.Action?.Invoke();
+        public void Dispose() {
+            Action?.Invoke();
+        }
     }
 }

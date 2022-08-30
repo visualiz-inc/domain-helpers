@@ -1,20 +1,15 @@
-namespace DomainHelpers.Core.Validations.Validators;
+namespace DomainHelpers.Core.Validations.Validators {
+    public class NotNullValidator<T, TProperty> : PropertyValidator<T, TProperty>, INotNullValidator {
+        public override string Name => "NotNullValidator";
 
-using Resources;
-using System;
+        public override bool IsValid(ValidationContext<T> context, TProperty value) {
+            return value != null;
+        }
 
-public class NotNullValidator<T, TProperty> : PropertyValidator<T, TProperty>, INotNullValidator {
-
-    public override string Name => "NotNullValidator";
-
-    public override bool IsValid(ValidationContext<T> context, TProperty value) {
-        return value != null;
+        protected override string GetDefaultMessageTemplate(string errorCode) {
+            return Localized(errorCode, Name);
+        }
     }
 
-    protected override string GetDefaultMessageTemplate(string errorCode) {
-        return Localized(errorCode, Name);
-    }
-}
-
-public interface INotNullValidator : IPropertyValidator {
+    public interface INotNullValidator : IPropertyValidator { }
 }

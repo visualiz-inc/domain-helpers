@@ -1,16 +1,14 @@
-namespace DomainHelpers.Core.Validations;
+using DomainHelpers.Core.Validations.Internal;
 
-using Internal;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
+namespace DomainHelpers.Core.Validations {
+    internal interface IValidationRuleInternal<T> : IValidationRule<T> {
+        ValueTask ValidateAsync(ValidationContext<T> context, bool useAsync, CancellationToken cancellation);
 
-internal interface IValidationRuleInternal<T> : IValidationRule<T> {
-    ValueTask ValidateAsync(ValidationContext<T> context, bool useAsync, CancellationToken cancellation);
+        void AddDependentRules(IEnumerable<IValidationRuleInternal<T>> rules);
+    }
 
-    void AddDependentRules(IEnumerable<IValidationRuleInternal<T>> rules);
-}
-
-internal interface IValidationRuleInternal<T, TProperty> : IValidationRule<T, TProperty>, IValidationRuleInternal<T> {
-    new List<RuleComponent<T, TProperty>> Components { get; }
+    internal interface
+        IValidationRuleInternal<T, TProperty> : IValidationRule<T, TProperty>, IValidationRuleInternal<T> {
+        new List<RuleComponent<T, TProperty>> Components { get; }
+    }
 }

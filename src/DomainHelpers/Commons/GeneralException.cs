@@ -1,138 +1,147 @@
-﻿namespace System;
+﻿namespace System {
+    public record ExceptionType;
 
-public record ExceptionType;
+    /// <summary>
+    ///     Represents the general error.
+    /// </summary>
+    public abstract class GeneralException : Exception {
+        public GeneralException(
+            string messsage,
+            string? displayMessage = null,
+            ExceptionType? exceptionType = null,
+            Ulid? eventId = null,
+            Exception? exception = null
+        ) : base(
+            messsage,
+            exception) {
+            ExceptionType = exceptionType;
+            DisplayMessage = displayMessage;
+            EventId = eventId;
+        }
 
-/// <summary>
-/// Represents the general error.
-/// </summary>
-public abstract class GeneralException : Exception {
-    public string? DisplayMessage { get; }
+        public string? DisplayMessage { get; }
 
-    public Ulid? EventId { get; }
+        public Ulid? EventId { get; }
 
-    public ExceptionType? ExceptionType { get; }
+        public ExceptionType? ExceptionType { get; }
 
-    public GeneralException(
-        string messsage,
-        string? displayMessage = null,
-        ExceptionType? exceptionType = null,
-        Ulid? eventId = null,
-        Exception? exception = null
-    ) : base(
-        messsage,
-        exception) {
-        this.ExceptionType = exceptionType;
-        DisplayMessage = displayMessage;
-        EventId = eventId;
+        public static GeneralException WithDisplayMessage(
+            string displayMessage,
+            Ulid? eventId = null
+        ) {
+            return new GeneralException<ExceptionType>(
+                null,
+                displayMessage,
+                displayMessage,
+                eventId ?? Ulid.NewUlid()
+            );
+        }
+
+        public static GeneralException<TExceptionType> WithDisplayMessage<TExceptionType>(
+            TExceptionType exceptionType,
+            string displayMessage,
+            Ulid? eventId = null
+        ) where TExceptionType : ExceptionType {
+            return new(
+                exceptionType,
+                displayMessage,
+                displayMessage,
+                eventId ?? Ulid.NewUlid()
+            );
+        }
+
+        public static GeneralException WithMessage(
+            string messsage,
+            string? displayMessage = null,
+            Exception? ex = null,
+            Ulid? eventId = null
+        ) {
+            return new GeneralException<ExceptionType>(
+                null,
+                messsage,
+                displayMessage,
+                eventId ?? Ulid.NewUlid(),
+                ex!
+            );
+        }
+
+        public static GeneralException<TExceptionType> WithMessage<TExceptionType>(
+            TExceptionType exceptionType,
+            string messsage,
+            string? displayMessage = null,
+            Exception? ex = null,
+            Ulid? eventId = null
+        ) where TExceptionType : ExceptionType {
+            return new(
+                exceptionType,
+                messsage,
+                displayMessage,
+                eventId ?? Ulid.NewUlid(),
+                ex!
+            );
+        }
+
+        public static GeneralException WithException(
+            Exception ex,
+            string? messsage = null,
+            string? displayMessage = null
+        ) {
+            return WithMessage(
+                messsage ?? ex.Message,
+                displayMessage,
+                ex
+            );
+        }
+
+        public static GeneralException WithChild(
+            GeneralException ex,
+            string messsage,
+            string? displayMessage = null
+        ) {
+            return new GeneralException<ExceptionType>(
+                null,
+                messsage,
+                displayMessage,
+                ex.EventId,
+                ex
+            );
+        }
+
+        public static GeneralException<TExceptionType> WithChild<TExceptionType>(
+            TExceptionType type,
+            GeneralException ex,
+            string messsage,
+            string? displayMessage = null
+        ) where TExceptionType : ExceptionType {
+            return new(
+                type,
+                messsage,
+                displayMessage,
+                ex.EventId,
+                ex
+            );
+        }
     }
 
-    public static GeneralException WithDisplayMessage(
-        string displayMessage,
-        Ulid? eventId = null
-    ) => new GeneralException<ExceptionType>(
-        null,
-        displayMessage,
-        displayMessage,
-        eventId ?? Ulid.NewUlid()
-    );
-
-    public static GeneralException<TExceptionType> WithDisplayMessage<TExceptionType>(
-        TExceptionType exceptionType,
-        string displayMessage,
-        Ulid? eventId = null
-    ) where TExceptionType : ExceptionType
-        => new(
-        exceptionType,
-        displayMessage,
-        displayMessage,
-        eventId ?? Ulid.NewUlid()
-    );
-
-    public static GeneralException WithMessage(
-        string messsage,
-        string? displayMessage = null,
-        Exception? ex = null,
-        Ulid? eventId = null
-    ) => new GeneralException<ExceptionType>(
-        null,
-        messsage,
-        displayMessage,
-        eventId ?? Ulid.NewUlid(),
-        ex!
-    );
-
-    public static GeneralException<TExceptionType> WithMessage<TExceptionType>(
-        TExceptionType exceptionType,
-        string messsage,
-        string? displayMessage = null,
-        Exception? ex = null,
-        Ulid? eventId = null
-    ) where TExceptionType : ExceptionType
-        => new(
-            exceptionType,
-            messsage,
-            displayMessage,
-            eventId ?? Ulid.NewUlid(),
-            ex!
-        );
-
-    public static GeneralException WithException(
-        Exception ex,
-        string? messsage = null,
-        string? displayMessage = null
-    ) => WithMessage(
-        messsage ?? ex.Message,
-        displayMessage,
-        ex
-    );
-
-    public static GeneralException WithChild(
-        GeneralException ex,
-        string messsage,
-        string? displayMessage = null
-    ) => new GeneralException<ExceptionType>(
-            null,
-            messsage,
-            displayMessage,
-            ex.EventId,
-            ex
-        );
-
-    public static GeneralException<TExceptionType> WithChild<TExceptionType>(
-        TExceptionType type,
-        GeneralException ex,
-        string messsage,
-        string? displayMessage = null
-    ) where TExceptionType : ExceptionType
-        => new(
-            type,
-            messsage,
-            displayMessage,
-            ex.EventId,
-            ex
-        );
-}
-
-/// <summary>
-/// Represents the general error.
-/// </summary>
-/// <typeparam name="TError">Error info.</typeparam>
-public class GeneralException<TExceptionType> : GeneralException
-    where TExceptionType : ExceptionType {
-    public new TExceptionType? ExceptionType
-        => (TExceptionType?)base.ExceptionType;
-
-    public GeneralException(
-        TExceptionType? exceptionType,
-        string message,
-        string? displayMessage = null,
-        Ulid? eventId = null,
-        Exception? error = null) : base(
+    /// <summary>
+    ///     Represents the general error.
+    /// </summary>
+    /// <typeparam name="TError">Error info.</typeparam>
+    public class GeneralException<TExceptionType> : GeneralException
+        where TExceptionType : ExceptionType {
+        public GeneralException(
+            TExceptionType? exceptionType,
+            string message,
+            string? displayMessage = null,
+            Ulid? eventId = null,
+            Exception? error = null) : base(
             message,
             displayMessage,
             exceptionType,
             eventId,
-            error) {
+            error) { }
 
+        public new TExceptionType? ExceptionType
+            => (TExceptionType?)base.ExceptionType;
     }
 }

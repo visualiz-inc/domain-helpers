@@ -1,4 +1,5 @@
 #region License
+
 // Copyright (c) .NET Foundation and contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,87 +15,87 @@
 // limitations under the License.
 //
 // The latest version of this file can be found at https://github.com/DomainHelpers.Core.Validations/DomainHelpers.Core.Validations
-#endregion
-namespace DomainHelpers.Core.Validations.Internal;
 
-using System.Collections.Generic;
+#endregion
+
 using System.Text.RegularExpressions;
 
-/// <summary>
-/// Assists in the construction of validation messages.
-/// </summary>
-public class MessageFormatter {
-    readonly Dictionary<string, object> _placeholderValues = new(2);
-
-    private static readonly Regex _keyRegex = new Regex("{([^{}:]+)(?::([^{}]+))?}", RegexOptions.Compiled);
-
+namespace DomainHelpers.Core.Validations.Internal {
     /// <summary>
-    /// Default Property Name placeholder.
+    ///     Assists in the construction of validation messages.
     /// </summary>
-    public const string PropertyName = "PropertyName";
+    public class MessageFormatter {
+        /// <summary>
+        ///     Default Property Name placeholder.
+        /// </summary>
+        public const string PropertyName = "PropertyName";
 
-    /// <summary>
-    /// Default Property Value placeholder.
-    /// </summary>
-    public const string PropertyValue = "PropertyValue";
+        /// <summary>
+        ///     Default Property Value placeholder.
+        /// </summary>
+        public const string PropertyValue = "PropertyValue";
 
-    /// <summary>
-    /// Adds a value for a validation message placeholder.
-    /// </summary>
-    /// <param name="name"></param>
-    /// <param name="value"></param>
-    /// <returns></returns>
-    public MessageFormatter AppendArgument(string name, object value) {
-        _placeholderValues[name] = value;
-        return this;
-    }
+        private static readonly Regex _keyRegex = new("{([^{}:]+)(?::([^{}]+))?}", RegexOptions.Compiled);
 
-    /// <summary>
-    /// Appends a property name to the message.
-    /// </summary>
-    /// <param name="name">The name of the property</param>
-    /// <returns></returns>
-    public MessageFormatter AppendPropertyName(string name) {
-        return AppendArgument(PropertyName, name);
-    }
+        /// <summary>
+        ///     Additional placeholder values
+        /// </summary>
+        public Dictionary<string, object> PlaceholderValues { get; } = new(2);
 
-    /// <summary>
-    /// Appends a property value to the message.
-    /// </summary>
-    /// <param name="value">The value of the property</param>
-    /// <returns></returns>
-    public MessageFormatter AppendPropertyValue(object value) {
-        return AppendArgument(PropertyValue, value);
-    }
+        /// <summary>
+        ///     Adds a value for a validation message placeholder.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public MessageFormatter AppendArgument(string name, object value) {
+            PlaceholderValues[name] = value;
+            return this;
+        }
 
-    /// <summary>
-    /// Constructs the final message from the specified template.
-    /// </summary>
-    /// <param name="messageTemplate">Message template</param>
-    /// <returns>The message with placeholders replaced with their appropriate values</returns>
-    public virtual string BuildMessage(string messageTemplate) {
-        return _keyRegex.Replace(messageTemplate, m => {
-            var key = m.Groups[1].Value;
+        /// <summary>
+        ///     Appends a property name to the message.
+        /// </summary>
+        /// <param name="name">The name of the property</param>
+        /// <returns></returns>
+        public MessageFormatter AppendPropertyName(string name) {
+            return AppendArgument(PropertyName, name);
+        }
 
-            if (!_placeholderValues.TryGetValue(key, out var value))
-                return m.Value; // No placeholder / value
+        /// <summary>
+        ///     Appends a property value to the message.
+        /// </summary>
+        /// <param name="value">The value of the property</param>
+        /// <returns></returns>
+        public MessageFormatter AppendPropertyValue(object value) {
+            return AppendArgument(PropertyValue, value);
+        }
 
-            var format = m.Groups[2].Success // Format specified?
-                ? $"{{0:{m.Groups[2].Value}}}"
-                : null;
+        /// <summary>
+        ///     Constructs the final message from the specified template.
+        /// </summary>
+        /// <param name="messageTemplate">Message template</param>
+        /// <returns>The message with placeholders replaced with their appropriate values</returns>
+        public virtual string BuildMessage(string messageTemplate) {
+            return _keyRegex.Replace(messageTemplate, m => {
+                string key = m.Groups[1].Value;
 
-            return format == null
-                ? value?.ToString()
-                : string.Format(format, value);
-        });
-    }
+                if (!PlaceholderValues.TryGetValue(key, out object? value)) {
+                    return m.Value; // No placeholder / value
+                }
 
-    /// <summary>
-    /// Additional placeholder values
-    /// </summary>
-    public Dictionary<string, object> PlaceholderValues => _placeholderValues;
+                string? format = m.Groups[2].Success // Format specified?
+                    ? $"{{0:{m.Groups[2].Value}}}"
+                    : null;
 
-    internal void Reset() {
-        _placeholderValues.Clear();
+                return format == null
+                    ? value?.ToString()
+                    : string.Format(format, value);
+            });
+        }
+
+        internal void Reset() {
+            PlaceholderValues.Clear();
+        }
     }
 }
