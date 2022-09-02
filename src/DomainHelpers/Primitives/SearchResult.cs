@@ -14,10 +14,11 @@
             );
         }
     }
-
     public record SearchResult<T>(
         int HitCount,
         int Offset,
         int Fetch,
-        ImmutableArray<T> Items) { }
+        ImmutableArray<T> Items) {
+        public SearchResult() { }
+    }
 }
