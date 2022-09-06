@@ -262,48 +262,64 @@ namespace System {
                 throw new ArgumentException("invalid base32 length, length:" + base32.Length);
             }
 
-            Ulid ulid = default(Ulid);
-
-            Unsafe.Add(ref Unsafe.As<Ulid, byte>(ref ulid), 15) =
-                (byte)((CharToBase32[base32[24]] << 5) | CharToBase32[base32[25]]);
+            var ulid = default(Ulid);
+            Unsafe.Add(ref Unsafe.As<Ulid, byte>(ref ulid), 15) = (byte)(
+                (CharToBase32[base32[24]] << 5) | CharToBase32[base32[25]]
+            );
 
             Unsafe.Add(ref Unsafe.As<Ulid, byte>(ref ulid), 0) =
                 (byte)((CharToBase32[base32[0]] << 5) | CharToBase32[base32[1]]);
-            Unsafe.Add(ref Unsafe.As<Ulid, byte>(ref ulid), 1) =
-                (byte)((CharToBase32[base32[2]] << 3) | (CharToBase32[base32[3]] >> 2));
-            Unsafe.Add(ref Unsafe.As<Ulid, byte>(ref ulid), 2) = (byte)((CharToBase32[base32[3]] << 6) |
-                                                                        (CharToBase32[base32[4]] << 1) |
-                                                                        (CharToBase32[base32[5]] >> 4));
+            Unsafe.Add(ref Unsafe.As<Ulid, byte>(ref ulid), 1) = (byte)(
+                (CharToBase32[base32[2]] << 3) | (CharToBase32[base32[3]] >> 2)
+            );
+            Unsafe.Add(ref Unsafe.As<Ulid, byte>(ref ulid), 2) = (byte)(
+                (CharToBase32[base32[3]] << 6) |
+                (CharToBase32[base32[4]] << 1) |
+                (CharToBase32[base32[5]] >> 4)
+            );
             Unsafe.Add(ref Unsafe.As<Ulid, byte>(ref ulid), 3) =
                 (byte)((CharToBase32[base32[5]] << 4) | (CharToBase32[base32[6]] >> 1));
-            Unsafe.Add(ref Unsafe.As<Ulid, byte>(ref ulid), 4) = (byte)((CharToBase32[base32[6]] << 7) |
-                                                                        (CharToBase32[base32[7]] << 2) |
-                                                                        (CharToBase32[base32[8]] >> 3));
-            Unsafe.Add(ref Unsafe.As<Ulid, byte>(ref ulid), 5) =
-                (byte)((CharToBase32[base32[8]] << 5) | CharToBase32[base32[9]]);
+            Unsafe.Add(ref Unsafe.As<Ulid, byte>(ref ulid), 4) = (byte)(
+                (CharToBase32[base32[6]] << 7) |
+                (CharToBase32[base32[7]] << 2) |
+                (CharToBase32[base32[8]] >> 3)
+            );
+            Unsafe.Add(ref Unsafe.As<Ulid, byte>(ref ulid), 5) = (byte)(
+                (CharToBase32[base32[8]] << 5) | CharToBase32[base32[9]]
+            );
 
             Unsafe.Add(ref Unsafe.As<Ulid, byte>(ref ulid), 6) =
                 (byte)((CharToBase32[base32[10]] << 3) | (CharToBase32[base32[11]] >> 2));
-            Unsafe.Add(ref Unsafe.As<Ulid, byte>(ref ulid), 7) = (byte)((CharToBase32[base32[11]] << 6) |
-                                                                        (CharToBase32[base32[12]] << 1) |
-                                                                        (CharToBase32[base32[13]] >> 4));
+            Unsafe.Add(ref Unsafe.As<Ulid, byte>(ref ulid), 7) = (byte)(
+                (CharToBase32[base32[11]] << 6) |
+                (CharToBase32[base32[12]] << 1) |
+                (CharToBase32[base32[13]] >> 4)
+            );
             Unsafe.Add(ref Unsafe.As<Ulid, byte>(ref ulid), 8) =
                 (byte)((CharToBase32[base32[13]] << 4) | (CharToBase32[base32[14]] >> 1));
-            Unsafe.Add(ref Unsafe.As<Ulid, byte>(ref ulid), 9) = (byte)((CharToBase32[base32[14]] << 7) |
-                                                                        (CharToBase32[base32[15]] << 2) |
-                                                                        (CharToBase32[base32[16]] >> 3));
+            Unsafe.Add(ref Unsafe.As<Ulid, byte>(ref ulid), 9) = (byte)(
+                (CharToBase32[base32[14]] << 7) |
+                (CharToBase32[base32[15]] << 2) |
+                (CharToBase32[base32[16]] >> 3)
+            );
             Unsafe.Add(ref Unsafe.As<Ulid, byte>(ref ulid), 10) =
                 (byte)((CharToBase32[base32[16]] << 5) | CharToBase32[base32[17]]);
-            Unsafe.Add(ref Unsafe.As<Ulid, byte>(ref ulid), 11) =
-                (byte)((CharToBase32[base32[18]] << 3) | (CharToBase32[base32[19]] >> 2));
-            Unsafe.Add(ref Unsafe.As<Ulid, byte>(ref ulid), 12) = (byte)((CharToBase32[base32[19]] << 6) |
-                                                                         (CharToBase32[base32[20]] << 1) |
-                                                                         (CharToBase32[base32[21]] >> 4));
+            Unsafe.Add(ref Unsafe.As<Ulid, byte>(ref ulid), 11) = (byte)(
+                (CharToBase32[base32[18]] << 3)
+                | (CharToBase32[base32[19]] >> 2)
+            );
+            Unsafe.Add(ref Unsafe.As<Ulid, byte>(ref ulid), 12) = (byte)(
+                (CharToBase32[base32[19]] << 6) |
+                (CharToBase32[base32[20]] << 1) |
+                (CharToBase32[base32[21]] >> 4)
+            );
             Unsafe.Add(ref Unsafe.As<Ulid, byte>(ref ulid), 13) =
                 (byte)((CharToBase32[base32[21]] << 4) | (CharToBase32[base32[22]] >> 1));
-            Unsafe.Add(ref Unsafe.As<Ulid, byte>(ref ulid), 14) = (byte)((CharToBase32[base32[22]] << 7) |
-                                                                         (CharToBase32[base32[23]] << 2) |
-                                                                         (CharToBase32[base32[24]] >> 3));
+            Unsafe.Add(ref Unsafe.As<Ulid, byte>(ref ulid), 14) = (byte)(
+                (CharToBase32[base32[22]] << 7) |
+                (CharToBase32[base32[23]] << 2) |
+                (CharToBase32[base32[24]] >> 3)
+            );
 
             return ulid;
         }
@@ -541,13 +557,13 @@ namespace System {
             return 0;
         }
 
-        public static implicit operator Guid(Ulid target) {
-            return target.ToGuid();
-        }
+        //public static implicit operator Guid(Ulid target) {
+        //    return target.ToGuid();
+        //}
 
-        public static implicit operator Ulid(Guid target) {
-            return new Ulid(target);
-        }
+        //public static implicit operator Ulid(Guid target) {
+        //    return new Ulid(target);
+        //}
 
         /// <summary>
         ///     Convert this <c>Ulid</c> value to a <c>Guid</c> value with the same comparability.
