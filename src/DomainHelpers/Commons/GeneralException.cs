@@ -6,13 +6,13 @@
     /// </summary>
     public abstract class GeneralException : Exception {
         public GeneralException(
-            string messsage,
+            string message,
             string? displayMessage = null,
             ExceptionType? exceptionType = null,
             Ulid? eventId = null,
             Exception? exception = null
         ) : base(
-            messsage,
+            message,
             exception) {
             ExceptionType = exceptionType;
             DisplayMessage = displayMessage;
@@ -51,14 +51,14 @@
         }
 
         public static GeneralException WithMessage(
-            string messsage,
+            string message,
             string? displayMessage = null,
             Exception? ex = null,
             Ulid? eventId = null
         ) {
             return new GeneralException<ExceptionType>(
                 null,
-                messsage,
+                message,
                 displayMessage,
                 eventId ?? Ulid.NewUlid(),
                 ex!
@@ -67,14 +67,14 @@
 
         public static GeneralException<TExceptionType> WithMessage<TExceptionType>(
             TExceptionType exceptionType,
-            string messsage,
+            string message,
             string? displayMessage = null,
             Exception? ex = null,
             Ulid? eventId = null
         ) where TExceptionType : ExceptionType {
             return new(
                 exceptionType,
-                messsage,
+                message,
                 displayMessage,
                 eventId ?? Ulid.NewUlid(),
                 ex!
@@ -83,24 +83,30 @@
 
         public static GeneralException WithException(
             Exception ex,
-            string? messsage = null,
+            string? message = null,
             string? displayMessage = null
         ) {
-            return WithMessage(
-                messsage ?? ex.Message,
-                displayMessage,
-                ex
-            );
+            return ex switch {
+                GeneralException ge => WithChild(
+                    ge,
+                    ge.Message
+                ),
+                _ => WithMessage(
+                    message ?? ex.Message,
+                    displayMessage,
+                    ex
+                )
+            };
         }
 
         public static GeneralException WithChild(
             GeneralException ex,
-            string messsage,
+            string message,
             string? displayMessage = null
         ) {
             return new GeneralException<ExceptionType>(
                 null,
-                messsage,
+                message,
                 displayMessage,
                 ex.EventId,
                 ex
@@ -110,12 +116,12 @@
         public static GeneralException<TExceptionType> WithChild<TExceptionType>(
             TExceptionType type,
             GeneralException ex,
-            string messsage,
+            string message,
             string? displayMessage = null
         ) where TExceptionType : ExceptionType {
             return new(
                 type,
-                messsage,
+                message,
                 displayMessage,
                 ex.EventId,
                 ex

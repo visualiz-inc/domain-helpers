@@ -10,7 +10,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Folder Include="Commons\Validations\Masks\" />
+	  <Compile Remove="Commons\Validations\Masks\**" />
+	  <EmbeddedResource Remove="Commons\Validations\Masks\**" />
+	  <None Remove="Commons\Validations\Masks\**" />
 	</ItemGroup>
 
 </Project>

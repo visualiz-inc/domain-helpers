@@ -29,7 +29,7 @@ namespace DomainHelpers.DataAnnotations {
         public static T ValidateAndThrowIfInvalid<T>(this T obj, string? displayMessage = null)
             where T : class {
             if (obj?.ValidateWithAnnotation() is (false, var messages)) {
-                string message = messages.GetErrorMesssages().JoinStrings("\r\n");
+                string message = messages.GetErrormessages().JoinStrings("\r\n");
                 throw new DataValidationException(
                     new DataValidationExceptionType(messages),
                     message,
@@ -51,7 +51,7 @@ namespace DomainHelpers.DataAnnotations {
                 .ToImmutableArray();
         }
 
-        public static IEnumerable<string> GetErrorMesssages(this IEnumerable<ValidationResult> messages) {
+        public static IEnumerable<string> GetErrormessages(this IEnumerable<ValidationResult> messages) {
             return messages
                 .SelectMany(
                     x => x is CompositeValidationResult c
