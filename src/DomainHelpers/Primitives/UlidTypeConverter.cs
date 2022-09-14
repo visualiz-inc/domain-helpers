@@ -1,55 +1,55 @@
 ﻿using System.ComponentModel;
 using System.Globalization;
 
-namespace System {
-    public class UlidTypeConverter : TypeConverter {
-        private static readonly Type StringType = typeof(string);
-        private static readonly Type GuidType = typeof(Guid);
+namespace System; 
 
-        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) {
-            if (sourceType == StringType || sourceType == GuidType) {
-                return true;
-            }
+public class UlidTypeConverter : TypeConverter {
+    private static readonly Type StringType = typeof(string);
+    private static readonly Type GuidType = typeof(Guid);
 
-            return base.CanConvertFrom(context, sourceType);
+    public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) {
+        if (sourceType == StringType || sourceType == GuidType) {
+            return true;
         }
 
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType) {
-            if (destinationType == StringType || destinationType == GuidType) {
-                return true;
-            }
+        return base.CanConvertFrom(context, sourceType);
+    }
 
-            return base.CanConvertTo(context, destinationType);
+    public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType) {
+        if (destinationType == StringType || destinationType == GuidType) {
+            return true;
         }
 
-        public override object ConvertFrom(ITypeDescriptorContext context,
-            CultureInfo culture, object value) {
-            switch (value) {
-                case Guid g:
-                    return new Ulid(g);
-                case string stringValue:
-                    return Ulid.Parse(stringValue);
-            }
+        return base.CanConvertTo(context, destinationType);
+    }
 
-            return base.ConvertFrom(context, culture, value);
+    public override object ConvertFrom(ITypeDescriptorContext context,
+        CultureInfo culture, object value) {
+        switch (value) {
+            case Guid g:
+                return new Ulid(g);
+            case string stringValue:
+                return Ulid.Parse(stringValue);
         }
 
-        public override object ConvertTo(
-            ITypeDescriptorContext context,
-            CultureInfo culture,
-            object value,
-            Type destinationType) {
-            if (value is Ulid ulid) {
-                if (destinationType == StringType) {
-                    return ulid.ToString();
-                }
+        return base.ConvertFrom(context, culture, value);
+    }
 
-                if (destinationType == GuidType) {
-                    return ulid.ToGuid();
-                }
+    public override object ConvertTo(
+        ITypeDescriptorContext context,
+        CultureInfo culture,
+        object value,
+        Type destinationType) {
+        if (value is Ulid ulid) {
+            if (destinationType == StringType) {
+                return ulid.ToString();
             }
 
-            return base.ConvertTo(context, culture, value, destinationType);
+            if (destinationType == GuidType) {
+                return ulid.ToGuid();
+            }
         }
+
+        return base.ConvertTo(context, culture, value, destinationType);
     }
 }

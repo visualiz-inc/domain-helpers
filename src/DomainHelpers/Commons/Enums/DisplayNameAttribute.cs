@@ -1,9 +1,9 @@
-﻿namespace System {
-    public class DisplayNameAttribute : Attribute {
-        public DisplayNameAttribute(string displayName) {
-            DisplayName = displayName;
-        }
+﻿namespace System; 
 
-        public string DisplayName { get; init; }
+public class DisplayNameAttribute : Attribute {
+    public DisplayNameAttribute(string displayName) {
+        DisplayName = displayName;
     }
+
+    public string DisplayName { get; init; }
 }

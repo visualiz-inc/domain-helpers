@@ -33,9 +33,9 @@ public record SearchResult<T> {
         int fetch,
         ImmutableArray<T> items
     ) {
-        this.HitCount = hitCount;
-        this.Items = items;
-        this.Fetch = fetch;
-        this.Offset = offset;
+        HitCount = hitCount;
+        Items = items;
+        Fetch = fetch;
+        Offset = offset;
     }
 }
