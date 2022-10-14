@@ -4,7 +4,7 @@ namespace DomainHelpers.Core.Commons;
 
 public class DataValidationException : GeneralException<DataValidationExceptionType> {
     public DataValidationException(
-        DataValidationExceptionType exceptionType,
+        DataValidationExceptionType? exceptionType,
         string message,
         string? displayMessage = null,
         Ulid? eventId = null,
@@ -12,5 +12,5 @@ public class DataValidationException : GeneralException<DataValidationExceptionT
     ) : base(exceptionType, message, displayMessage, eventId, error) { }
 
     public new DataValidationExceptionType ExceptionType =>
-        base.ExceptionType ?? throw new InvalidDataException("ExceptionType was null.");
+        base.Payload ?? throw new InvalidDataException("ExceptionType was null.");
 }

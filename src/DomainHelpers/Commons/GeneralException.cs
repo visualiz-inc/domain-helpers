@@ -15,21 +15,20 @@ public class GeneralException : Exception {
     public GeneralException(
         string message,
         string? displayMessage = null,
-        object? exceptionType = null,
+        object? payload = null,
         Ulid? eventId = null,
         Exception? exception = null
     ) : base(
         message,
-        exception
-    ) {
-        Payload = exceptionType;
+        exception) {
+        Payload = payload;
         DisplayMessage = displayMessage;
         EventId = eventId;
 
         // Additional data
         Data.Add(nameof(EventId), eventId.ToString());
         Data.Add(nameof(DisplayMessage), displayMessage);
-        Data.Add(nameof(Payload), exceptionType);
+        Data.Add(nameof(Payload), payload);
     }
 
     public string? DisplayMessage { get; }
@@ -127,14 +126,14 @@ public class GeneralException : Exception {
         );
     }
 
-    public static GeneralException<TExceptionType> WithChild<TExceptionType>(
-        TExceptionType type,
+    public static GeneralException<TPayload> WithChild<TPayload>(
+        TPayload payload,
         GeneralException ex,
         string message,
         string? displayMessage = null
     ) {
         return new(
-            type,
+            payload,
             message,
             displayMessage,
             ex.EventId,
@@ -147,19 +146,20 @@ public class GeneralException : Exception {
 ///     Represents the general error.
 /// </summary>
 /// <typeparam name="TError">Error info.</typeparam>
-public class GeneralException<TExceptionType> : GeneralException {
+public class GeneralException<TPayload> : GeneralException{
     public GeneralException(
-        TExceptionType? exceptionType,
+        TPayload? payload,
         string message,
         string? displayMessage = null,
         Ulid? eventId = null,
-        Exception? error = null) : base(
+        Exception? error = null
+        ) : base(
         message,
         displayMessage,
-        exceptionType,
+        payload,
         eventId,
-        error) { }
+        error
+            ) { }
 
-    public new TExceptionType? ExceptionType
-        => (TExceptionType?)base.Payload;
+    public new TPayload? Payload => (TPayload?)base.Payload;
 }
