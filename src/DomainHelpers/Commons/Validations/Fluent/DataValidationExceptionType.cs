@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DomainHelpers.Core.Commons.Validations; 
+namespace DomainHelpers.Core.Commons.Validations;
 
-public record DataValidationExceptionType : ExceptionType {
+public record DataValidationExceptionType {
     public DataValidationExceptionType(ImmutableArray<ValidationResult> results) {
         ValidationResults = results;
     }

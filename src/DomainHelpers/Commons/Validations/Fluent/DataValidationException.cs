@@ -4,7 +4,7 @@ namespace DomainHelpers.Core.Commons;
 
 public class DataValidationException : GeneralException<DataValidationExceptionType> {
     public DataValidationException(
-        DataValidationExceptionType exceptionType,
+        DataValidationExceptionType? exceptionType,
         string message,
         string? displayMessage = null,
         Ulid? eventId = null,

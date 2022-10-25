@@ -1,11 +1,17 @@
 ﻿namespace System;
 
-public record ExceptionType;
-
 /// <summary>
 ///     Represents the general error.
 /// </summary>
-public abstract class GeneralException : Exception {
+public class GeneralException : Exception {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="message"></param>
+    /// <param name="displayMessage"></param>
+    /// <param name="exceptionType"></param>
+    /// <param name="eventId"></param>
+    /// <param name="exception"></param>
     public GeneralException(
         string message,
         string? displayMessage = null,
@@ -18,6 +24,11 @@ public abstract class GeneralException : Exception {
         Payload = payload;
         DisplayMessage = displayMessage;
         EventId = eventId;
+
+        // Additional data
+        Data.Add(nameof(EventId), eventId.ToString());
+        Data.Add(nameof(DisplayMessage), displayMessage);
+        Data.Add(nameof(Payload), payload);
     }
 
     public string? DisplayMessage { get; }
@@ -30,7 +41,7 @@ public abstract class GeneralException : Exception {
         string displayMessage,
         Ulid? eventId = null
     ) {
-        return new GeneralException<ExceptionType>(
+        return new GeneralException<object>(
             null,
             displayMessage,
             displayMessage,
@@ -38,11 +49,11 @@ public abstract class GeneralException : Exception {
         );
     }
 
-    public static GeneralException<TExceptionType> WithDisplayMessage<TExceptionType>(
-        TExceptionType exceptionType,
+    public static GeneralException<TPayload> WithDisplayMessage<TPayload>(
+        TPayload exceptionType,
         string displayMessage,
         Ulid? eventId = null
-    ) where TExceptionType : ExceptionType {
+    ) {
         return new(
             exceptionType,
             displayMessage,
@@ -57,7 +68,7 @@ public abstract class GeneralException : Exception {
         Exception? ex = null,
         Ulid? eventId = null
     ) {
-        return new GeneralException<ExceptionType>(
+        return new GeneralException<object>(
             null,
             message,
             displayMessage,
@@ -66,13 +77,13 @@ public abstract class GeneralException : Exception {
         );
     }
 
-    public static GeneralException<TExceptionType> WithMessage<TExceptionType>(
-        TExceptionType exceptionType,
+    public static GeneralException<TPayload> WithMessage<TPayload>(
+        TPayload exceptionType,
         string message,
         string? displayMessage,
         Exception? ex = null,
         Ulid? eventId = null
-    ) where TExceptionType : ExceptionType {
+    ) {
         return new(
             exceptionType,
             message,
@@ -90,7 +101,8 @@ public abstract class GeneralException : Exception {
         return ex switch {
             GeneralException ge => WithChild(
                 ge,
-                ge.Message
+                ge.Message,
+                ge.DisplayMessage
             ),
             _ => WithMessage(
                 message ?? ex.Message,
@@ -105,7 +117,7 @@ public abstract class GeneralException : Exception {
         string message,
         string? displayMessage = null
     ) {
-        return new GeneralException<ExceptionType>(
+        return new GeneralException<object>(
             null,
             message,
             displayMessage,
