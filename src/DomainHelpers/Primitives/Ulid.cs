@@ -16,7 +16,7 @@ namespace System;
 [DebuggerDisplay("{ToString(),nq}")]
 [TypeConverter(typeof(UlidTypeConverter))]
 [JsonConverter(typeof(UlidJsonConverter))]
-public struct Ulid : IEquatable<Ulid>, IComparable<Ulid> {
+public readonly struct Ulid : IEquatable<Ulid>, IComparable<Ulid> {
     // https://en.wikipedia.org/wiki/Base32
     private static readonly char[] Base32Text = "0123456789ABCDEFGHJKMNPQRSTVWXYZ".ToCharArray();
     private static readonly byte[] Base32Bytes = Encoding.UTF8.GetBytes(Base32Text);
@@ -575,7 +575,7 @@ public struct Ulid : IEquatable<Ulid>, IComparable<Ulid> {
     /// <returns>The converted <c>Guid</c> value</returns>
     public Guid ToGuid() {
         Span<byte> buf = stackalloc byte[16];
-        MemoryMarshal.Write(buf, ref this);
+        MemoryMarshal.Write(buf, ref Unsafe.AsRef(this));
         if (BitConverter.IsLittleEndian) {
             byte tmp;
             tmp = buf[0];
