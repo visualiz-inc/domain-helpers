@@ -1,7 +1,4 @@
-﻿global using DomainHelpers;
-global using DomainHelpers.DataAnnotations;
-global using DomainHelpers.Primitives;
-global using DomainHelpers.Profiles;
+﻿global using DomainHelpers.DataAnnotations;
 global using DomainHelpers.Text;
 global using System;
 global using System.Collections.Generic;
