@@ -11,7 +11,7 @@ public static class ImmutableArrayFactory {
     /// </summary>
     /// <typeparam name="T">Item type.</typeparam>
     /// <param name="inital">Initialize values.</param>
-    /// <returns>The cretead immutable array instance.</returns>
+    /// <returns>The created immutable array instance.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ImmutableArray<T> ArrayOf<T>(params T[]? inital) {
         return ImmutableArray.Create(inital);
@@ -22,7 +22,7 @@ public static class ImmutableArrayFactory {
     /// </summary>
     /// <typeparam name="T">Item type.</typeparam>
     /// <param name="inital">Initialize values.</param>
-    /// <returns>The cretead immutable array instance.</returns>
+    /// <returns>The created immutable array instance.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ImmutableArray<T> ArrayOf<T>(T inital) {
         return ImmutableArray.Create(inital);
@@ -33,7 +33,7 @@ public static class ImmutableArrayFactory {
     /// </summary>
     /// <typeparam name="T">Item type.</typeparam>
     /// <param name="inital">Initialize values.</param>
-    /// <returns>The cretead immutable array instance.</returns>
+    /// <returns>The created immutable array instance.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ImmutableArray<T> ArrayOfRange<T>(IEnumerable<T> inital) {
         return ImmutableArray.CreateRange(inital);

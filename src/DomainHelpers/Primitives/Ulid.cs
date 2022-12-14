@@ -40,8 +40,6 @@ public readonly struct Ulid : IEquatable<Ulid>, IComparable<Ulid> {
 
     public static readonly Ulid Empty;
 
-    // Core
-
     // Timestamp(64bits)
     [FieldOffset(0)] private readonly byte timestamp0;
     [FieldOffset(1)] private readonly byte timestamp1;

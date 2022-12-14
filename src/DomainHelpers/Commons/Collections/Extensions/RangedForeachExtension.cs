@@ -55,7 +55,7 @@ public struct RangeEnumerator : IEnumerator<int> {
     /// <summary>
     ///     Reset cursor position.
     /// </summary>
-    /// <exception cref="NotSupportedException"></exception>
+    /// <_exception cref="NotSupportedException"></_exception>
     public void Reset() {
         throw new NotSupportedException();
     }

@@ -5,18 +5,16 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-		<LangVersion>Preview</LangVersion>
-		<EnablePreviewFeatures>True</EnablePreviewFeatures>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="Commons\Validations\Masks\**" />
-	  <EmbeddedResource Remove="Commons\Validations\Masks\**" />
-	  <None Remove="Commons\Validations\Masks\**" />
+		<Compile Remove="Commons\Validations\Masks\**" />
+		<EmbeddedResource Remove="Commons\Validations\Masks\**" />
+		<None Remove="Commons\Validations\Masks\**" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Commons\Validations\Fluent\" />
+		<Folder Include="Commons\Validations\Fluent\" />
 	</ItemGroup>
 
 </Project>
