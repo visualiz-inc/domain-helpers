@@ -1,4 +1,4 @@
-﻿namespace System.Collections.Generic; 
+﻿namespace System.Collections.Generic;
 
 public class Map<TKey, TValue> : Dictionary<TKey, TValue>
     where TKey : notnull {

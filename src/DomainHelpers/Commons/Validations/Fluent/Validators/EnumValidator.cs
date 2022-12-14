@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace DomainHelpers.Core.Validations.Validators; 
+namespace DomainHelpers.Core.Validations.Validators;
 
 public class EnumValidator<T, TProperty> : PropertyValidator<T, TProperty> {
     private readonly Type _enumType = typeof(TProperty);
@@ -30,48 +30,48 @@ public class EnumValidator<T, TProperty> : PropertyValidator<T, TProperty> {
 
         switch (typeName) {
             case "Byte": {
-                byte typedValue = (byte)value;
-                return EvaluateFlagEnumValues(typedValue, enumType);
-            }
+                    byte typedValue = (byte)value;
+                    return EvaluateFlagEnumValues(typedValue, enumType);
+                }
 
             case "Int16": {
-                short typedValue = (short)value;
+                    short typedValue = (short)value;
 
-                return EvaluateFlagEnumValues(typedValue, enumType);
-            }
+                    return EvaluateFlagEnumValues(typedValue, enumType);
+                }
 
             case "Int32": {
-                int typedValue = (int)value;
+                    int typedValue = (int)value;
 
-                return EvaluateFlagEnumValues(typedValue, enumType);
-            }
+                    return EvaluateFlagEnumValues(typedValue, enumType);
+                }
 
             case "Int64": {
-                long typedValue = (long)value;
+                    long typedValue = (long)value;
 
-                return EvaluateFlagEnumValues(typedValue, enumType);
-            }
+                    return EvaluateFlagEnumValues(typedValue, enumType);
+                }
 
             case "SByte": {
-                sbyte typedValue = (sbyte)value;
+                    sbyte typedValue = (sbyte)value;
 
-                return EvaluateFlagEnumValues(Convert.ToInt64(typedValue), enumType);
-            }
+                    return EvaluateFlagEnumValues(Convert.ToInt64(typedValue), enumType);
+                }
 
             case "UInt16": {
-                ushort typedValue = (ushort)value;
-                return EvaluateFlagEnumValues(typedValue, enumType);
-            }
+                    ushort typedValue = (ushort)value;
+                    return EvaluateFlagEnumValues(typedValue, enumType);
+                }
 
             case "UInt32": {
-                uint typedValue = (uint)value;
-                return EvaluateFlagEnumValues(typedValue, enumType);
-            }
+                    uint typedValue = (uint)value;
+                    return EvaluateFlagEnumValues(typedValue, enumType);
+                }
 
             case "UInt64": {
-                ulong typedValue = (ulong)value;
-                return EvaluateFlagEnumValues((long)typedValue, enumType);
-            }
+                    ulong typedValue = (ulong)value;
+                    return EvaluateFlagEnumValues((long)typedValue, enumType);
+                }
 
             default:
                 string message = $"Unexpected typeName of '{typeName}' during flags enum evaluation.";

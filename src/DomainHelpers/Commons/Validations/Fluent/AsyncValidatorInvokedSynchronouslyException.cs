@@ -1,4 +1,4 @@
-namespace DomainHelpers.Core.Validations; 
+namespace DomainHelpers.Core.Validations;
 
 /// <summary>
 ///     This exception is thrown when an asynchronous validator is executed synchronously.

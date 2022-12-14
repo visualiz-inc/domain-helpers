@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace DomainHelpers.Core.Validations.Validators; 
+namespace DomainHelpers.Core.Validations.Validators;
 
 public class EmptyValidator<T, TProperty> : PropertyValidator<T, TProperty> {
     public override string Name => "EmptyValidator";

@@ -1,6 +1,6 @@
 using DomainHelpers.Core.Validations.Validators;
 
-namespace DomainHelpers.Core.Validations.Internal; 
+namespace DomainHelpers.Core.Validations.Internal;
 
 internal class RuleComponentForNullableStruct<T, TProperty> : RuleComponent<T, TProperty?>
     where TProperty : struct {

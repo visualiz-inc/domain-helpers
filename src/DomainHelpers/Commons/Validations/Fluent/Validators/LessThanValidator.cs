@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace DomainHelpers.Core.Validations.Validators; 
+namespace DomainHelpers.Core.Validations.Validators;
 
 public class LessThanValidator<T, TProperty> : AbstractComparisonValidator<T, TProperty>
     where TProperty : IComparable<TProperty>, IComparable {

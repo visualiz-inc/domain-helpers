@@ -1,6 +1,6 @@
 using DomainHelpers.Core.Validations.Internal;
 
-namespace DomainHelpers.Core.Validations.Validators; 
+namespace DomainHelpers.Core.Validations.Validators;
 
 public class PredicateValidator<T, TProperty> : PropertyValidator<T, TProperty>, IPredicateValidator {
     public delegate bool Predicate(T instanceToValidate, TProperty propertyValue,

@@ -1,6 +1,6 @@
 using DomainHelpers.Core.Validations.Validators;
 
-namespace DomainHelpers.Core.Validations.Internal; 
+namespace DomainHelpers.Core.Validations.Internal;
 
 /// <summary>
 ///     Builds a validation rule and constructs a validator.

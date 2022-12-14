@@ -1,7 +1,7 @@
 using DomainHelpers.Core.Validations.Resources;
 using System.Linq.Expressions;
 
-namespace DomainHelpers.Core.Validations.Internal; 
+namespace DomainHelpers.Core.Validations.Internal;
 
 internal static class ExtensionsInternal {
     internal static void Guard(this object obj, string message, string paramName) {

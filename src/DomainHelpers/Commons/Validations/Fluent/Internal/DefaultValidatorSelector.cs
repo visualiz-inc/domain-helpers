@@ -1,4 +1,4 @@
-namespace DomainHelpers.Core.Validations.Internal; 
+namespace DomainHelpers.Core.Validations.Internal;
 
 /// <summary>
 ///     Default validator selector that will execute all rules that do not belong to a RuleSet.

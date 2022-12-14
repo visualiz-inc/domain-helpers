@@ -1,4 +1,4 @@
-﻿namespace DomainHelpers.Text; 
+﻿namespace DomainHelpers.Text;
 
 public static class NumberTextExtensions {
     public static string ToLocaleString(this int num) {

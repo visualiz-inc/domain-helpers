@@ -1,4 +1,4 @@
-﻿namespace DomainHelpers.Profiles; 
+﻿namespace DomainHelpers.Profiles;
 
 public record PersonalName(string FirstName, string LastName) {
     public string? MiddleName { get; init; }

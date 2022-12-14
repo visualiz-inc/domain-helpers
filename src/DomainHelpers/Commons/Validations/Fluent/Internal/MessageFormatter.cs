@@ -20,7 +20,7 @@
 
 using System.Text.RegularExpressions;
 
-namespace DomainHelpers.Core.Validations.Internal; 
+namespace DomainHelpers.Core.Validations.Internal;
 
 /// <summary>
 ///     Assists in the construction of validation messages.

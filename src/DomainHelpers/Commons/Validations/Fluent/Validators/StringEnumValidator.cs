@@ -1,4 +1,4 @@
-namespace DomainHelpers.Core.Validations.Validators; 
+namespace DomainHelpers.Core.Validations.Validators;
 
 public class StringEnumValidator<T> : PropertyValidator<T, string> {
     private readonly bool _caseSensitive;

@@ -1,6 +1,6 @@
 ﻿using System.Buffers;
 
-namespace System.Text.Json.Serialization; 
+namespace System.Text.Json.Serialization;
 
 public class UlidJsonConverter : JsonConverter<Ulid> {
     /// <summary>

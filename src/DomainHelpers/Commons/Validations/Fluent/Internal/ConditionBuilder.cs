@@ -1,4 +1,4 @@
-namespace DomainHelpers.Core.Validations.Internal; 
+namespace DomainHelpers.Core.Validations.Internal;
 
 internal class ConditionBuilder<T> {
     private readonly TrackingCollection<IValidationRuleInternal<T>> _rules;

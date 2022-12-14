@@ -1,6 +1,6 @@
 using DomainHelpers.Core.Validations.Validators;
 
-namespace DomainHelpers.Core.Validations.Internal; 
+namespace DomainHelpers.Core.Validations.Internal;
 
 /// <summary>
 ///     An individual component within a rule.

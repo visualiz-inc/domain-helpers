@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace DomainHelpers.Core.Validations.Internal; 
+namespace DomainHelpers.Core.Validations.Internal;
 
 internal class TrackingCollection<T> : IEnumerable<T> {
     private readonly List<T> _innerCollection = new();

@@ -1,4 +1,4 @@
-namespace DomainHelpers.Core.Validations.Results; 
+namespace DomainHelpers.Core.Validations.Results;
 
 /// <summary>
 ///     Defines a validation failure

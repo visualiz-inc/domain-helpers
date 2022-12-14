@@ -1,4 +1,4 @@
-namespace DomainHelpers.Core.Validations.Internal; 
+namespace DomainHelpers.Core.Validations.Internal;
 
 internal class CompositeValidatorSelector : IValidatorSelector {
     private readonly IEnumerable<IValidatorSelector> _selectors;

@@ -3,7 +3,7 @@ using DomainHelpers.Core.Commons;
 using DomainHelpers.Core.Commons.Validations;
 using System.ComponentModel.DataAnnotations;
 
-namespace DomainHelpers.DataAnnotations; 
+namespace DomainHelpers.DataAnnotations;
 
 public static class DataAnnotationValidator {
     /// <summary>

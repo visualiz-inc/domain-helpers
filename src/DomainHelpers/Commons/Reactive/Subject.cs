@@ -1,6 +1,6 @@
 ﻿using DomainHelpers.Commons.Reactive;
 
-namespace DomainHelpers; 
+namespace DomainHelpers;
 
 public class Subject<T> : IObservable<T>, IObserver<T> {
     private bool didComplete;

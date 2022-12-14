@@ -1,4 +1,4 @@
-namespace DomainHelpers.Core.Validations.Internal; 
+namespace DomainHelpers.Core.Validations.Internal;
 
 /// <summary>
 ///     Selects validators that belong to the specified rulesets.

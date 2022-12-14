@@ -3,7 +3,7 @@ using DomainHelpers.Core.Validations.Validators;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace DomainHelpers.Core.Validations.Internal; 
+namespace DomainHelpers.Core.Validations.Internal;
 
 internal abstract class RuleBase<T, TProperty, TValue> : IValidationRule<T, TValue> {
     private Func<CascadeMode> _cascadeModeThunk;

@@ -1,4 +1,4 @@
-namespace DomainHelpers.Core.Validations.Validators; 
+namespace DomainHelpers.Core.Validations.Validators;
 // Attribution: This class was contributed to DomainHelpers.Core.Validations using code posted on StackOverflow by Jon Skeet
 // The original code can be found at https://stackoverflow.com/a/764102
 

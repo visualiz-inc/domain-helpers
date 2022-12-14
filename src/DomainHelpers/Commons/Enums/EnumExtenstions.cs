@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace System; 
+namespace System;
 
 public static class EnumExtenstions {
     public static IEnumerable<(string Name, TEnum Value)> GetNameAndValues<TEnum>()

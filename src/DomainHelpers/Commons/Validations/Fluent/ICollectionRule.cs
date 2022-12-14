@@ -1,4 +1,4 @@
-namespace DomainHelpers.Core.Validations; 
+namespace DomainHelpers.Core.Validations;
 
 /// <summary>
 ///     Represents a rule defined against a collection with RuleForEach.

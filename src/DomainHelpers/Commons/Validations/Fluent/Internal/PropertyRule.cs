@@ -2,7 +2,7 @@ using DomainHelpers.Core.Validations.Results;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace DomainHelpers.Core.Validations.Internal; 
+namespace DomainHelpers.Core.Validations.Internal;
 
 /// <summary>
 ///     Defines a rule associated with a property.

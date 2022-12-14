@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace System.Collections.Immutable; 
+namespace System.Collections.Immutable;
 
 /// <summary>
 ///     Immutable array factories.

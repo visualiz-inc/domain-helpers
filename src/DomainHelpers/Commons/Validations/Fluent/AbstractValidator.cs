@@ -4,7 +4,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.Linq.Expressions;
 
-namespace DomainHelpers.Core.Validations; 
+namespace DomainHelpers.Core.Validations;
 
 /// <summary>
 ///     Base class for object validators.

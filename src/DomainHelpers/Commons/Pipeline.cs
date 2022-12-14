@@ -1,4 +1,4 @@
-﻿namespace System; 
+﻿namespace System;
 
 /// <summary>
 ///     Represents pipeline operetor with async operation.

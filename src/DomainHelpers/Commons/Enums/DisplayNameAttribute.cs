@@ -1,4 +1,4 @@
-﻿namespace System; 
+﻿namespace System;
 
 public class DisplayNameAttribute : Attribute {
     public DisplayNameAttribute(string displayName) {

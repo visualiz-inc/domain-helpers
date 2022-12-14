@@ -1,7 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 
-namespace System; 
+namespace System;
 
 internal static class RandomProvider {
     [ThreadStatic] private static Random? random;

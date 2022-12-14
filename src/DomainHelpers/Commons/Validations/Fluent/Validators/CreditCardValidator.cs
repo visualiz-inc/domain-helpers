@@ -1,4 +1,4 @@
-namespace DomainHelpers.Core.Validations.Validators; 
+namespace DomainHelpers.Core.Validations.Validators;
 
 /// <summary>
 ///     Ensures that the property value is a valid credit card number.

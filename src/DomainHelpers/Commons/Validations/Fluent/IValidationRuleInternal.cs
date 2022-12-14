@@ -1,6 +1,6 @@
 using DomainHelpers.Core.Validations.Internal;
 
-namespace DomainHelpers.Core.Validations; 
+namespace DomainHelpers.Core.Validations;
 
 internal interface IValidationRuleInternal<T> : IValidationRule<T> {
     ValueTask ValidateAsync(ValidationContext<T> context, bool useAsync, CancellationToken cancellation);

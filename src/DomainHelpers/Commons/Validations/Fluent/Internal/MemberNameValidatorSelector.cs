@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 
-namespace DomainHelpers.Core.Validations.Internal; 
+namespace DomainHelpers.Core.Validations.Internal;
 
 /// <summary>
 ///     Selects validators that are associated with a particular property.

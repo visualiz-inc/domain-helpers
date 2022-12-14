@@ -146,7 +146,7 @@ public class GeneralException : Exception {
 ///     Represents the general error.
 /// </summary>
 /// <typeparam name="TError">Error info.</typeparam>
-public class GeneralException<TPayload> : GeneralException{
+public class GeneralException<TPayload> : GeneralException {
     public GeneralException(
         TPayload? payload,
         string message,

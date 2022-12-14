@@ -1,6 +1,6 @@
 using DomainHelpers.Core.Validations.Results;
 
-namespace DomainHelpers.Core.Validations; 
+namespace DomainHelpers.Core.Validations;
 
 /// <summary>
 ///     Defines a validator for a particular type.

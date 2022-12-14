@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace DomainHelpers.Commons.Text.Json; 
+namespace DomainHelpers.Commons.Text.Json;
 
 public class PolymorphicJsonConverter<T> : JsonConverter<T> {
     public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {

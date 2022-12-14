@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace System; 
+namespace System;
 
 public static class RangedForeachExtension {
     /// <summary>

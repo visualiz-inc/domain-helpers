@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Globalization;
 
-namespace System; 
+namespace System;
 
 public class UlidTypeConverter : TypeConverter {
     private static readonly Type StringType = typeof(string);

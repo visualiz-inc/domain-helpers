@@ -1,6 +1,6 @@
 #pragma warning disable 618
 
-namespace DomainHelpers.Core.Validations.Resources; 
+namespace DomainHelpers.Core.Validations.Resources;
 
 internal class BulgarianLanguage {
     public const string Culture = "bg";

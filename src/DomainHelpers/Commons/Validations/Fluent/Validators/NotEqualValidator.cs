@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace DomainHelpers.Core.Validations.Validators; 
+namespace DomainHelpers.Core.Validations.Validators;
 
 public class NotEqualValidator<T, TProperty> : PropertyValidator<T, TProperty>, IComparisonValidator {
     private readonly IEqualityComparer<TProperty> _comparer;

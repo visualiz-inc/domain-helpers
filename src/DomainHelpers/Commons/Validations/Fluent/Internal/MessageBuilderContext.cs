@@ -1,6 +1,6 @@
 ﻿using DomainHelpers.Core.Validations.Validators;
 
-namespace DomainHelpers.Core.Validations.Internal; 
+namespace DomainHelpers.Core.Validations.Internal;
 
 public interface IMessageBuilderContext<T, out TProperty> {
     IRuleComponent<T, TProperty> Component { get; }

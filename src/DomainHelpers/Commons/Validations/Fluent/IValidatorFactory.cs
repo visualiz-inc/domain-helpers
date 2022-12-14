@@ -1,4 +1,4 @@
-namespace DomainHelpers.Core.Validations; 
+namespace DomainHelpers.Core.Validations;
 
 /// <summary>
 ///     Gets validators for a particular type.

@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace DomainHelpers.Core.Validations.Validators; 
+namespace DomainHelpers.Core.Validations.Validators;
 
 /// <summary>
 ///     Defines which mode should be used for email validation.

@@ -1,7 +1,7 @@
 using DomainHelpers.Core.Validations.Internal;
 using DomainHelpers.Core.Validations.Results;
 
-namespace DomainHelpers.Core.Validations; 
+namespace DomainHelpers.Core.Validations;
 
 public interface IValidationContext {
     /// <summary>

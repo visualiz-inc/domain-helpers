@@ -2,7 +2,7 @@ using DomainHelpers.Core.Validations.Internal;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace DomainHelpers.Core.Validations; 
+namespace DomainHelpers.Core.Validations;
 
 /// <summary>
 ///     Default options that can be used to configure a validator.

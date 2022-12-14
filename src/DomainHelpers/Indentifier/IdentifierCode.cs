@@ -1,4 +1,4 @@
-﻿namespace DomainHelpers.Indentifier; 
+﻿namespace DomainHelpers.Indentifier;
 
 public abstract class IdentifierCode {
     public IdentifierCode(string src) {

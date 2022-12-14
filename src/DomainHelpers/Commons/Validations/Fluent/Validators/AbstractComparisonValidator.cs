@@ -1,7 +1,7 @@
 using DomainHelpers.Core.Validations.Internal;
 using System.Reflection;
 
-namespace DomainHelpers.Core.Validations.Validators; 
+namespace DomainHelpers.Core.Validations.Validators;
 
 /// <summary>
 ///     Base class for all comparison validators

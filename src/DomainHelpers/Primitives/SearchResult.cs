@@ -10,7 +10,10 @@ public abstract class SearchResult {
         ImmutableArray<T> items
     ) {
         return new() {
-            HitCount = hitCount, Offset = offset, Fetch = fetch, Items = items,
+            HitCount = hitCount,
+            Offset = offset,
+            Fetch = fetch,
+            Items = items,
         };
     }
 }

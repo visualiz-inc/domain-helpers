@@ -1,6 +1,6 @@
 using DomainHelpers.Core.Validations.Internal;
 
-namespace DomainHelpers.Core.Validations.Validators; 
+namespace DomainHelpers.Core.Validations.Validators;
 
 public abstract class AsyncPropertyValidator<T, TProperty> : IAsyncPropertyValidator<T, TProperty> {
     string IPropertyValidator.GetDefaultMessageTemplate(string errorCode) {

@@ -1,4 +1,4 @@
-﻿namespace System; 
+﻿namespace System;
 
 public record ObservableSubscription : IDisposable {
     public ObservableSubscription(Action action) {

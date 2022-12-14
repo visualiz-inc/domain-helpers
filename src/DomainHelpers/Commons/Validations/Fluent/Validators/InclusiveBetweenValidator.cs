@@ -1,4 +1,4 @@
-namespace DomainHelpers.Core.Validations.Validators; 
+namespace DomainHelpers.Core.Validations.Validators;
 
 /// <summary>
 ///     Performs range validation where the property value must be between the two specified values (inclusive).

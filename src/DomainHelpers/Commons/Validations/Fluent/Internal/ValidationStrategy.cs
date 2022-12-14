@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 
-namespace DomainHelpers.Core.Validations.Internal; 
+namespace DomainHelpers.Core.Validations.Internal;
 
 public class ValidationStrategy<T> {
     private IValidatorSelector _customSelector;

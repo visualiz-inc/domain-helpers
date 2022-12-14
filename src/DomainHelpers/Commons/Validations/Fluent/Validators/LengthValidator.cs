@@ -1,4 +1,4 @@
-namespace DomainHelpers.Core.Validations.Validators; 
+namespace DomainHelpers.Core.Validations.Validators;
 
 public class LengthValidator<T> : PropertyValidator<T, string>, ILengthValidator {
     public LengthValidator(int min, int max) {

@@ -1,6 +1,6 @@
 using DomainHelpers.Core.Validations.Internal;
 
-namespace DomainHelpers.Core.Validations.Validators; 
+namespace DomainHelpers.Core.Validations.Validators;
 
 /// <summary>
 ///     Performs runtime checking of the value being validated, and passes validation off to a subclass validator.

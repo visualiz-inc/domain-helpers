@@ -1,4 +1,4 @@
-﻿namespace DomainHelpers.Core.Validations.Resources; 
+﻿namespace DomainHelpers.Core.Validations.Resources;
 
 internal class ThaiLanguage {
     public const string Culture = "th";

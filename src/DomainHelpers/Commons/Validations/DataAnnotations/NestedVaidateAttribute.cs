@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DomainHelpers.Commons.DataAnnotations; 
+namespace DomainHelpers.Commons.DataAnnotations;
 
 public class ValidateNestedAttribute : ValidationAttribute {
     protected override ValidationResult IsValid(object? value, ValidationContext validationContext) {

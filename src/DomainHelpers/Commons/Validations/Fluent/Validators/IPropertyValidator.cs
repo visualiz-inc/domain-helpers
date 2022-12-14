@@ -1,4 +1,4 @@
-namespace DomainHelpers.Core.Validations.Validators; 
+namespace DomainHelpers.Core.Validations.Validators;
 
 public interface IAsyncPropertyValidator<T, in TProperty> : IPropertyValidator {
     /// <summary>

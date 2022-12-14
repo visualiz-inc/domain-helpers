@@ -1,6 +1,6 @@
 ﻿using DomainHelpers.Core.Commons.Validations;
 
-namespace DomainHelpers.Core.Commons; 
+namespace DomainHelpers.Core.Commons;
 
 public class DataValidationException : GeneralException<DataValidationExceptionType> {
     public DataValidationException(

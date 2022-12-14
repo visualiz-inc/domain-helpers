@@ -1,4 +1,4 @@
-namespace DomainHelpers.Core.Validations.Validators; 
+namespace DomainHelpers.Core.Validations.Validators;
 
 public class NotNullValidator<T, TProperty> : PropertyValidator<T, TProperty>, INotNullValidator {
     public override string Name => "NotNullValidator";

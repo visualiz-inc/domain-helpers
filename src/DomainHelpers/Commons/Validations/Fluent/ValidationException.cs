@@ -1,7 +1,7 @@
 using DomainHelpers.Core.Validations.Results;
 using System.Runtime.Serialization;
 
-namespace DomainHelpers.Core.Validations; 
+namespace DomainHelpers.Core.Validations;
 
 /// <summary>
 ///     An exception that represents failed validation

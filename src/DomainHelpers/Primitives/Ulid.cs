@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 
-namespace System; 
+namespace System;
 
 /// <summary>
 ///     Represents a Universally Unique Lexicographically Sortable Identifier (ULID).

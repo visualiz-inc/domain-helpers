@@ -1,4 +1,4 @@
-namespace DomainHelpers.Core.Validations; 
+namespace DomainHelpers.Core.Validations;
 
 /// <summary>
 ///     Specifies how rules should cascade when one fails.

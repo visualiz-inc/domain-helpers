@@ -3,7 +3,7 @@ using DomainHelpers.Core.Validations.Validators;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace DomainHelpers.Core.Validations; 
+namespace DomainHelpers.Core.Validations;
 
 public interface IValidationRule<T, out TProperty> : IValidationRule<T> {
     /// <summary>

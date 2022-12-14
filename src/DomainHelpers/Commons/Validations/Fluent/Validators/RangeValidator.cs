@@ -1,4 +1,4 @@
-﻿namespace DomainHelpers.Core.Validations.Validators; 
+﻿namespace DomainHelpers.Core.Validations.Validators;
 
 /// <summary>
 ///     Base class for range validation.

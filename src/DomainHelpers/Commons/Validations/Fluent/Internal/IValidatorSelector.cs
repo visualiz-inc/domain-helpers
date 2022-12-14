@@ -1,4 +1,4 @@
-namespace DomainHelpers.Core.Validations.Internal; 
+namespace DomainHelpers.Core.Validations.Internal;
 
 /// <summary>
 ///     Determines whether or not a rule should execute.

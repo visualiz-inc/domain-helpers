@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace DomainHelpers.Core.Validations.Validators; 
+namespace DomainHelpers.Core.Validations.Validators;
 
 public class RegularExpressionValidator<T> : PropertyValidator<T, string>, IRegularExpressionValidator {
     private readonly Func<T, Regex> _regexFunc;

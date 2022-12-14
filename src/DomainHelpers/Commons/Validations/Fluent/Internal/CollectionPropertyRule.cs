@@ -2,7 +2,7 @@
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace DomainHelpers.Core.Validations.Internal; 
+namespace DomainHelpers.Core.Validations.Internal;
 
 /// <summary>
 ///     Rule definition for collection properties
@@ -135,7 +135,7 @@ internal class CollectionPropertyRule<T, TElement> : RuleBase<T, IEnumerable<TEl
             }
         }
 
-        AfterValidate:
+    AfterValidate:
 
         if (context.Failures.Count <= totalFailures && DependentRules != null) {
             foreach (IValidationRuleInternal<T> dependentRule in DependentRules) {

@@ -1,4 +1,4 @@
-﻿namespace DomainHelpers.Core.Validations.Validators; 
+﻿namespace DomainHelpers.Core.Validations.Validators;
 
 internal class ComparableComparer<T> : IComparer<T> where T : IComparable<T> {
     static ComparableComparer() {

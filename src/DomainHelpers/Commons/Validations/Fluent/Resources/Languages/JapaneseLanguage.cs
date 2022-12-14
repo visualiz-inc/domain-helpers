@@ -1,6 +1,6 @@
 #pragma warning disable 618
 
-namespace DomainHelpers.Core.Validations.Resources; 
+namespace DomainHelpers.Core.Validations.Resources;
 
 internal class JapaneseLanguage {
     public const string Culture = "ja";

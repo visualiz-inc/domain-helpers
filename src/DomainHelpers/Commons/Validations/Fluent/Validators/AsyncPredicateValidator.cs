@@ -1,6 +1,6 @@
 using DomainHelpers.Core.Validations.Internal;
 
-namespace DomainHelpers.Core.Validations.Validators; 
+namespace DomainHelpers.Core.Validations.Validators;
 
 /// <summary>
 ///     Asynchronous custom validator

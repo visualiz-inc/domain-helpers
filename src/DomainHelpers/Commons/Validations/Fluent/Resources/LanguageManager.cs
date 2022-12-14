@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Globalization;
 
-namespace DomainHelpers.Core.Validations.Resources; 
+namespace DomainHelpers.Core.Validations.Resources;
 
 /// <summary>
 ///     Allows the default error message translations to be managed.

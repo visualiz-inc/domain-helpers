@@ -1,4 +1,4 @@
-﻿namespace System; 
+﻿namespace System;
 
 public static class WithIndexExtension {
     public static IEnumerable<(T Value, int Index)> WithIndex<T>(this IEnumerable<T> sequence) {

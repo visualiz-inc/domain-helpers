@@ -1,4 +1,4 @@
-namespace DomainHelpers.Core.Validations; 
+namespace DomainHelpers.Core.Validations;
 
 /// <summary>
 ///     Validator implementation that allows rules to be defined without inheriting from AbstractValidator.

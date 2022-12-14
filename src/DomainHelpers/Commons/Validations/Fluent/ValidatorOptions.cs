@@ -4,7 +4,7 @@ using DomainHelpers.Core.Validations.Validators;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace DomainHelpers.Core.Validations; 
+namespace DomainHelpers.Core.Validations;
 
 /// <summary>
 ///     Configuration options for validators.

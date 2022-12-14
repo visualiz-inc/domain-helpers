@@ -1,6 +1,6 @@
 using DomainHelpers.Core.Validations.Validators;
 
-namespace DomainHelpers.Core.Validations; 
+namespace DomainHelpers.Core.Validations;
 
 /// <summary>
 ///     Rule builder that starts the chain
