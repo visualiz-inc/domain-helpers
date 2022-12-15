@@ -10,7 +10,4 @@ public class DataValidationException : GeneralException<DataValidationExceptionT
         Ulid? eventId = null,
         Exception? error = null
     ) : base(exceptionType, message, displayMessage, eventId, error) { }
-
-    public new DataValidationExceptionType ExceptionType =>
-        base.Payload ?? throw new InvalidDataException("ExceptionType was null.");
 }
