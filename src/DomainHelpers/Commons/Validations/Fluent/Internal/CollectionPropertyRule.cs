@@ -234,9 +234,7 @@ internal class CollectionPropertyRule<T, TElement> : RuleBase<T, IEnumerable<TEl
     }
 
     private static string InferPropertyName(LambdaExpression expression) {
-        ParameterExpression? paramExp = expression.Body as ParameterExpression;
-
-        if (paramExp == null) {
+        if (expression.Body is not ParameterExpression paramExp) {
             throw new InvalidOperationException("Could not infer property name for expression: " + expression +
                                                 ". Please explicitly specify a property name by calling OverridePropertyName as part of the rule chain. Eg: RuleForEach(x => x).NotNull().OverridePropertyName(\"MyProperty\")");
         }

@@ -110,14 +110,11 @@ public class PropertyChain {
     /// </summary>
     public override string ToString() {
         // Performance: Calling string.Join causes much overhead when it's not needed.
-        switch (_memberNames.Count) {
-            case 0:
-                return string.Empty;
-            case 1:
-                return _memberNames[0];
-            default:
-                return string.Join(ValidatorOptions.Global.PropertyChainSeparator, _memberNames);
-        }
+        return _memberNames.Count switch {
+            0 => string.Empty,
+            1 => _memberNames[0],
+            _ => string.Join(ValidatorOptions.Global.PropertyChainSeparator, _memberNames),
+        };
     }
 
     /// <summary>

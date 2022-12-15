@@ -1,6 +1,4 @@
-﻿using DomainHelpers.Domain.Locations;
-
-namespace DomainHelpers.Domain.Indentifier;
+﻿namespace DomainHelpers.Domain.Indentifier;
 
 public abstract record PrefixedUlid {
     public abstract string Prefix { get; }
@@ -30,7 +28,7 @@ public abstract record PrefixedUlid {
         }
     }
 
-    public static T TryParse<T>(string rawId) where T : PrefixedUlid, new() {
+    public static T Parse<T>(string rawId) where T : PrefixedUlid, new() {
         var pid = new T();
         pid.CheckIfValidAndSetUlid(rawId);
         return pid;
@@ -41,5 +39,7 @@ public abstract record PrefixedUlid {
         pid.Value = Ulid.NewUlid();
         return pid;
     }
+
+    public override string ToString() => FullValue;
 }
 

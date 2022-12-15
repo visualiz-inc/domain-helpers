@@ -471,7 +471,7 @@ public readonly struct Ulid : IEquatable<Ulid>, IComparable<Ulid> {
         }
     }
 
-    public override bool Equals(object obj) {
+    public override bool Equals(object? obj) {
         return obj is Ulid other ? Equals(other) : false;
     }
 

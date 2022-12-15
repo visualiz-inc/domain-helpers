@@ -8,12 +8,12 @@ namespace DomainHelpers.Core.Validations.Internal;
 ///     the NotNull and the NotEqual are both rule components.
 /// </summary>
 public class RuleComponent<T, TProperty> : IRuleComponent<T, TProperty> {
-    private readonly IAsyncPropertyValidator<T, TProperty> _asyncPropertyValidator;
-    private readonly IPropertyValidator<T, TProperty> _propertyValidator;
-    private Func<ValidationContext<T>, CancellationToken, Task<bool>> _asyncCondition;
-    private Func<ValidationContext<T>, bool> _condition;
-    private string _errorMessage;
-    private Func<ValidationContext<T>, TProperty, string> _errorMessageFactory;
+    private readonly IAsyncPropertyValidator<T, TProperty>? _asyncPropertyValidator;
+    private readonly IPropertyValidator<T, TProperty>? _propertyValidator;
+    private Func<ValidationContext<T>, CancellationToken, Task<bool>>? _asyncCondition;
+    private Func<ValidationContext<T>, bool>? _condition;
+    private string? _errorMessage;
+    private Func<ValidationContext<T>?, TProperty, string>? _errorMessageFactory;
 
     internal RuleComponent(IPropertyValidator<T, TProperty> propertyValidator) {
         _propertyValidator = propertyValidator;
@@ -38,8 +38,8 @@ public class RuleComponent<T, TProperty> : IRuleComponent<T, TProperty> {
     public bool HasAsyncCondition => _asyncCondition != null;
 
     /// <inheritdoc />
-    public virtual IPropertyValidator Validator
-        => (IPropertyValidator)_propertyValidator ?? _asyncPropertyValidator;
+    public virtual IPropertyValidator? Validator
+        => (IPropertyValidator?)_propertyValidator ?? _asyncPropertyValidator;
 
     /// <summary>
     ///     Adds a condition for this validator. If there's already a condition, they're combined together with an AND.
@@ -89,12 +89,9 @@ public class RuleComponent<T, TProperty> : IRuleComponent<T, TProperty> {
     /// </summary>
     /// <returns></returns>
     public string GetUnformattedErrorMessage() {
-        string message = _errorMessageFactory?.Invoke(null, default) ?? _errorMessage;
-
-        // If no custom message has been supplied, use the default.
-        if (message == null) {
-            message = Validator.GetDefaultMessageTemplate(ErrorCode);
-        }
+        var message = _errorMessageFactory?.Invoke(null, default)
+            ?? _errorMessage
+            ?? Validator?.GetDefaultMessageTemplate(ErrorCode);
 
         return message;
     }
@@ -177,18 +174,15 @@ public class RuleComponent<T, TProperty> : IRuleComponent<T, TProperty> {
     /// <returns>Either the formatted or unformatted error message.</returns>
     public string GetErrorMessage(ValidationContext<T> context, TProperty value) {
         // Use a custom message if one has been specified.
-        string rawTemplate = _errorMessageFactory?.Invoke(context, value) ?? _errorMessage;
-
-
-        // If no custom message has been supplied, use the default.
-        if (rawTemplate == null) {
-            rawTemplate = Validator.GetDefaultMessageTemplate(ErrorCode);
-        }
+        var rawTemplate = _errorMessageFactory?.Invoke(context, value)
+            ?? _errorMessage
+            ?? Validator?.GetDefaultMessageTemplate(ErrorCode);
 
         if (context == null) {
             return rawTemplate;
         }
-
-        return context.MessageFormatter.BuildMessage(rawTemplate);
+        else {
+            return context.MessageFormatter.BuildMessage(rawTemplate);
+        }
     }
 }

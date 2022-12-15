@@ -12,7 +12,7 @@ public static class DataAnnotationValidator {
     /// <typeparam name="T">The target object type.</typeparam>
     /// <param name="obj">The target object.</param>
     /// <returns>The validation result.</returns>
-    public static (bool, ImmutableArray<ValidationResult>) ValidateWithAnnotation(this object? obj) {
+    public static (bool, ImmutableArray<ValidationResult>) ValidateWithAnnotation(this object obj) {
         List<ValidationResult> results = new();
         ValidationContext context = new(obj, null, null);
         bool isSuccess = Validator.TryValidateObject(obj, context, results, true);
@@ -29,7 +29,7 @@ public static class DataAnnotationValidator {
     /// <exception cref="DataValidationException"> The exception throws validation error.</exception>
     public static T ValidateAndThrowIfInvalid<T>(this T obj, string? displayMessage = null)
         where T : class {
-        if (obj?.ValidateWithAnnotation() is (false, var messages)) {
+        if (obj.ValidateWithAnnotation() is (false, var messages)) {
             string message = messages.GetErrormessages().JoinStrings("\r\n");
             throw new DataValidationException(
                 new DataValidationExceptionType(messages),
@@ -56,7 +56,7 @@ public static class DataAnnotationValidator {
         return messages
             .SelectMany(
                 x => x is CompositeValidationResult c
-                    ? c.Results.Select(x => x.ErrorMessage)
+                    ? c.Results.Select(x => x.ErrorMessage!)
                     : ArrayOf(x.ErrorMessage)
             );
     }
@@ -70,8 +70,8 @@ public static class DataAnnotationValidator {
         foreach (ValidationResult message in messages.FluttenNesteds()) {
             foreach (string? member in message.MemberNames) {
                 string memberName = member ?? "_";
-                if (result.ContainsKey(memberName)) {
-                    result[memberName].Add(message.ErrorMessage);
+                if (result.TryGetValue(memberName, out var value)) {
+                    value.Add(message.ErrorMessage);
                 }
                 else {
                     result.Add(

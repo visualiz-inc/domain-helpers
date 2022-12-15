@@ -7,7 +7,7 @@ public class UlidTypeConverter : TypeConverter {
     private static readonly Type StringType = typeof(string);
     private static readonly Type GuidType = typeof(Guid);
 
-    public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) {
+    public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType) {
         if (sourceType == StringType || sourceType == GuidType) {
             return true;
         }
@@ -15,7 +15,7 @@ public class UlidTypeConverter : TypeConverter {
         return base.CanConvertFrom(context, sourceType);
     }
 
-    public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType) {
+    public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType) {
         if (destinationType == StringType || destinationType == GuidType) {
             return true;
         }
@@ -23,23 +23,24 @@ public class UlidTypeConverter : TypeConverter {
         return base.CanConvertTo(context, destinationType);
     }
 
-    public override object ConvertFrom(ITypeDescriptorContext context,
-        CultureInfo culture, object value) {
-        switch (value) {
-            case Guid g:
-                return new Ulid(g);
-            case string stringValue:
-                return Ulid.Parse(stringValue);
-        }
-
-        return base.ConvertFrom(context, culture, value);
+    public override object? ConvertFrom(
+        ITypeDescriptorContext? context,
+        CultureInfo? culture,
+        object value
+    ) {
+        return value switch {
+            Guid g => new Ulid(g),
+            string stringValue => Ulid.Parse(stringValue),
+            _ => base.ConvertFrom(context, culture, value),
+        };
     }
 
-    public override object ConvertTo(
-        ITypeDescriptorContext context,
-        CultureInfo culture,
-        object value,
-        Type destinationType) {
+    public override object? ConvertTo(
+        ITypeDescriptorContext? context,
+        CultureInfo? culture,
+        object? value,
+        Type destinationType
+    ) {
         if (value is Ulid ulid) {
             if (destinationType == StringType) {
                 return ulid.ToString();

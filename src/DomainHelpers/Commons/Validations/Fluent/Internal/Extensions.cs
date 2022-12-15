@@ -10,14 +10,12 @@ public static class Extensions {
     /// <summary>
     ///     Gets a MemberInfo from a member expression.
     /// </summary>
-    public static MemberInfo GetMember<T, TProperty>(this Expression<Func<T, TProperty>> expression) {
-        MemberExpression? memberExp = RemoveUnary(expression.Body) as MemberExpression;
-
-        if (memberExp == null) {
+    public static MemberInfo? GetMember<T, TProperty>(this Expression<Func<T, TProperty>> expression) {
+        if (RemoveUnary(expression.Body) is not MemberExpression memberExp) {
             return null;
         }
 
-        Expression currentExpr = memberExp.Expression;
+        var currentExpr = memberExp.Expression;
 
         // Unwind the expression to get the root object that the expression acts upon.
         while (true) {
@@ -38,11 +36,9 @@ public static class Extensions {
         return memberExp.Member;
     }
 
-    private static Expression RemoveUnary(Expression toUnwrap) {
-        if (toUnwrap is UnaryExpression) {
-            return ((UnaryExpression)toUnwrap).Operand;
-        }
-
-        return toUnwrap;
+    private static Expression? RemoveUnary(Expression? toUnwrap) {
+        return toUnwrap is UnaryExpression expression
+            ? expression.Operand
+            : toUnwrap;
     }
 }

@@ -35,8 +35,8 @@ public class MessageFormatter {
     ///     Default Property Value placeholder.
     /// </summary>
     public const string PropertyValue = "PropertyValue";
-
-    private static readonly Regex _keyRegex = new("{([^{}:]+)(?::([^{}]+))?}", RegexOptions.Compiled);
+    private static readonly Regex regex = new("{([^{}:]+)(?::([^{}]+))?}", RegexOptions.Compiled);
+    private static readonly Regex _keyRegex = regex;
 
     /// <summary>
     ///     Additional placeholder values
@@ -77,7 +77,7 @@ public class MessageFormatter {
     /// </summary>
     /// <param name="messageTemplate">Message template</param>
     /// <returns>The message with placeholders replaced with their appropriate values</returns>
-    public virtual string BuildMessage(string messageTemplate) {
+    public virtual string BuildMessage(string? messageTemplate) {
         return _keyRegex.Replace(messageTemplate, m => {
             string key = m.Groups[1].Value;
 
