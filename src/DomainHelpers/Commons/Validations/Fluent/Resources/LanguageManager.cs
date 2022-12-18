@@ -4,31 +4,31 @@ using System.Globalization;
 namespace DomainHelpers.Core.Validations.Resources;
 
 /// <summary>
-///     Allows the default error message translations to be managed.
+/// Allows the default error message translations to be managed.
 /// </summary>
 public class LanguageManager : ILanguageManager {
     private readonly ConcurrentDictionary<string, string> _languages = new();
 
     /// <summary>
-    ///     Whether localization is enabled.
+    /// Whether localization is enabled.
     /// </summary>
     public bool Enabled { get; set; } = true;
 
     /// <summary>
-    ///     Default culture to use for all requests to the LanguageManager. If not specified, uses the current UI culture.
+    /// Default culture to use for all requests to the LanguageManager. If not specified, uses the current UI culture.
     /// </summary>
-    public CultureInfo Culture { get; set; }
+    public CultureInfo? Culture { get; set; }
 
     /// <summary>
-    ///     Gets a translated string based on its key. If the culture is specific and it isn't registered, we try the neutral
-    ///     culture instead.
-    ///     If no matching culture is found  to be registered we use English.
+    /// Gets a translated string based on its key. If the culture is specific and it isn't registered, we try the neutral
+    /// culture instead.
+    /// If no matching culture is found  to be registered we use English.
     /// </summary>
     /// <param name="key">The key</param>
     /// <param name="culture">The culture to translate into</param>
     /// <returns></returns>
-    public virtual string GetString(string key, CultureInfo culture = null) {
-        string value;
+    public virtual string GetString(string key, CultureInfo? culture = null) {
+        string? value;
 
         if (Enabled) {
             culture = culture ?? Culture ?? CultureInfo.CurrentUICulture;
@@ -48,25 +48,25 @@ public class LanguageManager : ILanguageManager {
                 // If it couldn't be found, try the fallback English (if we haven't tried it already).
                 if (!culture.IsNeutralCulture && culture.Parent.Name != EnglishLanguage.Culture) {
                     value = _languages.GetOrAdd(EnglishLanguage.Culture + ":" + key,
-                        k => EnglishLanguage.GetTranslation(key));
+                        k => EnglishLanguage.GetTranslation(key) ?? "");
                 }
             }
         }
         else {
             value = _languages.GetOrAdd(EnglishLanguage.Culture + ":" + key,
-                k => EnglishLanguage.GetTranslation(key));
+                k => EnglishLanguage.GetTranslation(key) ?? "");
         }
 
         return value ?? string.Empty;
     }
 
     /// <summary>
-    ///     Language factory.
+    /// Language factory.
     /// </summary>
     /// <param name="culture">The culture code.</param>
     /// <param name="key">The key to load</param>
     /// <returns>The corresponding Language instance or null.</returns>
-    private static string? GetTranslation(string culture, string key) {
+    private static string GetTranslation(string culture, string key) {
         return culture switch {
             EnglishLanguage.AmericanCulture => EnglishLanguage.GetTranslation(key),
             EnglishLanguage.BritishCulture => EnglishLanguage.GetTranslation(key),
@@ -115,11 +115,11 @@ public class LanguageManager : ILanguageManager {
             VietnameseLanguage.Culture => VietnameseLanguage.GetTranslation(key),
             WelshLanguage.Culture => WelshLanguage.GetTranslation(key),
             _ => null
-        };
+        } ?? "";
     }
 
     /// <summary>
-    ///     Removes all languages except the default.
+    /// Removes all languages except the default.
     /// </summary>
     public void Clear() {
         _languages.Clear();

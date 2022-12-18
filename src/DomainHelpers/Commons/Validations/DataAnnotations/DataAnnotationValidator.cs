@@ -7,7 +7,7 @@ namespace DomainHelpers.DataAnnotations;
 
 public static class DataAnnotationValidator {
     /// <summary>
-    ///     Validate the object with data annotaion.
+    /// Validate the object with data annotaion.
     /// </summary>
     /// <typeparam name="T">The target object type.</typeparam>
     /// <param name="obj">The target object.</param>
@@ -20,7 +20,7 @@ public static class DataAnnotationValidator {
     }
 
     /// <summary>
-    ///     Validate the object with data annotaion.
+    /// Validate the object with data annotaion.
     /// </summary>
     /// <typeparam name="T">The target object type.</typeparam>
     /// <param name="obj">The target object.</param>

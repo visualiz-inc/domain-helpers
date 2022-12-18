@@ -4,13 +4,14 @@ using System.Reflection;
 namespace DomainHelpers.Core.Validations.Validators;
 
 /// <summary>
-///     Base class for all comparison validators
+/// Base class for all comparison validators
 /// </summary>
-public abstract class AbstractComparisonValidator<T, TProperty> : PropertyValidator<T, TProperty>,
-    IComparisonValidator where TProperty : IComparable<TProperty>, IComparable {
-    private readonly string _comparisonMemberDisplayName;
-    private readonly Func<T, TProperty> _valueToCompareFunc;
-    private readonly Func<T, (bool HasValue, TProperty Value)> _valueToCompareFuncForNullables;
+public abstract class AbstractComparisonValidator<T, TProperty>
+    : PropertyValidator<T, TProperty>, IComparisonValidator
+        where TProperty : IComparable<TProperty>?, IComparable {
+    private readonly string? _comparisonMemberDisplayName;
+    private readonly Func<T, TProperty>? _valueToCompareFunc;
+    private readonly Func<T, (bool HasValue, TProperty Value)>? _valueToCompareFuncForNullables;
 
     /// <summary>
     /// </summary>
@@ -25,8 +26,11 @@ public abstract class AbstractComparisonValidator<T, TProperty> : PropertyValida
     /// <param name="valueToCompareFunc"></param>
     /// <param name="member"></param>
     /// <param name="memberDisplayName"></param>
-    protected AbstractComparisonValidator(Func<T, (bool HasValue, TProperty Value)> valueToCompareFunc,
-        MemberInfo member, string memberDisplayName) {
+    protected AbstractComparisonValidator(
+        Func<T, (bool HasValue, TProperty Value)> valueToCompareFunc,
+        MemberInfo member,
+        string memberDisplayName
+    ) {
         _valueToCompareFuncForNullables = valueToCompareFunc;
         _comparisonMemberDisplayName = memberDisplayName;
         MemberToCompare = member;
@@ -37,32 +41,35 @@ public abstract class AbstractComparisonValidator<T, TProperty> : PropertyValida
     /// <param name="valueToCompareFunc"></param>
     /// <param name="member"></param>
     /// <param name="memberDisplayName"></param>
-    protected AbstractComparisonValidator(Func<T, TProperty> valueToCompareFunc, MemberInfo member,
-        string memberDisplayName) {
+    protected AbstractComparisonValidator(
+        Func<T, TProperty> valueToCompareFunc,
+        MemberInfo member,
+        string memberDisplayName
+    ) {
         _valueToCompareFunc = valueToCompareFunc;
         _comparisonMemberDisplayName = memberDisplayName;
         MemberToCompare = member;
     }
 
     /// <summary>
-    ///     The value being compared
+    /// The value being compared
     /// </summary>
-    public TProperty ValueToCompare { get; }
+    public TProperty? ValueToCompare { get; }
 
     /// <summary>
-    ///     Metadata- the comparison type
+    /// Metadata- the comparison type
     /// </summary>
     public abstract Comparison Comparison { get; }
 
     /// <summary>
-    ///     Metadata- the member being compared
+    /// Metadata- the member being compared
     /// </summary>
-    public MemberInfo MemberToCompare { get; }
+    public MemberInfo? MemberToCompare { get; }
 
     /// <summary>
-    ///     Comparison value as non-generic for metadata.
+    /// Comparison value as non-generic for metadata.
     /// </summary>
-    object IComparisonValidator.ValueToCompare =>
+    object? IComparisonValidator.ValueToCompare =>
         // For clientside validation to work, we must return null if MemberToCompare or valueToCompareFunc is set.
         // We can't rely on ValueToCompare being null itself as it's generic, and will be initialized
         // as default(TProperty) which for non-nullable value types will emit the
@@ -70,7 +77,7 @@ public abstract class AbstractComparisonValidator<T, TProperty> : PropertyValida
         MemberToCompare != null || _valueToCompareFunc != null ? null : ValueToCompare;
 
     /// <summary>
-    ///     Performs the comparison
+    /// Performs the comparison
     /// </summary>
     /// <param name="context"></param>
     /// <param name="propertyValue"></param>
@@ -82,7 +89,7 @@ public abstract class AbstractComparisonValidator<T, TProperty> : PropertyValida
             return true;
         }
 
-        (bool HasValue, TProperty Value) valueToCompare = GetComparisonValue(context);
+        var valueToCompare = GetComparisonValue(context);
 
         if (!valueToCompare.HasValue || !IsValid(propertyValue, valueToCompare.Value)) {
             context.MessageFormatter.AppendArgument("ComparisonValue",
@@ -94,7 +101,7 @@ public abstract class AbstractComparisonValidator<T, TProperty> : PropertyValida
         return true;
     }
 
-    public (bool HasValue, TProperty Value) GetComparisonValue(ValidationContext<T> context) {
+    public (bool HasValue, TProperty? Value) GetComparisonValue(ValidationContext<T> context) {
         if (_valueToCompareFunc != null) {
             TProperty? value = _valueToCompareFunc(context.InstanceToValidate);
             return (value != null, value);
@@ -108,7 +115,7 @@ public abstract class AbstractComparisonValidator<T, TProperty> : PropertyValida
     }
 
     /// <summary>
-    ///     Override to perform the comparison
+    /// Override to perform the comparison
     /// </summary>
     /// <param name="value"></param>
     /// <param name="valueToCompare"></param>
@@ -117,26 +124,26 @@ public abstract class AbstractComparisonValidator<T, TProperty> : PropertyValida
 }
 
 /// <summary>
-///     Defines a comparison validator
+/// Defines a comparison validator
 /// </summary>
 public interface IComparisonValidator : IPropertyValidator {
     /// <summary>
-    ///     Metadata- the comparison type
+    /// Metadata- the comparison type
     /// </summary>
     Comparison Comparison { get; }
 
     /// <summary>
-    ///     Metadata- the member being compared
+    /// Metadata- the member being compared
     /// </summary>
-    MemberInfo MemberToCompare { get; }
+    MemberInfo? MemberToCompare { get; }
 
     /// <summary>
-    ///     Metadata- the value being compared
+    /// Metadata- the value being compared
     /// </summary>
-    object ValueToCompare { get; }
+    object? ValueToCompare { get; }
 }
 
-#pragma warning disable 1591
+
 public enum Comparison {
     Equal,
     NotEqual,
@@ -145,4 +152,3 @@ public enum Comparison {
     GreaterThanOrEqual,
     LessThanOrEqual
 }
-#pragma warning restore 1591

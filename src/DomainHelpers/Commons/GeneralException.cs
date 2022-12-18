@@ -1,7 +1,7 @@
 ﻿namespace System;
 
 /// <summary>
-///     Represents the general error.
+/// Represents the general error.
 /// </summary>
 public class GeneralException : Exception {
     /// <summary>
@@ -143,7 +143,7 @@ public class GeneralException : Exception {
 }
 
 /// <summary>
-///     Represents the general error.
+/// Represents the general error.
 /// </summary>
 /// <typeparam name="TError">Error info.</typeparam>
 public class GeneralException<TPayload> : GeneralException {

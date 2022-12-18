@@ -7,15 +7,19 @@ public class NotEqualValidator<T, TProperty> : PropertyValidator<T, TProperty>, 
     private readonly Func<T, TProperty> _func;
     private readonly string _memberDisplayName;
 
-    public NotEqualValidator(Func<T, TProperty> func, MemberInfo memberToCompare, string memberDisplayName,
-        IEqualityComparer<TProperty> equalityComparer = null) {
+    public NotEqualValidator(
+        Func<T, TProperty> func,
+        MemberInfo memberToCompare,
+        string memberDisplayName,
+        IEqualityComparer<TProperty>? equalityComparer = null
+    ) {
         _func = func;
         _comparer = equalityComparer;
         _memberDisplayName = memberDisplayName;
         MemberToCompare = memberToCompare;
     }
 
-    public NotEqualValidator(TProperty comparisonValue, IEqualityComparer<TProperty> equalityComparer = null) {
+    public NotEqualValidator(TProperty comparisonValue, IEqualityComparer<TProperty>? equalityComparer = null) {
         ValueToCompare = comparisonValue;
         _comparer = equalityComparer;
     }

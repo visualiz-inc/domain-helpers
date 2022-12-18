@@ -5,14 +5,14 @@ using System.Reflection;
 namespace DomainHelpers.Core.Validations.Internal;
 
 /// <summary>
-///     Member accessor cache.
+/// Member accessor cache.
 /// </summary>
 /// <typeparam name="T"></typeparam>
 public static class AccessorCache<T> {
     private static readonly ConcurrentDictionary<Key, Delegate> _cache = new();
 
     /// <summary>
-    ///     Gets an accessor func based on an expression
+    /// Gets an accessor func based on an expression
     /// </summary>
     /// <typeparam name="TProperty"></typeparam>
     /// <param name="member">The member represented by the expression</param>
@@ -20,13 +20,17 @@ public static class AccessorCache<T> {
     /// <param name="bypassCache"></param>
     /// <param name="cachePrefix">Cache prefix</param>
     /// <returns>Accessor func</returns>
-    public static Func<T, TProperty> GetCachedAccessor<TProperty>(MemberInfo member,
-        Expression<Func<T, TProperty>> expression, bool bypassCache = false, string cachePrefix = null) {
-        if (member == null || bypassCache || ValidatorOptions.Global.DisableAccessorCache) {
+    public static Func<T, TProperty> GetCachedAccessor<TProperty>(
+        MemberInfo? member,
+        Expression<Func<T, TProperty>> expression,
+        bool bypassCache = false,
+        string? cachePrefix = null
+    ) {
+        if (member is null || bypassCache || ValidatorOptions.Global.DisableAccessorCache) {
             return expression.Compile();
         }
 
-        Key key = new Key(member, expression, cachePrefix);
+        var key = new Key(member, expression, cachePrefix);
         return (Func<T, TProperty>)_cache.GetOrAdd(key, k => expression.Compile());
     }
 
@@ -38,7 +42,7 @@ public static class AccessorCache<T> {
         private readonly string _expressionDebugView;
         private readonly MemberInfo _memberInfo;
 
-        public Key(MemberInfo member, Expression expression, string cachePrefix) {
+        public Key(MemberInfo member, Expression expression, string? cachePrefix) {
             _memberInfo = member;
             _expressionDebugView = cachePrefix != null ? cachePrefix + expression : expression.ToString();
         }
@@ -48,7 +52,7 @@ public static class AccessorCache<T> {
                    string.Equals(_expressionDebugView, other._expressionDebugView);
         }
 
-        public override bool Equals(object obj) {
+        public override bool Equals(object? obj) {
             if (ReferenceEquals(null, obj)) {
                 return false;
             }

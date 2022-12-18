@@ -4,7 +4,7 @@ namespace System.Collections.Generic;
 
 internal class MapExtensions {
     /// <summary>
-    ///     Initialize map with key and value pairs.
+    /// Initialize map with key and value pairs.
     /// </summary>
     /// <typeparam name="TKey">Key type.</typeparam>
     /// <typeparam name="TValue">Item type.</typeparam>

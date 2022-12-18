@@ -3,13 +3,13 @@ using DomainHelpers.Core.Validations.Internal;
 namespace DomainHelpers.Core.Validations.Validators;
 
 /// <summary>
-///     Asynchronous custom validator
+/// Asynchronous custom validator
 /// </summary>
 public class AsyncPredicateValidator<T, TProperty> : AsyncPropertyValidator<T, TProperty> {
     private readonly Func<T, TProperty, ValidationContext<T>, CancellationToken, Task<bool>> _predicate;
 
     /// <summary>
-    ///     Creates a new AsyncPredicateValidator
+    /// Creates a new AsyncPredicateValidator
     /// </summary>
     /// <param name="predicate"></param>
     public AsyncPredicateValidator(

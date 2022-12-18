@@ -4,12 +4,12 @@ namespace System;
 
 public static class RangedForeachExtension {
     /// <summary>
-    ///     Privides ranged foreach with <see cref="System.Range" />.
+    /// Privides ranged foreach with <see cref="System.Range" />.
     /// </summary>
     /// <example>
-    ///     foreach(var i in 0..^1000)
-    ///     {
-    ///     }
+    /// foreach(var i in 0..^1000)
+    /// {
+    /// }
     /// </example>
     /// <param name="range"></param>
     /// <returns></returns>
@@ -23,17 +23,17 @@ public struct RangeEnumerator : IEnumerator<int> {
     private readonly int Step;
 
     /// <summary>
-    ///     The current item position.
+    /// The current item position.
     /// </summary>
     public int Current { get; private set; }
 
     /// <summary>
-    ///     The current item.
+    /// The current item.
     /// </summary>
     object IEnumerator.Current => Current;
 
     /// <summary>
-    ///     Move current cursor to next.
+    /// Move current cursor to next.
     /// </summary>
     /// <returns></returns>
     public bool MoveNext() {
@@ -46,14 +46,14 @@ public struct RangeEnumerator : IEnumerator<int> {
     }
 
     /// <summary>
-    ///     Dispose this.
+    /// Dispose this.
     /// </summary>
     public void Dispose() {
         // noop
     }
 
     /// <summary>
-    ///     Reset cursor position.
+    /// Reset cursor position.
     /// </summary>
     /// <_exception cref="NotSupportedException"></_exception>
     public void Reset() {
@@ -61,7 +61,7 @@ public struct RangeEnumerator : IEnumerator<int> {
     }
 
     /// <summary>
-    ///     Initializes a new instance of <see cref="RangeEnumerator" /> struct.
+    /// Initializes a new instance of <see cref="RangeEnumerator" /> struct.
     /// </summary>
     /// <param name="range">Initialize range.</param>
     public RangeEnumerator(Range range) {

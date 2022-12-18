@@ -1,6 +1,6 @@
 namespace DomainHelpers.Core.Validations.Internal;
 
-internal class ConditionBuilder<T> {
+internal class ConditionBuilder<T> where T : notnull {
     private readonly TrackingCollection<IValidationRuleInternal<T>> _rules;
 
     public ConditionBuilder(TrackingCollection<IValidationRuleInternal<T>> rules) {
@@ -8,13 +8,13 @@ internal class ConditionBuilder<T> {
     }
 
     /// <summary>
-    ///     Defines a condition that applies to several rules
+    /// Defines a condition that applies to several rules
     /// </summary>
     /// <param name="predicate">The condition that should apply to multiple rules</param>
     /// <param name="action">Action that encapsulates the rules.</param>
     /// <returns></returns>
     public IConditionBuilder When(Func<T, ValidationContext<T>, bool> predicate, Action action) {
-        List<IValidationRuleInternal<T>> propertyRules = new List<IValidationRuleInternal<T>>();
+        var propertyRules = new List<IValidationRuleInternal<T>>();
 
         using (_rules.OnItemAdded(propertyRules.Add)) {
             action();
@@ -57,7 +57,7 @@ internal class ConditionBuilder<T> {
     }
 
     /// <summary>
-    ///     Defines an inverse condition that applies to several rules
+    /// Defines an inverse condition that applies to several rules
     /// </summary>
     /// <param name="predicate">The condition that should be applied to multiple rules</param>
     /// <param name="action">Action that encapsulates the rules</param>
@@ -74,7 +74,7 @@ internal class AsyncConditionBuilder<T> {
     }
 
     /// <summary>
-    ///     Defines an asynchronous condition that applies to several rules
+    /// Defines an asynchronous condition that applies to several rules
     /// </summary>
     /// <param name="predicate">The asynchronous condition that should apply to multiple rules</param>
     /// <param name="action">Action that encapsulates the rules.</param>
@@ -124,7 +124,7 @@ internal class AsyncConditionBuilder<T> {
     }
 
     /// <summary>
-    ///     Defines an inverse asynchronous condition that applies to several rules
+    /// Defines an inverse asynchronous condition that applies to several rules
     /// </summary>
     /// <param name="predicate">The asynchronous condition that should be applied to multiple rules</param>
     /// <param name="action">Action that encapsulates the rules</param>

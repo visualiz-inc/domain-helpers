@@ -8,13 +8,13 @@ public class EqualValidator<T, TProperty> : PropertyValidator<T, TProperty>, IEq
     private readonly string _memberDisplayName;
 
 
-    public EqualValidator(TProperty valueToCompare, IEqualityComparer<TProperty> comparer = null) {
+    public EqualValidator(TProperty valueToCompare, IEqualityComparer<TProperty>? comparer = null) {
         ValueToCompare = valueToCompare;
         _comparer = comparer;
     }
 
     public EqualValidator(Func<T, TProperty> comparisonProperty, MemberInfo member, string memberDisplayName,
-        IEqualityComparer<TProperty> comparer = null) {
+        IEqualityComparer<TProperty>? comparer = null) {
         _func = comparisonProperty;
         _memberDisplayName = memberDisplayName;
         MemberToCompare = member;

@@ -3,11 +3,12 @@ using DomainHelpers.Core.Validations.Validators;
 namespace DomainHelpers.Core.Validations.Internal;
 
 /// <summary>
-///     An individual component within a rule.
-///     In a rule definition such as RuleFor(x => x.Name).NotNull().NotEqual("Foo")
-///     the NotNull and the NotEqual are both rule components.
+/// An individual component within a rule.
+/// In a rule definition such as RuleFor(x => x.Name).NotNull().NotEqual("Foo")
+/// the NotNull and the NotEqual are both rule components.
 /// </summary>
-public class RuleComponent<T, TProperty> : IRuleComponent<T, TProperty> {
+public class RuleComponent<T, TProperty> : IRuleComponent<T, TProperty>
+    where T : notnull {
     private readonly IAsyncPropertyValidator<T, TProperty>? _asyncPropertyValidator;
     private readonly IPropertyValidator<T, TProperty>? _propertyValidator;
     private Func<ValidationContext<T>, CancellationToken, Task<bool>>? _asyncCondition;
@@ -15,7 +16,7 @@ public class RuleComponent<T, TProperty> : IRuleComponent<T, TProperty> {
     private string? _errorMessage;
     private Func<ValidationContext<T>?, TProperty, string>? _errorMessageFactory;
 
-    internal RuleComponent(IPropertyValidator<T, TProperty> propertyValidator) {
+    internal RuleComponent(IPropertyValidator<T, TProperty>? propertyValidator) {
         _propertyValidator = propertyValidator;
     }
 
@@ -42,7 +43,7 @@ public class RuleComponent<T, TProperty> : IRuleComponent<T, TProperty> {
         => (IPropertyValidator?)_propertyValidator ?? _asyncPropertyValidator;
 
     /// <summary>
-    ///     Adds a condition for this validator. If there's already a condition, they're combined together with an AND.
+    /// Adds a condition for this validator. If there's already a condition, they're combined together with an AND.
     /// </summary>
     /// <param name="condition"></param>
     public void ApplyCondition(Func<ValidationContext<T>, bool> condition) {
@@ -56,7 +57,7 @@ public class RuleComponent<T, TProperty> : IRuleComponent<T, TProperty> {
     }
 
     /// <summary>
-    ///     Adds a condition for this validator. If there's already a condition, they're combined together with an AND.
+    /// Adds a condition for this validator. If there's already a condition, they're combined together with an AND.
     /// </summary>
     /// <param name="condition"></param>
     public void ApplyAsyncCondition(Func<ValidationContext<T>, CancellationToken, Task<bool>> condition) {
@@ -70,22 +71,22 @@ public class RuleComponent<T, TProperty> : IRuleComponent<T, TProperty> {
     }
 
     /// <summary>
-    ///     Function used to retrieve custom state for the validator
+    /// Function used to retrieve custom state for the validator
     /// </summary>
-    public Func<ValidationContext<T>, TProperty, object> CustomStateProvider { get; set; }
+    public Func<ValidationContext<T>, TProperty, object>? CustomStateProvider { get; set; }
 
     /// <summary>
-    ///     Function used to retrieve the severity for the validator
+    /// Function used to retrieve the severity for the validator
     /// </summary>
-    public Func<ValidationContext<T>, TProperty, Severity> SeverityProvider { get; set; }
+    public Func<ValidationContext<T>, TProperty, Severity>? SeverityProvider { get; set; }
 
     /// <summary>
-    ///     Retrieves the error code.
+    /// Retrieves the error code.
     /// </summary>
-    public string ErrorCode { get; set; }
+    public string? ErrorCode { get; set; }
 
     /// <summary>
-    ///     Gets the raw unformatted error message. Placeholders will not have been rewritten.
+    /// Gets the raw unformatted error message. Placeholders will not have been rewritten.
     /// </summary>
     /// <returns></returns>
     public string GetUnformattedErrorMessage() {
@@ -97,7 +98,7 @@ public class RuleComponent<T, TProperty> : IRuleComponent<T, TProperty> {
     }
 
     /// <summary>
-    ///     Sets the overridden error message template for this validator.
+    /// Sets the overridden error message template for this validator.
     /// </summary>
     /// <param name="errorFactory">A function for retrieving the error message template.</param>
     public void SetErrorMessage(Func<ValidationContext<T>, TProperty, string> errorFactory) {
@@ -106,7 +107,7 @@ public class RuleComponent<T, TProperty> : IRuleComponent<T, TProperty> {
     }
 
     /// <summary>
-    ///     Sets the overridden error message template for this validator.
+    /// Sets the overridden error message template for this validator.
     /// </summary>
     /// <param name="errorMessage">The error message to set</param>
     public void SetErrorMessage(string errorMessage) {
@@ -166,8 +167,8 @@ public class RuleComponent<T, TProperty> : IRuleComponent<T, TProperty> {
     }
 
     /// <summary>
-    ///     Gets the error message. If a context is supplied, it will be used to format the message if it has placeholders.
-    ///     If no context is supplied, the raw unformatted message will be returned, containing placeholders.
+    /// Gets the error message. If a context is supplied, it will be used to format the message if it has placeholders.
+    /// If no context is supplied, the raw unformatted message will be returned, containing placeholders.
     /// </summary>
     /// <param name="context">The validation context.</param>
     /// <param name="value">The current property value.</param>

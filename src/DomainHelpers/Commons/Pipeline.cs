@@ -1,7 +1,7 @@
 ﻿namespace System;
 
 /// <summary>
-///     Represents pipeline operetor with async operation.
+/// Represents pipeline operetor with async operation.
 /// </summary>
 public class Pipeline {
     internal Pipeline() { }
@@ -28,12 +28,12 @@ public class Pipeline {
 }
 
 /// <summary>
-///     Represents pipeline operetor with async operation.
+/// Represents pipeline operetor with async operation.
 /// </summary>
 /// <typeparam name="T">The value that you want to pipe.</typeparam>
 public class Pipeline<T> : Pipeline {
     /// <summary>
-    ///     Initializes a new instance of the <see cref="Pipeline{T}" /> class.
+    /// Initializes a new instance of the <see cref="Pipeline{T}" /> class.
     /// </summary>
     /// <param name="func">The value selector.</param>
     internal Pipeline(Func<T> func) {
@@ -41,12 +41,12 @@ public class Pipeline<T> : Pipeline {
     }
 
     /// <summary>
-    ///     The value selector.
+    /// The value selector.
     /// </summary>
     protected Func<T> Func { get; }
 
     /// <summary>
-    ///     Connects and convolves a series of functions and return values
+    /// Connects and convolves a series of functions and return values
     /// </summary>
     /// <typeparam name="U">Argument type</typeparam>
     /// <param name="func">To pipe function</param>
@@ -56,7 +56,7 @@ public class Pipeline<T> : Pipeline {
     }
 
     /// <summary>
-    ///     Innterupt action.
+    /// Innterupt action.
     /// </summary>
     /// <typeparam name="T">Argument type</typeparam>
     /// <param name="func">To innterupt async action</param>
@@ -70,7 +70,7 @@ public class Pipeline<T> : Pipeline {
     }
 
     /// <summary>
-    ///     Connects and convolves a series of functions and return values. Connect to async pipe.
+    /// Connects and convolves a series of functions and return values. Connect to async pipe.
     /// </summary>
     /// <typeparam name="U">Argument type</typeparam>
     /// <param name="func">To pipe function</param>
@@ -80,7 +80,7 @@ public class Pipeline<T> : Pipeline {
     }
 
     /// <summary>
-    ///     Execute all piped actions.
+    /// Execute all piped actions.
     /// </summary>
     /// <returns>The piped result.</returns>
     public T Execute() {
@@ -89,12 +89,12 @@ public class Pipeline<T> : Pipeline {
 }
 
 /// <summary>
-///     Represents pipeline operetor.
+/// Represents pipeline operetor.
 /// </summary>
 /// <typeparam name="T">The value that you want to pipe.</typeparam>
 public class AsyncPipeline<T> : Pipeline {
     /// <summary>
-    ///     Initializes a new instance of the <see cref="AsyncPipeline{T}" /> class.
+    /// Initializes a new instance of the <see cref="AsyncPipeline{T}" /> class.
     /// </summary>
     /// <param name="func">The value selector.</param>
     internal AsyncPipeline(Func<Task<T>> func) {
@@ -102,12 +102,12 @@ public class AsyncPipeline<T> : Pipeline {
     }
 
     /// <summary>
-    ///     The value selector.
+    /// The value selector.
     /// </summary>
     protected Func<Task<T>> Func { get; }
 
     /// <summary>
-    ///     Connects and convolves a series of functions and return values.
+    /// Connects and convolves a series of functions and return values.
     /// </summary>
     /// <typeparam name="U">Argument type</typeparam>
     /// <param name="func">To pipe function</param>
@@ -117,7 +117,7 @@ public class AsyncPipeline<T> : Pipeline {
     }
 
     /// <summary>
-    ///     Connects and convolves a series of functions and return values.
+    /// Connects and convolves a series of functions and return values.
     /// </summary>
     /// <typeparam name="U">Argument type</typeparam>
     /// <param name="func">To pipe function</param>
@@ -127,7 +127,7 @@ public class AsyncPipeline<T> : Pipeline {
     }
 
     /// <summary>
-    ///     Innterupt action.
+    /// Innterupt action.
     /// </summary>
     /// <typeparam name="T">Argument type</typeparam>
     /// <param name="func">To innterupt async action</param>
@@ -141,7 +141,7 @@ public class AsyncPipeline<T> : Pipeline {
     }
 
     /// <summary>
-    ///     Innterupt action.
+    /// Innterupt action.
     /// </summary>
     /// <typeparam name="T">Argument type</typeparam>
     /// <param name="func">To innterupt async action</param>
@@ -155,7 +155,7 @@ public class AsyncPipeline<T> : Pipeline {
     }
 
     /// <summary>
-    ///     Execute all piped actions async.
+    /// Execute all piped actions async.
     /// </summary>
     /// <returns></returns>
     public async Task<T> ExecuteAsync() {

@@ -1,7 +1,7 @@
 namespace DomainHelpers.Core.Validations.Validators;
 
 /// <summary>
-///     Performs range validation where the property value must be between the two specified values (inclusive).
+/// Performs range validation where the property value must be between the two specified values (inclusive).
 /// </summary>
 public class InclusiveBetweenValidator<T, TProperty> : RangeValidator<T, TProperty>, IInclusiveBetweenValidator {
     public InclusiveBetweenValidator(TProperty from, TProperty to, IComparer<TProperty> comparer) : base(from, to,

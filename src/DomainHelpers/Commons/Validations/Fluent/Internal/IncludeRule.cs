@@ -3,16 +3,16 @@ using DomainHelpers.Core.Validations.Validators;
 namespace DomainHelpers.Core.Validations.Internal;
 
 /// <summary>
-///     Marker interface indicating an include rule.
+/// Marker interface indicating an include rule.
 /// </summary>
 public interface IIncludeRule { }
 
 /// <summary>
-///     Include rule
+/// Include rule
 /// </summary>
 internal class IncludeRule<T> : PropertyRule<T, T>, IIncludeRule {
     /// <summary>
-    ///     Creates a new IncludeRule
+    /// Creates a new IncludeRule
     /// </summary>
     public IncludeRule(IValidator<T> validator, Func<CascadeMode> cascadeModeThunk, Type typeToValidate)
         : base(null, x => x, null, cascadeModeThunk, typeToValidate) {
@@ -23,7 +23,7 @@ internal class IncludeRule<T> : PropertyRule<T, T>, IIncludeRule {
     }
 
     /// <summary>
-    ///     Creates a new IncludeRule
+    /// Creates a new IncludeRule
     /// </summary>
     public IncludeRule(Func<ValidationContext<T>, T, IValidator<T>> func, Func<CascadeMode> cascadeModeThunk,
         Type typeToValidate, Type validatorType)
@@ -35,14 +35,14 @@ internal class IncludeRule<T> : PropertyRule<T, T>, IIncludeRule {
     }
 
     /// <summary>
-    ///     Creates a new include rule from an existing validator
+    /// Creates a new include rule from an existing validator
     /// </summary>
     public static IncludeRule<T> Create(IValidator<T> validator, Func<CascadeMode> cascadeModeThunk) {
         return new IncludeRule<T>(validator, cascadeModeThunk, typeof(T));
     }
 
     /// <summary>
-    ///     Creates a new include rule from an existing validator
+    /// Creates a new include rule from an existing validator
     /// </summary>
     public static IncludeRule<T> Create<TValidator>(Func<T, TValidator> func, Func<CascadeMode> cascadeModeThunk)
         where TValidator : IValidator<T> {

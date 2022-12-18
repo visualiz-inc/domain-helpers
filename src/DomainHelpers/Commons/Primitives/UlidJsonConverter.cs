@@ -4,7 +4,7 @@ namespace System.Text.Json.Serialization;
 
 public class UlidJsonConverter : JsonConverter<Ulid> {
     /// <summary>
-    ///     Read a Ulid value represented by a string from JSON.
+    /// Read a Ulid value represented by a string from JSON.
     /// </summary>
     public override Ulid Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
         try {

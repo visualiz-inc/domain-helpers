@@ -1,7 +1,7 @@
 ﻿namespace DomainHelpers.Core.Validations.Validators;
 
 /// <summary>
-///     Base class for range validation.
+/// Base class for range validation.
 /// </summary>
 public abstract class RangeValidator<T, TProperty> : PropertyValidator<T, TProperty>, IBetweenValidator {
     private readonly IComparer<TProperty> _explicitComparer;

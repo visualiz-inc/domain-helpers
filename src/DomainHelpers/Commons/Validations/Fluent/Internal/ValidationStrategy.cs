@@ -2,16 +2,16 @@ using System.Linq.Expressions;
 
 namespace DomainHelpers.Core.Validations.Internal;
 
-public class ValidationStrategy<T> {
-    private IValidatorSelector _customSelector;
-    private List<string> _properties;
-    private List<string> _ruleSets;
+public class ValidationStrategy<T> where T : notnull {
+    private IValidatorSelector? _customSelector;
+    private List<string>? _properties;
+    private List<string>? _ruleSets;
     private bool _throw;
 
     internal ValidationStrategy() { }
 
     /// <summary>
-    ///     Indicates that only the specified properties should be validated.
+    /// Indicates that only the specified properties should be validated.
     /// </summary>
     /// <param name="properties">The property names to validate.</param>
     /// <returns></returns>
@@ -27,7 +27,7 @@ public class ValidationStrategy<T> {
     }
 
     /// <summary>
-    ///     Indicates that only the specified properties should be validated.
+    /// Indicates that only the specified properties should be validated.
     /// </summary>
     /// <param name="propertyExpressions">The properties to validate, defined as expressions.</param>
     /// <returns></returns>
@@ -44,9 +44,9 @@ public class ValidationStrategy<T> {
     }
 
     /// <summary>
-    ///     Indicates that all rules not in a rule-set should be included for validation (the equivalent of calling
-    ///     IncludeRuleSets("default")).
-    ///     This method can be combined with IncludeRuleSets.
+    /// Indicates that all rules not in a rule-set should be included for validation (the equivalent of calling
+    /// IncludeRuleSets("default")).
+    /// This method can be combined with IncludeRuleSets.
     /// </summary>
     /// <returns></returns>
     public ValidationStrategy<T> IncludeRulesNotInRuleSet() {
@@ -56,8 +56,8 @@ public class ValidationStrategy<T> {
     }
 
     /// <summary>
-    ///     Indicates that all rules should be executed, regardless of whether or not they're in a ruleset.
-    ///     This is the equivalent of IncludeRuleSets("*").
+    /// Indicates that all rules should be executed, regardless of whether or not they're in a ruleset.
+    /// This is the equivalent of IncludeRuleSets("*").
     /// </summary>
     /// <returns></returns>
     public ValidationStrategy<T> IncludeAllRuleSets() {
@@ -67,7 +67,7 @@ public class ValidationStrategy<T> {
     }
 
     /// <summary>
-    ///     Indicates that only the specified rule sets should be validated.
+    /// Indicates that only the specified rule sets should be validated.
     /// </summary>
     /// <param name="ruleSets">The names of the rulesets to validate.</param>
     /// <returns></returns>
@@ -85,7 +85,7 @@ public class ValidationStrategy<T> {
     }
 
     /// <summary>
-    ///     Indicates that the specified selector should be used to control which rules are executed.
+    /// Indicates that the specified selector should be used to control which rules are executed.
     /// </summary>
     /// <param name="selector">The custom selector to use</param>
     /// <returns></returns>
@@ -99,7 +99,7 @@ public class ValidationStrategy<T> {
     }
 
     /// <summary>
-    ///     Indicates that the validator should throw an exception if it fails, rather than return a validation result.
+    /// Indicates that the validator should throw an exception if it fails, rather than return a validation result.
     /// </summary>
     /// <returns></returns>
     public ValidationStrategy<T> ThrowOnFailures() {
@@ -108,7 +108,7 @@ public class ValidationStrategy<T> {
     }
 
     private IValidatorSelector GetSelector() {
-        IValidatorSelector selector = null;
+        IValidatorSelector? selector = null;
 
         if (_properties != null || _ruleSets != null || _customSelector != null) {
             List<IValidatorSelector> selectors = new List<IValidatorSelector>(3);

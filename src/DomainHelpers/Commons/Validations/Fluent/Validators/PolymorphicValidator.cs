@@ -3,18 +3,20 @@ using DomainHelpers.Core.Validations.Internal;
 namespace DomainHelpers.Core.Validations.Validators;
 
 /// <summary>
-///     Performs runtime checking of the value being validated, and passes validation off to a subclass validator.
+/// Performs runtime checking of the value being validated, and passes validation off to a subclass validator.
 /// </summary>
 /// <typeparam name="T">Root model type</typeparam>
 /// <typeparam name="TProperty">Base type of property being validated.</typeparam>
-public class PolymorphicValidator<T, TProperty> : ChildValidatorAdaptor<T, TProperty> {
+public class PolymorphicValidator<T, TProperty>
+    : ChildValidatorAdaptor<T, TProperty>
+        where T : notnull {
     private readonly Dictionary<Type, DerivedValidatorFactory> _derivedValidators = new();
 
     // Need the base constructor call, even though we're just passing null.
     public PolymorphicValidator() : base((IValidator<TProperty>)null, typeof(IValidator<TProperty>)) { }
 
     /// <summary>
-    ///     Adds a validator to handle a specific subclass.
+    /// Adds a validator to handle a specific subclass.
     /// </summary>
     /// <param name="derivedValidator">The derived validator</param>
     /// <param name="ruleSets">Optionally specify rulesets to execute. If set, rules not in these rulesets will not be run</param>
@@ -31,7 +33,7 @@ public class PolymorphicValidator<T, TProperty> : ChildValidatorAdaptor<T, TProp
     }
 
     /// <summary>
-    ///     Adds a validator to handle a specific subclass.
+    /// Adds a validator to handle a specific subclass.
     /// </summary>
     /// <param name="validatorFactory">The derived validator</param>
     /// <typeparam name="TDerived"></typeparam>
@@ -49,7 +51,7 @@ public class PolymorphicValidator<T, TProperty> : ChildValidatorAdaptor<T, TProp
     }
 
     /// <summary>
-    ///     Adds a validator to handle a specific subclass.
+    /// Adds a validator to handle a specific subclass.
     /// </summary>
     /// <param name="validatorFactory">The derived validator</param>
     /// <typeparam name="TDerived"></typeparam>
@@ -68,10 +70,10 @@ public class PolymorphicValidator<T, TProperty> : ChildValidatorAdaptor<T, TProp
     }
 
     /// <summary>
-    ///     Adds a validator to handle a specific subclass. This method is not publicly exposed as it
-    ///     takes a non-generic IValidator instance which could result in a type-unsafe validation operation.
-    ///     It allows derived validaors more flexibility in handling type conversion. If you make use of this method, you
-    ///     should ensure that the validator can correctly handle the type being validated.
+    /// Adds a validator to handle a specific subclass. This method is not publicly exposed as it
+    /// takes a non-generic IValidator instance which could result in a type-unsafe validation operation.
+    /// It allows derived validaors more flexibility in handling type conversion. If you make use of this method, you
+    /// should ensure that the validator can correctly handle the type being validated.
     /// </summary>
     /// <param name="subclassType"></param>
     /// <param name="validator"></param>
@@ -96,7 +98,7 @@ public class PolymorphicValidator<T, TProperty> : ChildValidatorAdaptor<T, TProp
         return this;
     }
 
-    public override IValidator GetValidator(ValidationContext<T> context, TProperty value) {
+    public override IValidator? GetValidator(ValidationContext<T> context, TProperty value) {
         // bail out if the current item is null
         if (value == null) {
             return null;
@@ -109,7 +111,7 @@ public class PolymorphicValidator<T, TProperty> : ChildValidatorAdaptor<T, TProp
         return null;
     }
 
-    private protected override IValidatorSelector GetSelector(ValidationContext<T> context, TProperty value) {
+    private protected override IValidatorSelector? GetSelector(ValidationContext<T> context, TProperty value) {
         if (_derivedValidators.TryGetValue(value.GetType(), out DerivedValidatorFactory? derivedValidatorFactory) &&
             derivedValidatorFactory.RuleSets is { Length: > 0 }) {
             return new RulesetValidatorSelector(derivedValidatorFactory.RuleSets);
@@ -119,7 +121,7 @@ public class PolymorphicValidator<T, TProperty> : ChildValidatorAdaptor<T, TProp
     }
 
     private class DerivedValidatorFactory {
-        private readonly Func<ValidationContext<T>, TProperty, IValidator> _factory;
+        private readonly Func<ValidationContext<T>, TProperty, IValidator>? _factory;
         private readonly IValidator _innerValidator;
 
         public DerivedValidatorFactory(IValidator innerValidator, string[] ruleSets) {

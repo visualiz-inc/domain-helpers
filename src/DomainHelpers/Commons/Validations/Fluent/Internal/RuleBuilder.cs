@@ -3,7 +3,7 @@ using DomainHelpers.Core.Validations.Validators;
 namespace DomainHelpers.Core.Validations.Internal;
 
 /// <summary>
-///     Builds a validation rule and constructs a validator.
+/// Builds a validation rule and constructs a validator.
 /// </summary>
 /// <typeparam name="T">Type of object being validated</typeparam>
 /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -11,7 +11,7 @@ internal class RuleBuilder<T, TProperty> : IRuleBuilderOptions<T, TProperty>, IR
     IRuleBuilderInitialCollection<T, TProperty>, IRuleBuilderOptionsConditions<T, TProperty>,
     IRuleBuilderInternal<T, TProperty> {
     /// <summary>
-    ///     Creates a new instance of the <see cref="RuleBuilder{T,TProperty}">RuleBuilder</see> class.
+    /// Creates a new instance of the <see cref="RuleBuilder{T,TProperty}">RuleBuilder</see> class.
     /// </summary>
     public RuleBuilder(IValidationRuleInternal<T, TProperty> rule, AbstractValidator<T> parent) {
         Rule = rule;
@@ -19,12 +19,12 @@ internal class RuleBuilder<T, TProperty> : IRuleBuilderOptions<T, TProperty>, IR
     }
 
     /// <summary>
-    ///     The rule being created by this RuleBuilder.
+    /// The rule being created by this RuleBuilder.
     /// </summary>
     public IValidationRuleInternal<T, TProperty> Rule { get; }
 
     /// <summary>
-    ///     Parent validator
+    /// Parent validator
     /// </summary>
     public AbstractValidator<T> ParentValidator { get; }
 

@@ -3,25 +3,25 @@ using System.Linq.Expressions;
 namespace DomainHelpers.Core.Validations.Internal;
 
 /// <summary>
-///     Selects validators that are associated with a particular property.
+/// Selects validators that are associated with a particular property.
 /// </summary>
 public class MemberNameValidatorSelector : IValidatorSelector {
     internal const string DisableCascadeKey = "_FV_DisableSelectorCascadeForChildRules";
 
     /// <summary>
-    ///     Creates a new instance of MemberNameValidatorSelector.
+    /// Creates a new instance of MemberNameValidatorSelector.
     /// </summary>
     public MemberNameValidatorSelector(IEnumerable<string> memberNames) {
         MemberNames = memberNames;
     }
 
     /// <summary>
-    ///     Member names that are validated.
+    /// Member names that are validated.
     /// </summary>
     public IEnumerable<string> MemberNames { get; }
 
     /// <summary>
-    ///     Determines whether or not a rule should execute.
+    /// Determines whether or not a rule should execute.
     /// </summary>
     /// <param name="rule">The rule</param>
     /// <param name="propertyPath">Property path (eg Customer.Address.Line1)</param>
@@ -41,7 +41,7 @@ public class MemberNameValidatorSelector : IValidatorSelector {
     }
 
     /// <summary>
-    ///     Gets member names from expressions
+    /// Gets member names from expressions
     /// </summary>
     /// <param name="propertyExpressions"></param>
     /// <typeparam name="T"></typeparam>

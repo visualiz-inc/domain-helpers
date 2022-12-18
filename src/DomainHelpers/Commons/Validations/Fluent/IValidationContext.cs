@@ -5,48 +5,48 @@ namespace DomainHelpers.Core.Validations;
 
 public interface IValidationContext {
     /// <summary>
-    ///     The object currently being validated.
+    /// The object currently being validated.
     /// </summary>
-    object InstanceToValidate { get; }
+    object? InstanceToValidate { get; }
 
     /// <summary>
-    ///     Additional data associated with the validation request.
+    /// Additional data associated with the validation request.
     /// </summary>
     IDictionary<string, object> RootContextData { get; }
 
     /// <summary>
-    ///     Property chain
+    /// Property chain
     /// </summary>
     PropertyChain PropertyChain { get; }
 
     /// <summary>
-    ///     Selector
+    /// Selector
     /// </summary>
-    IValidatorSelector Selector { get; }
+    IValidatorSelector? Selector { get; }
 
     /// <summary>
-    ///     Whether this is a child context
+    /// Whether this is a child context
     /// </summary>
     bool IsChildContext { get; }
 
     /// <summary>
-    ///     Whether this is a child collection context.
+    /// Whether this is a child collection context.
     /// </summary>
     bool IsChildCollectionContext { get; }
 
     /// <summary>
-    ///     Parent validation context.
+    /// Parent validation context.
     /// </summary>
-    IValidationContext ParentContext { get; }
+    IValidationContext? ParentContext { get; }
 
     /// <summary>
-    ///     Whether this context is async.
+    /// Whether this context is async.
     /// </summary>
     bool IsAsync { get; }
 
     /// <summary>
-    ///     Whether the validator should throw an exception if validation fails.
-    ///     The default is false.
+    /// Whether the validator should throw an exception if validation fails.
+    /// The default is false.
     /// </summary>
     bool ThrowOnFailures { get; }
 }
@@ -56,41 +56,59 @@ internal interface IHasFailures {
 }
 
 /// <summary>
-///     Validation context
+/// Validation context
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public class ValidationContext<T> : IValidationContext, IHasFailures {
-    private Func<ValidationContext<T>, string> _displayNameFunc;
+public class ValidationContext<T>
+    : IValidationContext, IHasFailures
+        where T : notnull {
+    private Func<ValidationContext<T>, string>? _displayNameFunc;
     private IValidationContext? _parentContext;
-
-
     private Dictionary<string, Dictionary<T, bool>>? _sharedConditionCache;
-
-
-    private Stack<(bool IsChildContext, bool IsChildCollectionContext, IValidationContext ParentContext,
-        PropertyChain Chain, Dictionary<string, Dictionary<T, bool>> SharedConditionCache)> _state;
+    private Stack<(
+        bool IsChildContext,
+        bool IsChildCollectionContext,
+        IValidationContext? ParentContext,
+        PropertyChain? Chain,
+        Dictionary<string, Dictionary<T, bool>>? SharedConditionCache
+    )>? _state;
 
     /// <summary>
-    ///     Creates a new validation context
+    /// Creates a new validation context
     /// </summary>
     /// <param name="instanceToValidate"></param>
     public ValidationContext(T instanceToValidate)
-        : this(instanceToValidate, null,
-            ValidatorOptions.Global.ValidatorSelectors.DefaultValidatorSelectorFactory()) { }
+        : this(
+            instanceToValidate,
+            null,
+            ValidatorOptions.Global.ValidatorSelectors.DefaultValidatorSelectorFactory()
+        ) { }
 
     /// <summary>
-    ///     Creates a new validation context with a custom property chain and selector
+    /// Creates a new validation context with a custom property chain and selector
     /// </summary>
     /// <param name="instanceToValidate"></param>
     /// <param name="propertyChain"></param>
     /// <param name="validatorSelector"></param>
-    public ValidationContext(T instanceToValidate, PropertyChain propertyChain,
-        IValidatorSelector validatorSelector)
-        : this(instanceToValidate, propertyChain, validatorSelector, new List<ValidationFailure>(),
-            ValidatorOptions.Global.MessageFormatterFactory()) { }
+    public ValidationContext(
+        T? instanceToValidate,
+        PropertyChain? propertyChain,
+        IValidatorSelector validatorSelector
+    ) : this(
+        instanceToValidate,
+        propertyChain,
+        validatorSelector,
+        new List<ValidationFailure>(),
+        ValidatorOptions.Global.MessageFormatterFactory()
+    ) { }
 
-    internal ValidationContext(T instanceToValidate, PropertyChain propertyChain,
-        IValidatorSelector validatorSelector, List<ValidationFailure> failures, MessageFormatter messageFormatter) {
+    internal ValidationContext(
+        T? instanceToValidate,
+        PropertyChain? propertyChain,
+        IValidatorSelector? validatorSelector,
+        List<ValidationFailure> failures,
+        MessageFormatter messageFormatter
+    ) {
         PropertyChain = new PropertyChain(propertyChain);
         InstanceToValidate = instanceToValidate;
         Selector = validatorSelector;
@@ -101,19 +119,19 @@ public class ValidationContext<T> : IValidationContext, IHasFailures {
     internal List<ValidationFailure> Failures { get; }
 
     /// <summary>
-    ///     The message formatter used to construct error messages.
+    /// The message formatter used to construct error messages.
     /// </summary>
     public MessageFormatter MessageFormatter { get; }
 
     /// <summary>
-    ///     The object to validate
+    /// The object to validate
     /// </summary>
-    public T InstanceToValidate { get; }
+    public T? InstanceToValidate { get; }
 
     /// <summary>
-    ///     Shared condition results cache.
-    ///     The key of the outer dictionary is the ID of the condition, and its value is the cache for that condition.
-    ///     The key of the inner dictionary is the instance being validated, and the value is the condition result.
+    /// Shared condition results cache.
+    /// The key of the outer dictionary is the ID of the condition, and its value is the cache for that condition.
+    /// The key of the inner dictionary is the instance being validated, and the value is the condition result.
     /// </summary>
     internal Dictionary<string, Dictionary<T, bool>> SharedConditionCache {
         get {
@@ -123,54 +141,54 @@ public class ValidationContext<T> : IValidationContext, IHasFailures {
     }
 
     /// <summary>
-    ///     Gets the display name for the current property being validated.
+    /// Gets the display name for the current property being validated.
     /// </summary>
-    public string DisplayName => _displayNameFunc(this);
+    public string? DisplayName => _displayNameFunc?.Invoke(this);
 
     /// <summary>
-    ///     The full name of the current property being validated.
-    ///     If accessed inside a child validator, this will include the parent's path too.
+    /// The full name of the current property being validated.
+    /// If accessed inside a child validator, this will include the parent's path too.
     /// </summary>
-    public string PropertyName { get; private set; }
+    public string? PropertyName { get; private set; }
 
-    internal string RawPropertyName { get; private set; }
+    internal string? RawPropertyName { get; private set; }
 
     List<ValidationFailure> IHasFailures.Failures => Failures;
 
     /// <summary>
-    ///     Additional data associated with the validation request.
+    /// Additional data associated with the validation request.
     /// </summary>
     public IDictionary<string, object> RootContextData { get; private protected set; } =
         new Dictionary<string, object>();
 
     /// <summary>
-    ///     Property chain
+    /// Property chain
     /// </summary>
     public PropertyChain PropertyChain { get; private set; }
 
     /// <summary>
-    ///     Object being validated
+    /// Object being validated
     /// </summary>
-    object IValidationContext.InstanceToValidate => InstanceToValidate;
+    object? IValidationContext.InstanceToValidate => InstanceToValidate;
 
     /// <summary>
-    ///     Selector
+    /// Selector
     /// </summary>
     public IValidatorSelector Selector { get; }
 
     /// <summary>
-    ///     Whether this is a child context
+    /// Whether this is a child context
     /// </summary>
     public virtual bool IsChildContext { get; internal set; }
 
     /// <summary>
-    ///     Whether this is a child collection context.
+    /// Whether this is a child collection context.
     /// </summary>
     public virtual bool IsChildCollectionContext { get; internal set; }
 
     // This is the root context so it doesn't have a parent.
     // Explicit implementation so it's not exposed necessarily.
-    IValidationContext IValidationContext.ParentContext => _parentContext;
+    IValidationContext? IValidationContext.ParentContext => _parentContext;
 
     /// <inheritdoc />
     public bool IsAsync {
@@ -179,13 +197,13 @@ public class ValidationContext<T> : IValidationContext, IHasFailures {
     }
 
     /// <summary>
-    ///     Whether the root validator should throw an exception when validation fails.
-    ///     Defaults to false.
+    /// Whether the root validator should throw an exception when validation fails.
+    /// Defaults to false.
     /// </summary>
     public bool ThrowOnFailures { get; internal set; }
 
     /// <summary>
-    ///     Creates a new validation context using the specified options.
+    /// Creates a new validation context using the specified options.
     /// </summary>
     /// <param name="instanceToValidate">The instance to validate</param>
     /// <param name="options">Callback that allows extra options to be configured.</param>
@@ -201,7 +219,7 @@ public class ValidationContext<T> : IValidationContext, IHasFailures {
     }
 
     /// <summary>
-    ///     Gets or creates generic validation context from non-generic validation context.
+    /// Gets or creates generic validation context from non-generic validation context.
     /// </summary>
     /// <param name="context"></param>
     /// <returns></returns>
@@ -236,7 +254,7 @@ public class ValidationContext<T> : IValidationContext, IHasFailures {
             List<ValidationFailure> failures =
                 context is IHasFailures f ? f.Failures : new List<ValidationFailure>();
 
-            return new ValidationContext<T>(default, context.PropertyChain, context.Selector, failures,
+            return new(default, context.PropertyChain, context.Selector, failures,
                 ValidatorOptions.Global.MessageFormatterFactory()) {
                 IsChildContext = context.IsChildContext,
                 RootContextData = context.RootContextData,
@@ -251,16 +269,24 @@ public class ValidationContext<T> : IValidationContext, IHasFailures {
     }
 
     /// <summary>
-    ///     Creates a new validation context for use with a child validator
+    /// Creates a new validation context for use with a child validator
     /// </summary>
     /// <param name="instanceToValidate"></param>
     /// <param name="preserveParentContext"></param>
     /// <param name="selector"></param>
     /// <returns></returns>
-    public ValidationContext<TChild> CloneForChildValidator<TChild>(TChild instanceToValidate,
-        bool preserveParentContext = false, IValidatorSelector selector = null) {
-        return new ValidationContext<TChild>(instanceToValidate, PropertyChain, selector ?? Selector, Failures,
-            MessageFormatter) {
+    public ValidationContext<TChild> CloneForChildValidator<TChild>(
+        TChild instanceToValidate,
+        bool preserveParentContext = false,
+        IValidatorSelector? selector = null
+    ) where TChild : notnull {
+        return new(
+            instanceToValidate,
+            PropertyChain,
+            selector ?? Selector,
+            Failures,
+            MessageFormatter
+        ) {
             IsChildContext = true,
             RootContextData = RootContextData,
             _parentContext = preserveParentContext ? this : null,
@@ -269,19 +295,21 @@ public class ValidationContext<T> : IValidationContext, IHasFailures {
     }
 
     internal void PrepareForChildCollectionValidator() {
-        _state ??=
-            new Stack<(bool IsChildContext, bool IsChildCollectionContext, IValidationContext ParentContext,
-                PropertyChain Chain, Dictionary<string, Dictionary<T, bool>> SharedConditionCache)>();
+        _state ??= new();
         _state.Push(
-            (IsChildContext, IsChildCollectionContext, _parentContext, PropertyChain, _sharedConditionCache));
+            (IsChildContext, IsChildCollectionContext, _parentContext, PropertyChain, _sharedConditionCache)
+        );
         IsChildContext = true;
         IsChildCollectionContext = true;
         PropertyChain = new PropertyChain();
     }
 
     internal void RestoreState() {
-        (bool IsChildContext, bool IsChildCollectionContext, IValidationContext ParentContext, PropertyChain Chain,
-            Dictionary<string, Dictionary<T, bool>> SharedConditionCache) state = _state.Pop();
+        if(_state is null) {
+            throw new InvalidOperationException();
+        }
+
+        var state = _state.Pop();
         IsChildContext = state.IsChildContext;
         IsChildCollectionContext = state.IsChildCollectionContext;
         _parentContext = state.ParentContext;
@@ -290,7 +318,7 @@ public class ValidationContext<T> : IValidationContext, IHasFailures {
     }
 
     /// <summary>
-    ///     Adds a new validation failure.
+    /// Adds a new validation failure.
     /// </summary>
     /// <param name="failure">The failure to add.</param>
     /// <exception cref="ArgumentNullException"></exception>
@@ -303,20 +331,24 @@ public class ValidationContext<T> : IValidationContext, IHasFailures {
     }
 
     /// <summary>
-    ///     Adds a new validation failure for the specified property.
+    /// Adds a new validation failure for the specified property.
     /// </summary>
     /// <param name="propertyName">The property name</param>
     /// <param name="errorMessage">The error message</param>
     public void AddFailure(string propertyName, string errorMessage) {
         errorMessage.Guard("An error message must be specified when calling AddFailure.", nameof(errorMessage));
         errorMessage = MessageFormatter.BuildMessage(errorMessage);
-        AddFailure(new ValidationFailure(PropertyChain.BuildPropertyName(propertyName ?? string.Empty),
-            errorMessage));
+        AddFailure(
+            new ValidationFailure(
+                PropertyChain.BuildPropertyName(propertyName ?? string.Empty),
+                errorMessage
+            )
+        );
     }
 
     /// <summary>
-    ///     Adds a new validation failure for the specified message.
-    ///     The failure will be associated with the current property being validated.
+    /// Adds a new validation failure for the specified message.
+    /// The failure will be associated with the current property being validated.
     /// </summary>
     /// <param name="errorMessage">The error message</param>
     public void AddFailure(string errorMessage) {

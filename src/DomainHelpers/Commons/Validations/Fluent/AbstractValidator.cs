@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 namespace DomainHelpers.Core.Validations;
 
 /// <summary>
-///     Base class for object validators.
+/// Base class for object validators.
 /// </summary>
 /// <typeparam name="T">The type of the object being validated</typeparam>
 public abstract class AbstractValidator<T> : IValidator<T>, IEnumerable<IValidationRule> {
@@ -16,29 +16,29 @@ public abstract class AbstractValidator<T> : IValidator<T>, IEnumerable<IValidat
     internal TrackingCollection<IValidationRuleInternal<T>> Rules { get; } = new();
 
     /// <summary>
-    ///     <para>
-    ///         Sets the cascade behaviour <i>in between</i> rules in this validator.
-    ///         This overrides the default value set in <see cref="ValidatorConfiguration.DefaultClassLevelCascadeMode" />.
-    ///     </para>
-    ///     <para>
-    ///         If set to <see cref="DomainHelpers.Core.Validations.CascadeMode.Continue" /> then all rules in the class will
-    ///         execute regardless of failures.
-    ///     </para>
-    ///     <para>
-    ///         If set to <see cref="DomainHelpers.Core.Validations.CascadeMode.Stop" /> then execution of the validator will
-    ///         stop after any rule fails.
-    ///     </para>
-    ///     <para>
-    ///         Note that cascade behaviour <i>within</i> individual rules is controlled by
-    ///         <see cref="AbstractValidator{T}.RuleLevelCascadeMode" />.
-    ///     </para>
-    ///     <para>
-    ///         This cannot be set to the deprecated
-    ///         <see cref="DomainHelpers.Core.Validations.CascadeMode.StopOnFirstFailure" />.
-    ///         <see cref="DomainHelpers.Core.Validations.CascadeMode.StopOnFirstFailure" />. Attempting to do so it will
-    ///         actually
-    ///         result in <see cref="DomainHelpers.Core.Validations.CascadeMode.Stop" /> being used.
-    ///     </para>
+    /// <para>
+    ///     Sets the cascade behaviour <i>in between</i> rules in this validator.
+    ///     This overrides the default value set in <see cref="ValidatorConfiguration.DefaultClassLevelCascadeMode" />.
+    /// </para>
+    /// <para>
+    ///     If set to <see cref="DomainHelpers.Core.Validations.CascadeMode.Continue" /> then all rules in the class will
+    ///     execute regardless of failures.
+    /// </para>
+    /// <para>
+    ///     If set to <see cref="DomainHelpers.Core.Validations.CascadeMode.Stop" /> then execution of the validator will
+    ///     stop after any rule fails.
+    /// </para>
+    /// <para>
+    ///     Note that cascade behaviour <i>within</i> individual rules is controlled by
+    ///     <see cref="AbstractValidator{T}.RuleLevelCascadeMode" />.
+    /// </para>
+    /// <para>
+    ///     This cannot be set to the deprecated
+    ///     <see cref="DomainHelpers.Core.Validations.CascadeMode.StopOnFirstFailure" />.
+    ///     <see cref="DomainHelpers.Core.Validations.CascadeMode.StopOnFirstFailure" />. Attempting to do so it will
+    ///     actually
+    ///     result in <see cref="DomainHelpers.Core.Validations.CascadeMode.Stop" /> being used.
+    /// </para>
     /// </summary>
     public CascadeMode ClassLevelCascadeMode {
         get => _classLevelCascadeMode();
@@ -46,30 +46,30 @@ public abstract class AbstractValidator<T> : IValidator<T>, IEnumerable<IValidat
     }
 
     /// <summary>
-    ///     <para>
-    ///         Sets the default cascade behaviour <i>within</i> each rule in this validator.
-    ///     </para>
-    ///     <para>
-    ///         This overrides the default value set in <see cref="ValidatorConfiguration.DefaultRuleLevelCascadeMode" />.
-    ///     </para>
-    ///     <para>
-    ///         It can be further overridden for specific rules by calling
-    ///         <see
-    ///             cref="DefaultValidatorOptions.Cascade{T, TProperty}(IRuleBuilderInitial{T, TProperty}, DomainHelpers.Core.Validations.CascadeMode)" />
-    ///         .
-    ///         <seealso cref="RuleBase{T, TProperty, TValue}.CascadeMode" />.
-    ///     </para>
-    ///     <para>
-    ///         Note that cascade behaviour <i>between</i> rules is controlled by
-    ///         <see cref="AbstractValidator{T}.ClassLevelCascadeMode" />.
-    ///     </para>
-    ///     <para>
-    ///         This cannot be set to the deprecated
-    ///         <see cref="DomainHelpers.Core.Validations.CascadeMode.StopOnFirstFailure" />.
-    ///         <see cref="DomainHelpers.Core.Validations.CascadeMode.StopOnFirstFailure" />. Attempting to do so it will
-    ///         actually
-    ///         result in <see cref="DomainHelpers.Core.Validations.CascadeMode.Stop" /> being used.
-    ///     </para>
+    /// <para>
+    ///     Sets the default cascade behaviour <i>within</i> each rule in this validator.
+    /// </para>
+    /// <para>
+    ///     This overrides the default value set in <see cref="ValidatorConfiguration.DefaultRuleLevelCascadeMode" />.
+    /// </para>
+    /// <para>
+    ///     It can be further overridden for specific rules by calling
+    ///     <see
+    ///         cref="DefaultValidatorOptions.Cascade{T, TProperty}(IRuleBuilderInitial{T, TProperty}, DomainHelpers.Core.Validations.CascadeMode)" />
+    ///     .
+    ///     <seealso cref="RuleBase{T, TProperty, TValue}.CascadeMode" />.
+    /// </para>
+    /// <para>
+    ///     Note that cascade behaviour <i>between</i> rules is controlled by
+    ///     <see cref="AbstractValidator{T}.ClassLevelCascadeMode" />.
+    /// </para>
+    /// <para>
+    ///     This cannot be set to the deprecated
+    ///     <see cref="DomainHelpers.Core.Validations.CascadeMode.StopOnFirstFailure" />.
+    ///     <see cref="DomainHelpers.Core.Validations.CascadeMode.StopOnFirstFailure" />. Attempting to do so it will
+    ///     actually
+    ///     result in <see cref="DomainHelpers.Core.Validations.CascadeMode.Stop" /> being used.
+    /// </para>
     /// </summary>
     public CascadeMode RuleLevelCascadeMode {
         get => _ruleLevelCascadeMode();
@@ -77,10 +77,10 @@ public abstract class AbstractValidator<T> : IValidator<T>, IEnumerable<IValidat
     }
 
     /// <summary>
-    ///     Returns an enumerator that iterates through the collection of validation rules.
+    /// Returns an enumerator that iterates through the collection of validation rules.
     /// </summary>
     /// <returns>
-    ///     A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
+    /// A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
     /// </returns>
     /// <filterpriority>1</filterpriority>
     public IEnumerator<IValidationRule> GetEnumerator() {
@@ -102,7 +102,7 @@ public abstract class AbstractValidator<T> : IValidator<T>, IEnumerable<IValidat
     }
 
     /// <summary>
-    ///     Validates the specified instance
+    /// Validates the specified instance
     /// </summary>
     /// <param name="instance">The object to validate</param>
     /// <returns>A ValidationResult object containing any validation failures</returns>
@@ -112,7 +112,7 @@ public abstract class AbstractValidator<T> : IValidator<T>, IEnumerable<IValidat
     }
 
     /// <summary>
-    ///     Validates the specified instance asynchronously
+    /// Validates the specified instance asynchronously
     /// </summary>
     /// <param name="instance">The object to validate</param>
     /// <param name="cancellation">Cancellation token</param>
@@ -132,7 +132,7 @@ public abstract class AbstractValidator<T> : IValidator<T>, IEnumerable<IValidat
     }
 
     /// <summary>
-    ///     Validates the specified instance.
+    /// Validates the specified instance.
     /// </summary>
     /// <param name="context">Validation Context</param>
     /// <returns>A ValidationResult object containing any validation failures.</returns>
@@ -167,7 +167,7 @@ public abstract class AbstractValidator<T> : IValidator<T>, IEnumerable<IValidat
     }
 
     /// <summary>
-    ///     Validates the specified instance asynchronously.
+    /// Validates the specified instance asynchronously.
     /// </summary>
     /// <param name="context">Validation Context</param>
     /// <param name="cancellation">Cancellation token</param>
@@ -226,10 +226,10 @@ public abstract class AbstractValidator<T> : IValidator<T>, IEnumerable<IValidat
     }
 
     /// <summary>
-    ///     Defines a validation rule for a specify property.
+    /// Defines a validation rule for a specify property.
     /// </summary>
     /// <example>
-    ///     RuleFor(x => x.Surname)...
+    /// RuleFor(x => x.Surname)...
     /// </example>
     /// <typeparam name="TProperty">The type of property being validated</typeparam>
     /// <param name="expression">The expression representing the property to validate</param>
@@ -242,10 +242,10 @@ public abstract class AbstractValidator<T> : IValidator<T>, IEnumerable<IValidat
     }
 
     /// <summary>
-    ///     Defines a validation rule for a specify property and transform it to a different type.
+    /// Defines a validation rule for a specify property and transform it to a different type.
     /// </summary>
     /// <example>
-    ///     Transform(x => x.OrderNumber, to: orderNumber => orderNumber.ToString())...
+    /// Transform(x => x.OrderNumber, to: orderNumber => orderNumber.ToString())...
     /// </example>
     /// <typeparam name="TProperty">The type of property being validated</typeparam>
     /// <typeparam name="TTransformed">The type after the transformer has been applied</typeparam>
@@ -262,10 +262,10 @@ public abstract class AbstractValidator<T> : IValidator<T>, IEnumerable<IValidat
     }
 
     /// <summary>
-    ///     Defines a validation rule for a specify property and transform it to a different type.
+    /// Defines a validation rule for a specify property and transform it to a different type.
     /// </summary>
     /// <example>
-    ///     Transform(x => x.OrderNumber, to: orderNumber => orderNumber.ToString())...
+    /// Transform(x => x.OrderNumber, to: orderNumber => orderNumber.ToString())...
     /// </example>
     /// <typeparam name="TProperty">The type of property being validated</typeparam>
     /// <typeparam name="TTransformed">The type after the transformer has been applied</typeparam>
@@ -283,7 +283,7 @@ public abstract class AbstractValidator<T> : IValidator<T>, IEnumerable<IValidat
 
 
     /// <summary>
-    ///     Invokes a rule for each item in the collection.
+    /// Invokes a rule for each item in the collection.
     /// </summary>
     /// <typeparam name="TElement">Type of property</typeparam>
     /// <param name="expression">Expression representing the collection to validate</param>
@@ -298,7 +298,7 @@ public abstract class AbstractValidator<T> : IValidator<T>, IEnumerable<IValidat
     }
 
     /// <summary>
-    ///     Invokes a rule for each item in the collection, transforming the element from one type to another.
+    /// Invokes a rule for each item in the collection, transforming the element from one type to another.
     /// </summary>
     /// <typeparam name="TElement">Type of property</typeparam>
     /// <typeparam name="TTransformed">The type after the transformer has been applied</typeparam>
@@ -315,7 +315,7 @@ public abstract class AbstractValidator<T> : IValidator<T>, IEnumerable<IValidat
     }
 
     /// <summary>
-    ///     Invokes a rule for each item in the collection, transforming the element from one type to another.
+    /// Invokes a rule for each item in the collection, transforming the element from one type to another.
     /// </summary>
     /// <typeparam name="TElement">Type of property</typeparam>
     /// <typeparam name="TTransformed">The type after the transformer has been applied</typeparam>
@@ -332,7 +332,7 @@ public abstract class AbstractValidator<T> : IValidator<T>, IEnumerable<IValidat
     }
 
     /// <summary>
-    ///     Defines a RuleSet that can be used to group together several validators.
+    /// Defines a RuleSet that can be used to group together several validators.
     /// </summary>
     /// <param name="ruleSetName">The name of the ruleset.</param>
     /// <param name="action">Action that encapsulates the rules in the ruleset.</param>
@@ -350,7 +350,7 @@ public abstract class AbstractValidator<T> : IValidator<T>, IEnumerable<IValidat
     }
 
     /// <summary>
-    ///     Defines a condition that applies to several rules
+    /// Defines a condition that applies to several rules
     /// </summary>
     /// <param name="predicate">The condition that should apply to multiple rules</param>
     /// <param name="action">Action that encapsulates the rules.</param>
@@ -360,7 +360,7 @@ public abstract class AbstractValidator<T> : IValidator<T>, IEnumerable<IValidat
     }
 
     /// <summary>
-    ///     Defines a condition that applies to several rules
+    /// Defines a condition that applies to several rules
     /// </summary>
     /// <param name="predicate">The condition that should apply to multiple rules</param>
     /// <param name="action">Action that encapsulates the rules.</param>
@@ -370,7 +370,7 @@ public abstract class AbstractValidator<T> : IValidator<T>, IEnumerable<IValidat
     }
 
     /// <summary>
-    ///     Defines an inverse condition that applies to several rules
+    /// Defines an inverse condition that applies to several rules
     /// </summary>
     /// <param name="predicate">The condition that should be applied to multiple rules</param>
     /// <param name="action">Action that encapsulates the rules</param>
@@ -379,7 +379,7 @@ public abstract class AbstractValidator<T> : IValidator<T>, IEnumerable<IValidat
     }
 
     /// <summary>
-    ///     Defines an inverse condition that applies to several rules
+    /// Defines an inverse condition that applies to several rules
     /// </summary>
     /// <param name="predicate">The condition that should be applied to multiple rules</param>
     /// <param name="action">Action that encapsulates the rules</param>
@@ -388,7 +388,7 @@ public abstract class AbstractValidator<T> : IValidator<T>, IEnumerable<IValidat
     }
 
     /// <summary>
-    ///     Defines an asynchronous condition that applies to several rules
+    /// Defines an asynchronous condition that applies to several rules
     /// </summary>
     /// <param name="predicate">The asynchronous condition that should apply to multiple rules</param>
     /// <param name="action">Action that encapsulates the rules.</param>
@@ -398,7 +398,7 @@ public abstract class AbstractValidator<T> : IValidator<T>, IEnumerable<IValidat
     }
 
     /// <summary>
-    ///     Defines an asynchronous condition that applies to several rules
+    /// Defines an asynchronous condition that applies to several rules
     /// </summary>
     /// <param name="predicate">The asynchronous condition that should apply to multiple rules</param>
     /// <param name="action">Action that encapsulates the rules.</param>
@@ -409,7 +409,7 @@ public abstract class AbstractValidator<T> : IValidator<T>, IEnumerable<IValidat
     }
 
     /// <summary>
-    ///     Defines an inverse asynchronous condition that applies to several rules
+    /// Defines an inverse asynchronous condition that applies to several rules
     /// </summary>
     /// <param name="predicate">The asynchronous condition that should be applied to multiple rules</param>
     /// <param name="action">Action that encapsulates the rules</param>
@@ -418,7 +418,7 @@ public abstract class AbstractValidator<T> : IValidator<T>, IEnumerable<IValidat
     }
 
     /// <summary>
-    ///     Defines an inverse asynchronous condition that applies to several rules
+    /// Defines an inverse asynchronous condition that applies to several rules
     /// </summary>
     /// <param name="predicate">The asynchronous condition that should be applied to multiple rules</param>
     /// <param name="action">Action that encapsulates the rules</param>
@@ -428,7 +428,7 @@ public abstract class AbstractValidator<T> : IValidator<T>, IEnumerable<IValidat
     }
 
     /// <summary>
-    ///     Includes the rules from the specified validator
+    /// Includes the rules from the specified validator
     /// </summary>
     public void Include(IValidator<T> rulesToInclude) {
         rulesToInclude.Guard("Cannot pass null to Include", nameof(rulesToInclude));
@@ -437,7 +437,7 @@ public abstract class AbstractValidator<T> : IValidator<T>, IEnumerable<IValidat
     }
 
     /// <summary>
-    ///     Includes the rules from the specified validator
+    /// Includes the rules from the specified validator
     /// </summary>
     public void Include<TValidator>(Func<T, TValidator> rulesToInclude) where TValidator : IValidator<T> {
         rulesToInclude.Guard("Cannot pass null to Include", nameof(rulesToInclude));
@@ -446,7 +446,7 @@ public abstract class AbstractValidator<T> : IValidator<T>, IEnumerable<IValidat
     }
 
     /// <summary>
-    ///     Throws an exception if the instance being validated is null.
+    /// Throws an exception if the instance being validated is null.
     /// </summary>
     /// <param name="instanceToValidate"></param>
     protected virtual void EnsureInstanceNotNull(object? instanceToValidate) {
@@ -454,9 +454,9 @@ public abstract class AbstractValidator<T> : IValidator<T>, IEnumerable<IValidat
     }
 
     /// <summary>
-    ///     Determines if validation should occtur and provides a means to modify the context and ValidationResult prior to
-    ///     execution.
-    ///     If this method returns false, then the ValidationResult is immediately returned from Validate/ValidateAsync.
+    /// Determines if validation should occtur and provides a means to modify the context and ValidationResult prior to
+    /// execution.
+    /// If this method returns false, then the ValidationResult is immediately returned from Validate/ValidateAsync.
     /// </summary>
     /// <param name="context"></param>
     /// <param name="result"></param>
@@ -466,8 +466,8 @@ public abstract class AbstractValidator<T> : IValidator<T>, IEnumerable<IValidat
     }
 
     /// <summary>
-    ///     Throws a ValidationException. This method will only be called if the validator has been configured
-    ///     to throw exceptions if validation fails. The default behaviour is not to throw an exception.
+    /// Throws a ValidationException. This method will only be called if the validator has been configured
+    /// to throw exceptions if validation fails. The default behaviour is not to throw an exception.
     /// </summary>
     /// <param name="context"></param>
     /// <param name="result"></param>

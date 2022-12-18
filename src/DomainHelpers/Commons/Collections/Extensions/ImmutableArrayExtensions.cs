@@ -3,11 +3,11 @@
 namespace System.Collections.Immutable;
 
 /// <summary>
-///     Immutable array factories.
+/// Immutable array factories.
 /// </summary>
 public static class ImmutableArrayFactory {
     /// <summary>
-    ///     Initialize immutable array.
+    /// Initialize immutable array.
     /// </summary>
     /// <typeparam name="T">Item type.</typeparam>
     /// <param name="inital">Initialize values.</param>
@@ -18,7 +18,7 @@ public static class ImmutableArrayFactory {
     }
 
     /// <summary>
-    ///     Initialize immutable array.
+    /// Initialize immutable array.
     /// </summary>
     /// <typeparam name="T">Item type.</typeparam>
     /// <param name="inital">Initialize values.</param>
@@ -29,7 +29,7 @@ public static class ImmutableArrayFactory {
     }
 
     /// <summary>
-    ///     Initialize immutable array with IEnumerable{T}.
+    /// Initialize immutable array with IEnumerable{T}.
     /// </summary>
     /// <typeparam name="T">Item type.</typeparam>
     /// <param name="inital">Initialize values.</param>

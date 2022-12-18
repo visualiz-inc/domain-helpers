@@ -4,18 +4,18 @@ using System.Runtime.Serialization;
 namespace DomainHelpers.Core.Validations;
 
 /// <summary>
-///     An exception that represents failed validation
+/// An exception that represents failed validation
 /// </summary>
 [Serializable]
 public class ValidationException : Exception {
     /// <summary>
-    ///     Creates a new ValidationException
+    /// Creates a new ValidationException
     /// </summary>
     /// <param name="message"></param>
     public ValidationException(string message) : this(message, Enumerable.Empty<ValidationFailure>()) { }
 
     /// <summary>
-    ///     Creates a new ValidationException
+    /// Creates a new ValidationException
     /// </summary>
     /// <param name="message"></param>
     /// <param name="errors"></param>
@@ -24,7 +24,7 @@ public class ValidationException : Exception {
     }
 
     /// <summary>
-    ///     Creates a new ValidationException
+    /// Creates a new ValidationException
     /// </summary>
     /// <param name="message"></param>
     /// <param name="errors"></param>
@@ -35,7 +35,7 @@ public class ValidationException : Exception {
     }
 
     /// <summary>
-    ///     Creates a new ValidationException
+    /// Creates a new ValidationException
     /// </summary>
     /// <param name="errors"></param>
     public ValidationException(IEnumerable<ValidationFailure> errors) : base(BuildErrorMessage(errors)) {
@@ -47,7 +47,7 @@ public class ValidationException : Exception {
     }
 
     /// <summary>
-    ///     Validation errors
+    /// Validation errors
     /// </summary>
     public IEnumerable<ValidationFailure> Errors { get; private set; }
 

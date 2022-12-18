@@ -4,11 +4,11 @@ using System.Reflection;
 namespace DomainHelpers.Core.Validations.Internal;
 
 /// <summary>
-///     Useful extensions
+/// Useful extensions
 /// </summary>
 public static class Extensions {
     /// <summary>
-    ///     Gets a MemberInfo from a member expression.
+    /// Gets a MemberInfo from a member expression.
     /// </summary>
     public static MemberInfo? GetMember<T, TProperty>(this Expression<Func<T, TProperty>> expression) {
         if (RemoveUnary(expression.Body) is not MemberExpression memberExp) {

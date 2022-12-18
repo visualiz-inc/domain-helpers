@@ -1,7 +1,7 @@
 namespace DomainHelpers.Core.Validations;
 
 /// <summary>
-///     This exception is thrown when an asynchronous validator is executed synchronously.
+/// This exception is thrown when an asynchronous validator is executed synchronously.
 /// </summary>
 public class AsyncValidatorInvokedSynchronouslyException : InvalidOperationException {
     internal AsyncValidatorInvokedSynchronouslyException() { }

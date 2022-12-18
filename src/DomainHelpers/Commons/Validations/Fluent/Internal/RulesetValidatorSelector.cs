@@ -1,26 +1,26 @@
 namespace DomainHelpers.Core.Validations.Internal;
 
 /// <summary>
-///     Selects validators that belong to the specified rulesets.
+/// Selects validators that belong to the specified rulesets.
 /// </summary>
 public class RulesetValidatorSelector : IValidatorSelector {
     public const string DefaultRuleSetName = "default";
     public const string WildcardRuleSetName = "*";
 
     /// <summary>
-    ///     Creates a new instance of the RulesetValidatorSelector.
+    /// Creates a new instance of the RulesetValidatorSelector.
     /// </summary>
     public RulesetValidatorSelector(IEnumerable<string> rulesetsToExecute) {
         RuleSets = rulesetsToExecute;
     }
 
     /// <summary>
-    ///     Rule sets
+    /// Rule sets
     /// </summary>
     public IEnumerable<string> RuleSets { get; }
 
     /// <summary>
-    ///     Determines whether or not a rule should execute.
+    /// Determines whether or not a rule should execute.
     /// </summary>
     /// <param name="rule">The rule</param>
     /// <param name="propertyPath">Property path (eg Customer.Address.Line1)</param>
@@ -75,7 +75,7 @@ public class RulesetValidatorSelector : IValidatorSelector {
     }
 
     /// <summary>
-    ///     Checks if the rule is an IncludeRule
+    /// Checks if the rule is an IncludeRule
     /// </summary>
     /// <param name="rule"></param>
     /// <returns></returns>

@@ -4,12 +4,15 @@ using System.Reflection;
 
 namespace DomainHelpers.Core.Validations;
 
+#pragma warning disable CS8600
+#pragma warning disable CS8604
+
 /// <summary>
-///     Default options that can be used to configure a validator.
+/// Default options that can be used to configure a validator.
 /// </summary>
 public static class DefaultValidatorOptions {
     /// <summary>
-    ///     Configures the rule.
+    /// Configures the rule.
     /// </summary>
     /// <param name="ruleBuilder"></param>
     /// <param name="configurator">Action to configure the object.</param>
@@ -21,7 +24,7 @@ public static class DefaultValidatorOptions {
     }
 
     /// <summary>
-    ///     Configures the current object.
+    /// Configures the current object.
     /// </summary>
     /// <param name="ruleBuilder"></param>
     /// <param name="configurator">Action to configure the object.</param>
@@ -34,7 +37,7 @@ public static class DefaultValidatorOptions {
 
 
     /// <summary>
-    ///     Configures the rule object.
+    /// Configures the rule object.
     /// </summary>
     /// <param name="ruleBuilder"></param>
     /// <param name="configurator">Action to configure the object.</param>
@@ -47,7 +50,7 @@ public static class DefaultValidatorOptions {
     }
 
     /// <summary>
-    ///     Gets the configurable rule instance from a rule builder.
+    /// Gets the configurable rule instance from a rule builder.
     /// </summary>
     /// <param name="ruleBuilder">The rule builder.</param>
     /// <returns>A configurable IValidationRule instance.</returns>
@@ -56,7 +59,7 @@ public static class DefaultValidatorOptions {
     }
 
     /// <summary>
-    ///     Gets the configurable rule instance from a rule builder.
+    /// Gets the configurable rule instance from a rule builder.
     /// </summary>
     /// <param name="ruleBuilder">The rule builder.</param>
     /// <returns>A configurable IValidationRule instance.</returns>
@@ -67,21 +70,21 @@ public static class DefaultValidatorOptions {
     }
 
     /// <summary>
-    ///     <para>
-    ///         Specifies the cascade mode for failures.
-    ///     </para>
-    ///     <para>
-    ///         If set to <see cref="CascadeMode.Stop" /> then execution of the rule will stop once the first validator in the
-    ///         chain fails.
-    ///     </para>
-    ///     <para>
-    ///         If set to <see cref="CascadeMode.Continue" /> then all validators in the chain will execute regardless of
-    ///         failures.
-    ///     </para>
-    ///     <para>
-    ///         If set to the deprecated <see cref="CascadeMode.StopOnFirstFailure" />, behavior is as with
-    ///         <see cref="CascadeMode.Stop" />.
-    ///     </para>
+    /// <para>
+    ///     Specifies the cascade mode for failures.
+    /// </para>
+    /// <para>
+    ///     If set to <see cref="CascadeMode.Stop" /> then execution of the rule will stop once the first validator in the
+    ///     chain fails.
+    /// </para>
+    /// <para>
+    ///     If set to <see cref="CascadeMode.Continue" /> then all validators in the chain will execute regardless of
+    ///     failures.
+    /// </para>
+    /// <para>
+    ///     If set to the deprecated <see cref="CascadeMode.StopOnFirstFailure" />, behavior is as with
+    ///     <see cref="CascadeMode.Stop" />.
+    /// </para>
     /// </summary>
     public static IRuleBuilderInitial<T, TProperty> Cascade<T, TProperty>(
         this IRuleBuilderInitial<T, TProperty> ruleBuilder, CascadeMode cascadeMode) {
@@ -90,21 +93,21 @@ public static class DefaultValidatorOptions {
     }
 
     /// <summary>
-    ///     <para>
-    ///         Specifies the cascade mode for failures.
-    ///     </para>
-    ///     <para>
-    ///         If set to <see cref="CascadeMode.Stop" /> then execution of the rule will stop once the first validator in the
-    ///         chain fails.
-    ///     </para>
-    ///     <para>
-    ///         If set to <see cref="CascadeMode.Continue" /> then all validators in the chain will execute regardless of
-    ///         failures.
-    ///     </para>
-    ///     <para>
-    ///         If set to the deprecated <see cref="CascadeMode.StopOnFirstFailure" />, behaviour is as with
-    ///         <see cref="CascadeMode.Stop" />.
-    ///     </para>
+    /// <para>
+    ///     Specifies the cascade mode for failures.
+    /// </para>
+    /// <para>
+    ///     If set to <see cref="CascadeMode.Stop" /> then execution of the rule will stop once the first validator in the
+    ///     chain fails.
+    /// </para>
+    /// <para>
+    ///     If set to <see cref="CascadeMode.Continue" /> then all validators in the chain will execute regardless of
+    ///     failures.
+    /// </para>
+    /// <para>
+    ///     If set to the deprecated <see cref="CascadeMode.StopOnFirstFailure" />, behaviour is as with
+    ///     <see cref="CascadeMode.Stop" />.
+    /// </para>
     /// </summary>
     public static IRuleBuilderInitialCollection<T, TProperty> Cascade<T, TProperty>(
         this IRuleBuilderInitialCollection<T, TProperty> ruleBuilder, CascadeMode cascadeMode) {
@@ -113,7 +116,7 @@ public static class DefaultValidatorOptions {
     }
 
     /// <summary>
-    ///     Specifies a custom error message to use when validation fails. Only applies to the rule that directly precedes it.
+    /// Specifies a custom error message to use when validation fails. Only applies to the rule that directly precedes it.
     /// </summary>
     /// <param name="rule">The current rule</param>
     /// <param name="errorMessage">The error message to use</param>
@@ -126,22 +129,28 @@ public static class DefaultValidatorOptions {
     }
 
     /// <summary>
-    ///     Specifies a custom error message to use when validation fails. Only applies to the rule that directly precedes it.
+    /// Specifies a custom error message to use when validation fails. Only applies to the rule that directly precedes it.
     /// </summary>
     /// <param name="rule">The current rule</param>
     /// <param name="messageProvider">Delegate that will be invoked to retrieve the localized message. </param>
     /// <returns></returns>
     public static IRuleBuilderOptions<T, TProperty> WithMessage<T, TProperty>(
-        this IRuleBuilderOptions<T, TProperty> rule, Func<T, string> messageProvider) {
-        messageProvider.Guard("A messageProvider must be provided.", nameof(messageProvider));
+        this IRuleBuilderOptions<T, TProperty> rule,
+        Func<T, string> messageProvider
+    ) {
+        messageProvider.Guard(
+            "A messageProvider must be provided.",
+            nameof(messageProvider)
+        );
         Configurable(rule).Current.SetErrorMessage((ctx, val) => {
-            return messageProvider(ctx == null ? default : ctx.InstanceToValidate);
+            return messageProvider(ctx is not null ? ctx.InstanceToValidate : default);
         });
+
         return rule;
     }
 
     /// <summary>
-    ///     Specifies a custom error message to use when validation fails. Only applies to the rule that directly precedes it.
+    /// Specifies a custom error message to use when validation fails. Only applies to the rule that directly precedes it.
     /// </summary>
     /// <param name="rule">The current rule</param>
     /// <param name="messageProvider">Delegate that will be invoked.Uses_localized_name to retrieve the localized message. </param>
@@ -156,7 +165,7 @@ public static class DefaultValidatorOptions {
     }
 
     /// <summary>
-    ///     Specifies a custom error code to use if validation fails.
+    /// Specifies a custom error code to use if validation fails.
     /// </summary>
     /// <param name="rule">The current rule</param>
     /// <param name="errorCode">The error code to use</param>
@@ -169,8 +178,8 @@ public static class DefaultValidatorOptions {
     }
 
     /// <summary>
-    ///     Specifies a condition limiting when the validator should run.
-    ///     The validator will only be executed if the result of the lambda returns true.
+    /// Specifies a condition limiting when the validator should run.
+    /// The validator will only be executed if the result of the lambda returns true.
     /// </summary>
     /// <param name="rule">The current rule</param>
     /// <param name="predicate">A lambda expression that specifies a condition for when the validator should run</param>
@@ -183,8 +192,8 @@ public static class DefaultValidatorOptions {
     }
 
     /// <summary>
-    ///     Specifies a condition limiting when the validator should run.
-    ///     The validator will only be executed if the result of the lambda returns true.
+    /// Specifies a condition limiting when the validator should run.
+    /// The validator will only be executed if the result of the lambda returns true.
     /// </summary>
     /// <param name="rule">The current rule</param>
     /// <param name="predicate">A lambda expression that specifies a condition for when the validator should run</param>
@@ -198,8 +207,8 @@ public static class DefaultValidatorOptions {
     }
 
     /// <summary>
-    ///     Specifies a condition limiting when the validator should run.
-    ///     The validator will only be executed if the result of the lambda returns true.
+    /// Specifies a condition limiting when the validator should run.
+    /// The validator will only be executed if the result of the lambda returns true.
     /// </summary>
     /// <param name="rule">The current rule</param>
     /// <param name="predicate">A lambda expression that specifies a condition for when the validator should run</param>
@@ -218,8 +227,8 @@ public static class DefaultValidatorOptions {
     }
 
     /// <summary>
-    ///     Specifies a condition limiting when the validator should run.
-    ///     The validator will only be executed if the result of the lambda returns true.
+    /// Specifies a condition limiting when the validator should run.
+    /// The validator will only be executed if the result of the lambda returns true.
     /// </summary>
     /// <param name="rule">The current rule</param>
     /// <param name="predicate">A lambda expression that specifies a condition for when the validator should run</param>
@@ -238,8 +247,8 @@ public static class DefaultValidatorOptions {
     }
 
     /// <summary>
-    ///     Specifies a condition limiting when the validator should not run.
-    ///     The validator will only be executed if the result of the lambda returns false.
+    /// Specifies a condition limiting when the validator should not run.
+    /// The validator will only be executed if the result of the lambda returns false.
     /// </summary>
     /// <param name="rule">The current rule</param>
     /// <param name="predicate">A lambda expression that specifies a condition for when the validator should not run</param>
@@ -253,8 +262,8 @@ public static class DefaultValidatorOptions {
     }
 
     /// <summary>
-    ///     Specifies a condition limiting when the validator should not run.
-    ///     The validator will only be executed if the result of the lambda returns false.
+    /// Specifies a condition limiting when the validator should not run.
+    /// The validator will only be executed if the result of the lambda returns false.
     /// </summary>
     /// <param name="rule">The current rule</param>
     /// <param name="predicate">A lambda expression that specifies a condition for when the validator should not run</param>
@@ -268,8 +277,8 @@ public static class DefaultValidatorOptions {
     }
 
     /// <summary>
-    ///     Specifies a condition limiting when the validator should not run.
-    ///     The validator will only be executed if the result of the lambda returns false.
+    /// Specifies a condition limiting when the validator should not run.
+    /// The validator will only be executed if the result of the lambda returns false.
     /// </summary>
     /// <param name="rule">The current rule</param>
     /// <param name="predicate">A lambda expression that specifies a condition for when the validator should not run</param>
@@ -283,8 +292,8 @@ public static class DefaultValidatorOptions {
     }
 
     /// <summary>
-    ///     Specifies a condition limiting when the validator should not run.
-    ///     The validator will only be executed if the result of the lambda returns false.
+    /// Specifies a condition limiting when the validator should not run.
+    /// The validator will only be executed if the result of the lambda returns false.
     /// </summary>
     /// <param name="rule">The current rule</param>
     /// <param name="predicate">A lambda expression that specifies a condition for when the validator should not run</param>
@@ -298,8 +307,8 @@ public static class DefaultValidatorOptions {
     }
 
     /// <summary>
-    ///     Specifies an asynchronous condition limiting when the validator should run.
-    ///     The validator will only be executed if the result of the lambda returns true.
+    /// Specifies an asynchronous condition limiting when the validator should run.
+    /// The validator will only be executed if the result of the lambda returns true.
     /// </summary>
     /// <param name="rule">The current rule</param>
     /// <param name="predicate">A lambda expression that specifies a condition for when the validator should run</param>
@@ -313,8 +322,8 @@ public static class DefaultValidatorOptions {
     }
 
     /// <summary>
-    ///     Specifies an asynchronous condition limiting when the validator should run.
-    ///     The validator will only be executed if the result of the lambda returns true.
+    /// Specifies an asynchronous condition limiting when the validator should run.
+    /// The validator will only be executed if the result of the lambda returns true.
     /// </summary>
     /// <param name="rule">The current rule</param>
     /// <param name="predicate">A lambda expression that specifies a condition for when the validator should run</param>
@@ -328,8 +337,8 @@ public static class DefaultValidatorOptions {
     }
 
     /// <summary>
-    ///     Specifies an asynchronous condition limiting when the validator should run.
-    ///     The validator will only be executed if the result of the lambda returns true.
+    /// Specifies an asynchronous condition limiting when the validator should run.
+    /// The validator will only be executed if the result of the lambda returns true.
     /// </summary>
     /// <param name="rule">The current rule</param>
     /// <param name="predicate">A lambda expression that specifies a condition for when the validator should run</param>
@@ -349,8 +358,8 @@ public static class DefaultValidatorOptions {
     }
 
     /// <summary>
-    ///     Specifies an asynchronous condition limiting when the validator should run.
-    ///     The validator will only be executed if the result of the lambda returns true.
+    /// Specifies an asynchronous condition limiting when the validator should run.
+    /// The validator will only be executed if the result of the lambda returns true.
     /// </summary>
     /// <param name="rule">The current rule</param>
     /// <param name="predicate">A lambda expression that specifies a condition for when the validator should run</param>
@@ -370,8 +379,8 @@ public static class DefaultValidatorOptions {
     }
 
     /// <summary>
-    ///     Specifies an asynchronous condition limiting when the validator should not run.
-    ///     The validator will only be executed if the result of the lambda returns false.
+    /// Specifies an asynchronous condition limiting when the validator should not run.
+    /// The validator will only be executed if the result of the lambda returns false.
     /// </summary>
     /// <param name="rule">The current rule</param>
     /// <param name="predicate">A lambda expression that specifies a condition for when the validator should not run</param>
@@ -385,8 +394,8 @@ public static class DefaultValidatorOptions {
     }
 
     /// <summary>
-    ///     Specifies an asynchronous condition limiting when the validator should not run.
-    ///     The validator will only be executed if the result of the lambda returns false.
+    /// Specifies an asynchronous condition limiting when the validator should not run.
+    /// The validator will only be executed if the result of the lambda returns false.
     /// </summary>
     /// <param name="rule">The current rule</param>
     /// <param name="predicate">A lambda expression that specifies a condition for when the validator should not run</param>
@@ -400,8 +409,8 @@ public static class DefaultValidatorOptions {
     }
 
     /// <summary>
-    ///     Specifies an asynchronous condition limiting when the validator should not run.
-    ///     The validator will only be executed if the result of the lambda returns false.
+    /// Specifies an asynchronous condition limiting when the validator should not run.
+    /// The validator will only be executed if the result of the lambda returns false.
     /// </summary>
     /// <param name="rule">The current rule</param>
     /// <param name="predicate">A lambda expression that specifies a condition for when the validator should not run</param>
@@ -416,8 +425,8 @@ public static class DefaultValidatorOptions {
     }
 
     /// <summary>
-    ///     Specifies an asynchronous condition limiting when the validator should not run.
-    ///     The validator will only be executed if the result of the lambda returns false.
+    /// Specifies an asynchronous condition limiting when the validator should not run.
+    /// The validator will only be executed if the result of the lambda returns false.
     /// </summary>
     /// <param name="rule">The current rule</param>
     /// <param name="predicate">A lambda expression that specifies a condition for when the validator should not run</param>
@@ -432,7 +441,7 @@ public static class DefaultValidatorOptions {
     }
 
     /// <summary>
-    ///     Applies a filter to a collection property.
+    /// Applies a filter to a collection property.
     /// </summary>
     /// <param name="rule">The current rule</param>
     /// <param name="predicate">The condition</param>
@@ -446,7 +455,7 @@ public static class DefaultValidatorOptions {
     }
 
     /// <summary>
-    ///     Specifies a custom property name to use within the error message.
+    /// Specifies a custom property name to use within the error message.
     /// </summary>
     /// <param name="rule">The current rule</param>
     /// <param name="overridePropertyName">The property name to use</param>
@@ -460,7 +469,7 @@ public static class DefaultValidatorOptions {
     }
 
     /// <summary>
-    ///     Specifies a custom property name to use within the error message.
+    /// Specifies a custom property name to use within the error message.
     /// </summary>
     /// <param name="rule">The current rule</param>
     /// <param name="nameProvider">Func used to retrieve the property's display name</param>
@@ -479,9 +488,9 @@ public static class DefaultValidatorOptions {
     }
 
     /// <summary>
-    ///     Overrides the name of the property associated with this rule.
-    ///     NOTE: This is a considered to be an advanced feature. Most of the time that you use this, you actually meant to use
-    ///     WithName.
+    /// Overrides the name of the property associated with this rule.
+    /// NOTE: This is a considered to be an advanced feature. Most of the time that you use this, you actually meant to use
+    /// WithName.
     /// </summary>
     /// <param name="rule">The current rule</param>
     /// <param name="propertyName">The property name to use</param>
@@ -499,9 +508,9 @@ public static class DefaultValidatorOptions {
     }
 
     /// <summary>
-    ///     Overrides the name of the property associated with this rule.
-    ///     NOTE: This is a considered to be an advanced feature. Most of the time that you use this, you actually meant to use
-    ///     WithName.
+    /// Overrides the name of the property associated with this rule.
+    /// NOTE: This is a considered to be an advanced feature. Most of the time that you use this, you actually meant to use
+    /// WithName.
     /// </summary>
     /// <param name="rule">The current rule</param>
     /// <param name="expr">An expression referencing another property</param>
@@ -521,7 +530,7 @@ public static class DefaultValidatorOptions {
     }
 
     /// <summary>
-    ///     Specifies custom state that should be stored alongside the validation message when validation fails for this rule.
+    /// Specifies custom state that should be stored alongside the validation message when validation fails for this rule.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="TProperty"></typeparam>
@@ -538,7 +547,7 @@ public static class DefaultValidatorOptions {
     }
 
     /// <summary>
-    ///     Specifies custom state that should be stored alongside the validation message when validation fails for this rule.
+    /// Specifies custom state that should be stored alongside the validation message when validation fails for this rule.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="TProperty"></typeparam>
@@ -559,8 +568,8 @@ public static class DefaultValidatorOptions {
     }
 
     /// <summary>
-    ///     Specifies custom severity that should be stored alongside the validation message when validation fails for this
-    ///     rule.
+    /// Specifies custom severity that should be stored alongside the validation message when validation fails for this
+    /// rule.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="TProperty"></typeparam>
@@ -574,8 +583,8 @@ public static class DefaultValidatorOptions {
     }
 
     /// <summary>
-    ///     Specifies custom severity that should be stored alongside the validation message when validation fails for this
-    ///     rule.
+    /// Specifies custom severity that should be stored alongside the validation message when validation fails for this
+    /// rule.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="TProperty"></typeparam>
@@ -595,8 +604,8 @@ public static class DefaultValidatorOptions {
     }
 
     /// <summary>
-    ///     Specifies custom severity that should be stored alongside the validation message when validation fails for this
-    ///     rule.
+    /// Specifies custom severity that should be stored alongside the validation message when validation fails for this
+    /// rule.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="TProperty"></typeparam>
@@ -616,12 +625,12 @@ public static class DefaultValidatorOptions {
     }
 
     /// <summary>
-    ///     Allows the generated indexer to be overridden for collection rules.
+    /// Allows the generated indexer to be overridden for collection rules.
     /// </summary>
     /// <param name="rule">The current rule</param>
     /// <param name="callback">
-    ///     The callback. Receives the model, the collection, the current element and the current index as
-    ///     parameters. Should return a string representation of the indexer. The default is "[" + index + "]"
+    /// The callback. Receives the model, the collection, the current element and the current index as
+    /// parameters. Should return a string representation of the indexer. The default is "[" + index + "]"
     /// </param>
     /// <returns></returns>
     public static IRuleBuilderInitialCollection<T, TCollectionElement> OverrideIndexer<T, TCollectionElement>(

@@ -4,20 +4,20 @@ using System.Reflection;
 namespace DomainHelpers.Core.Validations.Internal;
 
 /// <summary>
-///     Represents a chain of properties
+/// Represents a chain of properties
 /// </summary>
 public class PropertyChain {
     private readonly List<string> _memberNames = new(2);
 
     /// <summary>
-    ///     Creates a new PropertyChain.
+    /// Creates a new PropertyChain.
     /// </summary>
     public PropertyChain() { }
 
     /// <summary>
-    ///     Creates a new PropertyChain based on another.
+    /// Creates a new PropertyChain based on another.
     /// </summary>
-    public PropertyChain(PropertyChain parent) {
+    public PropertyChain(PropertyChain? parent) {
         if (parent != null
             && parent._memberNames.Count > 0) {
             _memberNames.AddRange(parent._memberNames);
@@ -25,7 +25,7 @@ public class PropertyChain {
     }
 
     /// <summary>
-    ///     Creates a new PropertyChain
+    /// Creates a new PropertyChain
     /// </summary>
     /// <param name="memberNames"></param>
     public PropertyChain(IEnumerable<string> memberNames) {
@@ -33,27 +33,27 @@ public class PropertyChain {
     }
 
     /// <summary>
-    ///     Number of member names in the chain
+    /// Number of member names in the chain
     /// </summary>
     public int Count => _memberNames.Count;
 
     /// <summary>
-    ///     Creates a PropertyChain from a lambda expression
+    /// Creates a PropertyChain from a lambda expression
     /// </summary>
     /// <param name="expression"></param>
     /// <returns></returns>
     public static PropertyChain FromExpression(LambdaExpression expression) {
         Stack<string> memberNames = new Stack<string>();
 
-        Func<Expression, MemberExpression> getMemberExp = new Func<Expression, MemberExpression>(toUnwrap => {
-            if (toUnwrap is UnaryExpression) {
-                return ((UnaryExpression)toUnwrap).Operand as MemberExpression;
+        var getMemberExp = new Func<Expression?, MemberExpression?>(toUnwrap => {
+            if (toUnwrap is UnaryExpression ue) {
+                return ue.Operand as MemberExpression;
             }
 
             return toUnwrap as MemberExpression;
         });
 
-        MemberExpression? memberExp = getMemberExp(expression.Body);
+        var memberExp = getMemberExp(expression.Body);
 
         while (memberExp != null) {
             memberNames.Push(memberExp.Member.Name);
@@ -64,7 +64,7 @@ public class PropertyChain {
     }
 
     /// <summary>
-    ///     Adds a MemberInfo instance to the chain
+    /// Adds a MemberInfo instance to the chain
     /// </summary>
     /// <param name="member">Member to add</param>
     public void Add(MemberInfo member) {
@@ -74,7 +74,7 @@ public class PropertyChain {
     }
 
     /// <summary>
-    ///     Adds a property name to the chain
+    /// Adds a property name to the chain
     /// </summary>
     /// <param name="propertyName">Name of the property to add</param>
     public void Add(string propertyName) {
@@ -84,15 +84,15 @@ public class PropertyChain {
     }
 
     /// <summary>
-    ///     Adds an indexer to the property chain. For example, if the following chain has been constructed:
-    ///     Parent.Child
-    ///     then calling AddIndexer(0) would convert this to:
-    ///     Parent.Child[0]
+    /// Adds an indexer to the property chain. For example, if the following chain has been constructed:
+    /// Parent.Child
+    /// then calling AddIndexer(0) would convert this to:
+    /// Parent.Child[0]
     /// </summary>
     /// <param name="indexer"></param>
     /// <param name="surroundWithBrackets">
-    ///     Whether square brackets should be applied before and after the indexer. Default
-    ///     true.
+    /// Whether square brackets should be applied before and after the indexer. Default
+    /// true.
     /// </param>
     public void AddIndexer(object indexer, bool surroundWithBrackets = true) {
         if (_memberNames.Count == 0) {
@@ -106,7 +106,7 @@ public class PropertyChain {
     }
 
     /// <summary>
-    ///     Creates a string representation of a property chain.
+    /// Creates a string representation of a property chain.
     /// </summary>
     public override string ToString() {
         // Performance: Calling string.Join causes much overhead when it's not needed.
@@ -118,9 +118,9 @@ public class PropertyChain {
     }
 
     /// <summary>
-    ///     Checks if the current chain is the child of another chain.
-    ///     For example, if chain1 were for "Parent.Child" and chain2 were for "Parent.Child.GrandChild" then
-    ///     chain2.IsChildChainOf(chain1) would be true.
+    /// Checks if the current chain is the child of another chain.
+    /// For example, if chain1 were for "Parent.Child" and chain2 were for "Parent.Child.GrandChild" then
+    /// chain2.IsChildChainOf(chain1) would be true.
     /// </summary>
     /// <param name="parentChain">The parent chain to compare</param>
     /// <returns>True if the current chain is the child of the other chain, otherwise false</returns>
@@ -129,7 +129,7 @@ public class PropertyChain {
     }
 
     /// <summary>
-    ///     Builds a property path.
+    /// Builds a property path.
     /// </summary>
     public string BuildPropertyName(string propertyName) {
         if (_memberNames.Count == 0) {

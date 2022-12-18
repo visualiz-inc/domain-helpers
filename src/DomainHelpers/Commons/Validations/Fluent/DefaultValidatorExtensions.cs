@@ -5,15 +5,17 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace DomainHelpers.Core.Validations;
+#pragma warning disable CS8600
+#pragma warning disable CS8604
 
 /// <summary>
-///     Extension methods that provide the default set of validators.
+/// Extension methods that provide the default set of validators.
 /// </summary>
 public static partial class DefaultValidatorExtensions {
     /// <summary>
-    ///     Associates a validator with this the property for this rule builder.
-    ///     This overload handles type conversion for nullable value types, allowing a validator for TProperty to be applied to
-    ///     a property of type Nullable&lt;TProperty&gt;
+    /// Associates a validator with this the property for this rule builder.
+    /// This overload handles type conversion for nullable value types, allowing a validator for TProperty to be applied to
+    /// a property of type Nullable&lt;TProperty&gt;
     /// </summary>
     /// <param name="ruleBuilder"></param>
     /// <param name="validator">The validator to set</param>
@@ -29,9 +31,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Associates an async validator with this the property for this rule builder.
-    ///     This overload handles type conversion for nullable value types, allowing a validator for TProperty to be applied to
-    ///     a property of type Nullable&lt;TProperty&gt;
+    /// Associates an async validator with this the property for this rule builder.
+    /// This overload handles type conversion for nullable value types, allowing a validator for TProperty to be applied to
+    /// a property of type Nullable&lt;TProperty&gt;
     /// </summary>
     /// <param name="ruleBuilder"></param>
     /// <param name="validator">The validator to set</param>
@@ -48,8 +50,8 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a 'not null' validator on the current rule builder.
-    ///     Validation will fail if the property is null.
+    /// Defines a 'not null' validator on the current rule builder.
+    /// Validation will fail if the property is null.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -61,8 +63,8 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a 'null' validator on the current rule builder.
-    ///     Validation will fail if the property is not null.
+    /// Defines a 'null' validator on the current rule builder.
+    /// Validation will fail if the property is not null.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -74,9 +76,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a 'not empty' validator on the current rule builder.
-    ///     Validation will fail if the property is null, an empty string, whitespace, an empty collection or the default value
-    ///     for the type (for example, 0 for integers but null for nullable integers)
+    /// Defines a 'not empty' validator on the current rule builder.
+    /// Validation will fail if the property is null, an empty string, whitespace, an empty collection or the default value
+    /// for the type (for example, 0 for integers but null for nullable integers)
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -88,9 +90,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a 'empty' validator on the current rule builder.
-    ///     Validation will fail if the property is not null, an empty or the default value for the type (for example, 0 for
-    ///     integers)
+    /// Defines a 'empty' validator on the current rule builder.
+    /// Validation will fail if the property is not null, an empty or the default value for the type (for example, 0 for
+    /// integers)
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -102,8 +104,8 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a length validator on the current rule builder, but only for string properties.
-    ///     Validation will fail if the length of the string is outside of the specified range. The range is inclusive.
+    /// Defines a length validator on the current rule builder, but only for string properties.
+    /// Validation will fail if the length of the string is outside of the specified range. The range is inclusive.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
@@ -116,8 +118,8 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a length validator on the current rule builder, but only for string properties.
-    ///     Validation will fail if the length of the string is outside of the specified range. The range is inclusive.
+    /// Defines a length validator on the current rule builder, but only for string properties.
+    /// Validation will fail if the length of the string is outside of the specified range. The range is inclusive.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
@@ -130,8 +132,8 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a length validator on the current rule builder, but only for string properties.
-    ///     Validation will fail if the length of the string is not equal to the length specified.
+    /// Defines a length validator on the current rule builder, but only for string properties.
+    /// Validation will fail if the length of the string is not equal to the length specified.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
@@ -143,8 +145,8 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a length validator on the current rule builder, but only for string properties.
-    ///     Validation will fail if the length of the string is not equal to the length specified.
+    /// Defines a length validator on the current rule builder, but only for string properties.
+    /// Validation will fail if the length of the string is not equal to the length specified.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
@@ -156,8 +158,8 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a regular expression validator on the current rule builder, but only for string properties.
-    ///     Validation will fail if the value returned by the lambda does not match the regular expression.
+    /// Defines a regular expression validator on the current rule builder, but only for string properties.
+    /// Validation will fail if the value returned by the lambda does not match the regular expression.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
@@ -169,8 +171,8 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a length validator on the current rule builder, but only for string properties.
-    ///     Validation will fail if the length of the string is larger than the length specified.
+    /// Defines a length validator on the current rule builder, but only for string properties.
+    /// Validation will fail if the length of the string is larger than the length specified.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
@@ -182,8 +184,8 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a length validator on the current rule builder, but only for string properties.
-    ///     Validation will fail if the length of the string is less than the length specified.
+    /// Defines a length validator on the current rule builder, but only for string properties.
+    /// Validation will fail if the length of the string is less than the length specified.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
@@ -195,8 +197,8 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a regular expression validator on the current rule builder, but only for string properties.
-    ///     Validation will fail if the value returned by the lambda does not match the regular expression.
+    /// Defines a regular expression validator on the current rule builder, but only for string properties.
+    /// Validation will fail if the value returned by the lambda does not match the regular expression.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
@@ -208,8 +210,8 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a regular expression validator on the current rule builder, but only for string properties.
-    ///     Validation will fail if the value returned by the lambda does not match the regular expression.
+    /// Defines a regular expression validator on the current rule builder, but only for string properties.
+    /// Validation will fail if the value returned by the lambda does not match the regular expression.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
@@ -220,8 +222,8 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a regular expression validator on the current rule builder, but only for string properties.
-    ///     Validation will fail if the value returned by the lambda does not match the regular expression.
+    /// Defines a regular expression validator on the current rule builder, but only for string properties.
+    /// Validation will fail if the value returned by the lambda does not match the regular expression.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
@@ -234,8 +236,8 @@ public static partial class DefaultValidatorExtensions {
 
 
     /// <summary>
-    ///     Defines a regular expression validator on the current rule builder, but only for string properties.
-    ///     Validation will fail if the value returned by the lambda does not match the regular expression.
+    /// Defines a regular expression validator on the current rule builder, but only for string properties.
+    /// Validation will fail if the value returned by the lambda does not match the regular expression.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
@@ -248,8 +250,8 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a regular expression validator on the current rule builder, but only for string properties.
-    ///     Validation will fail if the value returned by the lambda does not match the regular expression.
+    /// Defines a regular expression validator on the current rule builder, but only for string properties.
+    /// Validation will fail if the value returned by the lambda does not match the regular expression.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
@@ -262,32 +264,27 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines an email validator on the current rule builder for string properties.
-    ///     Validation will fail if the value returned by the lambda is not a valid email address.
+    /// Defines an email validator on the current rule builder for string properties.
+    /// Validation will fail if the value returned by the lambda is not a valid email address.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
     /// <param name="mode">
-    ///     The mode to use for email validation. If set to <see cref="EmailValidationMode.Net4xRegex" />, then
-    ///     a regular expression will be used. This is the same regex used by the EmailAddressAttribute in .NET 4.x. If set to
-    ///     <see cref="EmailValidationMode.AspNetCoreCompatible" /> then this uses the simplified ASP.NET Core logic for
-    ///     checking an email address, which just checks for the presence of an @ sign.
+    /// The mode to use for email validation. If set to <see cref="EmailValidationMode.Net4xRegex" />, then
+    /// a regular expression will be used. This is the same regex used by the EmailAddressAttribute in .NET 4.x. If set to
+    /// <see cref="EmailValidationMode.AspNetCoreCompatible" /> then this uses the simplified ASP.NET Core logic for
+    /// checking an email address, which just checks for the presence of an @ sign.
     /// </param>
     /// <returns></returns>
-    public static IRuleBuilderOptions<T, string> EmailAddress<T>(this IRuleBuilder<T, string> ruleBuilder,
-        EmailValidationMode mode = EmailValidationMode.AspNetCoreCompatible) {
-#pragma warning disable 618
-        PropertyValidator<T, string> validator = mode == EmailValidationMode.AspNetCoreCompatible
-            ? new AspNetCoreCompatibleEmailValidator<T>()
-            : (PropertyValidator<T, string>)new EmailValidator<T>();
-#pragma warning restore 618
+    public static IRuleBuilderOptions<T, string> EmailAddress<T>(this IRuleBuilder<T, string> ruleBuilder) {
+        var validator = new AspNetCoreCompatibleEmailValidator<T>();
         return ruleBuilder.SetValidator(validator);
     }
 
     /// <summary>
-    ///     Defines a 'not equal' validator on the current rule builder.
-    ///     Validation will fail if the specified value is equal to the value of the property.
-    ///     For strings, this performs an ordinal comparison unless you specify a different comparer.
+    /// Defines a 'not equal' validator on the current rule builder.
+    /// Validation will fail if the specified value is equal to the value of the property.
+    /// For strings, this performs an ordinal comparison unless you specify a different comparer.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -297,14 +294,14 @@ public static partial class DefaultValidatorExtensions {
     /// <returns></returns>
     public static IRuleBuilderOptions<T, TProperty> NotEqual<T, TProperty>(
         this IRuleBuilder<T, TProperty> ruleBuilder,
-        TProperty toCompare, IEqualityComparer<TProperty> comparer = null) {
+        TProperty toCompare, IEqualityComparer<TProperty>? comparer = null) {
         return ruleBuilder.SetValidator(new NotEqualValidator<T, TProperty>(toCompare, comparer));
     }
 
     /// <summary>
-    ///     Defines a 'not equal' validator on the current rule builder.
-    ///     Validation will fail if the specified value is equal to the value of the property.
-    ///     For strings, this performs an ordinal comparison unless you specify a different comparer.
+    /// Defines a 'not equal' validator on the current rule builder.
+    /// Validation will fail if the specified value is equal to the value of the property.
+    /// For strings, this performs an ordinal comparison unless you specify a different comparer.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
@@ -312,15 +309,15 @@ public static partial class DefaultValidatorExtensions {
     /// <param name="comparer">Equality comparer to use</param>
     /// <returns></returns>
     public static IRuleBuilderOptions<T, string> NotEqual<T>(this IRuleBuilder<T, string> ruleBuilder,
-        string toCompare, IEqualityComparer<string> comparer = null) {
+        string toCompare, IEqualityComparer<string>? comparer = null) {
         comparer ??= StringComparer.Ordinal;
         return ruleBuilder.SetValidator(new NotEqualValidator<T, string>(toCompare, comparer));
     }
 
     /// <summary>
-    ///     Defines a 'not equal' validator on the current rule builder using a lambda to specify the value.
-    ///     Validation will fail if the value returned by the lambda is equal to the value of the property.
-    ///     For strings, this performs an ordinal comparison unless you specify a different comparer.
+    /// Defines a 'not equal' validator on the current rule builder using a lambda to specify the value.
+    /// Validation will fail if the value returned by the lambda is equal to the value of the property.
+    /// For strings, this performs an ordinal comparison unless you specify a different comparer.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -330,7 +327,9 @@ public static partial class DefaultValidatorExtensions {
     /// <returns></returns>
     public static IRuleBuilderOptions<T, TProperty> NotEqual<T, TProperty>(
         this IRuleBuilder<T, TProperty> ruleBuilder,
-        Expression<Func<T, TProperty>> expression, IEqualityComparer<TProperty> comparer = null) {
+        Expression<Func<T, TProperty>> expression,
+        IEqualityComparer<TProperty>? comparer = null
+    ) {
         MemberInfo member = expression.GetMember();
         Func<T, TProperty> func = AccessorCache<T>.GetCachedAccessor(member, expression);
         string comparisonPropertyName = GetDisplayName(member, expression);
@@ -339,9 +338,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a 'not equal' validator on the current rule builder using a lambda to specify the value.
-    ///     Validation will fail if the value returned by the lambda is equal to the value of the property.
-    ///     For strings, this performs an ordinal comparison unless you specify a different comparer.
+    /// Defines a 'not equal' validator on the current rule builder using a lambda to specify the value.
+    /// Validation will fail if the value returned by the lambda is equal to the value of the property.
+    /// For strings, this performs an ordinal comparison unless you specify a different comparer.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
@@ -349,7 +348,7 @@ public static partial class DefaultValidatorExtensions {
     /// <param name="comparer">Equality Comparer to use</param>
     /// <returns></returns>
     public static IRuleBuilderOptions<T, string> NotEqual<T>(this IRuleBuilder<T, string> ruleBuilder,
-        Expression<Func<T, string>> expression, IEqualityComparer<string> comparer = null) {
+        Expression<Func<T, string>> expression, IEqualityComparer<string>? comparer = null) {
         comparer ??= StringComparer.Ordinal;
 
         MemberInfo member = expression.GetMember();
@@ -360,9 +359,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines an 'equals' validator on the current rule builder.
-    ///     Validation will fail if the specified value is not equal to the value of the property.
-    ///     For strings, this performs an ordinal comparison unless you specify a different comparer.
+    /// Defines an 'equals' validator on the current rule builder.
+    /// Validation will fail if the specified value is not equal to the value of the property.
+    /// For strings, this performs an ordinal comparison unless you specify a different comparer.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -371,14 +370,14 @@ public static partial class DefaultValidatorExtensions {
     /// <param name="comparer">Equality Comparer to use</param>
     /// <returns></returns>
     public static IRuleBuilderOptions<T, TProperty> Equal<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder,
-        TProperty toCompare, IEqualityComparer<TProperty> comparer = null) {
+        TProperty toCompare, IEqualityComparer<TProperty>? comparer = null) {
         return ruleBuilder.SetValidator(new EqualValidator<T, TProperty>(toCompare, comparer));
     }
 
     /// <summary>
-    ///     Defines an 'equals' validator on the current rule builder.
-    ///     Validation will fail if the specified value is not equal to the value of the property.
-    ///     For strings, this performs an ordinal comparison unless you specify a different comparer.
+    /// Defines an 'equals' validator on the current rule builder.
+    /// Validation will fail if the specified value is not equal to the value of the property.
+    /// For strings, this performs an ordinal comparison unless you specify a different comparer.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
@@ -393,9 +392,9 @@ public static partial class DefaultValidatorExtensions {
 
 
     /// <summary>
-    ///     Defines an 'equals' validator on the current rule builder using a lambda to specify the comparison value.
-    ///     Validation will fail if the value returned by the lambda is not equal to the value of the property.
-    ///     For strings, this performs an ordinal comparison unless you specify a different comparer.
+    /// Defines an 'equals' validator on the current rule builder using a lambda to specify the comparison value.
+    /// Validation will fail if the value returned by the lambda is not equal to the value of the property.
+    /// For strings, this performs an ordinal comparison unless you specify a different comparer.
     /// </summary>
     /// <typeparam name="T">The type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -404,7 +403,7 @@ public static partial class DefaultValidatorExtensions {
     /// <param name="comparer">Equality comparer to use</param>
     /// <returns></returns>
     public static IRuleBuilderOptions<T, TProperty> Equal<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder,
-        Expression<Func<T, TProperty>> expression, IEqualityComparer<TProperty> comparer = null) {
+        Expression<Func<T, TProperty>> expression, IEqualityComparer<TProperty>? comparer = null) {
         MemberInfo member = expression.GetMember();
         Func<T, TProperty> func = AccessorCache<T>.GetCachedAccessor(member, expression);
         string name = GetDisplayName(member, expression);
@@ -412,9 +411,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines an 'equals' validator on the current rule builder using a lambda to specify the comparison value.
-    ///     Validation will fail if the value returned by the lambda is not equal to the value of the property.
-    ///     For strings, this performs an ordinal comparison unless you specify a different comparer.
+    /// Defines an 'equals' validator on the current rule builder using a lambda to specify the comparison value.
+    /// Validation will fail if the value returned by the lambda is not equal to the value of the property.
+    /// For strings, this performs an ordinal comparison unless you specify a different comparer.
     /// </summary>
     /// <typeparam name="T">The type of object being validated</typeparam>
     /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
@@ -422,7 +421,7 @@ public static partial class DefaultValidatorExtensions {
     /// <param name="comparer">Equality comparer to use</param>
     /// <returns></returns>
     public static IRuleBuilderOptions<T, string> Equal<T>(this IRuleBuilder<T, string> ruleBuilder,
-        Expression<Func<T, string>> expression, IEqualityComparer<string> comparer = null) {
+        Expression<Func<T, string>> expression, IEqualityComparer<string>? comparer = null) {
         comparer ??= StringComparer.Ordinal;
         MemberInfo member = expression.GetMember();
         Func<T, string> func = AccessorCache<T>.GetCachedAccessor(member, expression);
@@ -431,9 +430,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a predicate validator on the current rule builder using a lambda expression to specify the predicate.
-    ///     Validation will fail if the specified lambda returns false.
-    ///     Validation will succeed if the specified lambda returns true.
+    /// Defines a predicate validator on the current rule builder using a lambda expression to specify the predicate.
+    /// Validation will fail if the specified lambda returns false.
+    /// Validation will succeed if the specified lambda returns true.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -447,10 +446,10 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a predicate validator on the current rule builder using a lambda expression to specify the predicate.
-    ///     Validation will fail if the specified lambda returns false.
-    ///     Validation will succeed if the specified lambda returns true.
-    ///     This overload accepts the object being validated in addition to the property being validated.
+    /// Defines a predicate validator on the current rule builder using a lambda expression to specify the predicate.
+    /// Validation will fail if the specified lambda returns false.
+    /// Validation will succeed if the specified lambda returns true.
+    /// This overload accepts the object being validated in addition to the property being validated.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -464,10 +463,10 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a predicate validator on the current rule builder using a lambda expression to specify the predicate.
-    ///     Validation will fail if the specified lambda returns false.
-    ///     Validation will succeed if the specified lambda returns true.
-    ///     This overload accepts the object being validated in addition to the property being validated.
+    /// Defines a predicate validator on the current rule builder using a lambda expression to specify the predicate.
+    /// Validation will fail if the specified lambda returns false.
+    /// Validation will succeed if the specified lambda returns true.
+    /// This overload accepts the object being validated in addition to the property being validated.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -483,10 +482,10 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines an asynchronous predicate validator on the current rule builder using a lambda expression to specify the
-    ///     predicate.
-    ///     Validation will fail if the specified lambda returns false.
-    ///     Validation will succeed if the specified lambda returns true.
+    /// Defines an asynchronous predicate validator on the current rule builder using a lambda expression to specify the
+    /// predicate.
+    /// Validation will fail if the specified lambda returns false.
+    /// Validation will succeed if the specified lambda returns true.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -501,11 +500,11 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines an asynchronous predicate validator on the current rule builder using a lambda expression to specify the
-    ///     predicate.
-    ///     Validation will fail if the specified lambda returns false.
-    ///     Validation will succeed if the specified lambda returns true.
-    ///     This overload accepts the object being validated in addition to the property being validated.
+    /// Defines an asynchronous predicate validator on the current rule builder using a lambda expression to specify the
+    /// predicate.
+    /// Validation will fail if the specified lambda returns false.
+    /// Validation will succeed if the specified lambda returns true.
+    /// This overload accepts the object being validated in addition to the property being validated.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -519,11 +518,11 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines an asynchronous predicate validator on the current rule builder using a lambda expression to specify the
-    ///     predicate.
-    ///     Validation will fail if the specified lambda returns false.
-    ///     Validation will succeed if the specified lambda returns true.
-    ///     This overload accepts the object being validated in addition to the property being validated.
+    /// Defines an asynchronous predicate validator on the current rule builder using a lambda expression to specify the
+    /// predicate.
+    /// Validation will fail if the specified lambda returns false.
+    /// Validation will succeed if the specified lambda returns true.
+    /// This overload accepts the object being validated in addition to the property being validated.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -538,9 +537,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a 'less than' validator on the current rule builder.
-    ///     The validation will succeed if the property value is less than the specified value.
-    ///     The validation will fail if the property value is greater than or equal to the specified value.
+    /// Defines a 'less than' validator on the current rule builder.
+    /// The validation will succeed if the property value is less than the specified value.
+    /// The validation will fail if the property value is greater than or equal to the specified value.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -555,9 +554,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a 'less than' validator on the current rule builder.
-    ///     The validation will succeed if the property value is less than the specified value.
-    ///     The validation will fail if the property value is greater than or equal to the specified value.
+    /// Defines a 'less than' validator on the current rule builder.
+    /// The validation will succeed if the property value is less than the specified value.
+    /// The validation will fail if the property value is greater than or equal to the specified value.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -572,9 +571,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a 'less than or equal' validator on the current rule builder.
-    ///     The validation will succeed if the property value is less than or equal to the specified value.
-    ///     The validation will fail if the property value is greater than the specified value.
+    /// Defines a 'less than or equal' validator on the current rule builder.
+    /// The validation will succeed if the property value is less than or equal to the specified value.
+    /// The validation will fail if the property value is greater than the specified value.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -588,9 +587,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a 'less than or equal' validator on the current rule builder.
-    ///     The validation will succeed if the property value is less than or equal to the specified value.
-    ///     The validation will fail if the property value is greater than the specified value.
+    /// Defines a 'less than or equal' validator on the current rule builder.
+    /// The validation will succeed if the property value is less than or equal to the specified value.
+    /// The validation will fail if the property value is greater than the specified value.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -604,9 +603,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a 'greater than' validator on the current rule builder.
-    ///     The validation will succeed if the property value is greater than the specified value.
-    ///     The validation will fail if the property value is less than or equal to the specified value.
+    /// Defines a 'greater than' validator on the current rule builder.
+    /// The validation will succeed if the property value is greater than the specified value.
+    /// The validation will fail if the property value is less than or equal to the specified value.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -620,9 +619,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a 'greater than' validator on the current rule builder.
-    ///     The validation will succeed if the property value is greater than the specified value.
-    ///     The validation will fail if the property value is less than or equal to the specified value.
+    /// Defines a 'greater than' validator on the current rule builder.
+    /// The validation will succeed if the property value is greater than the specified value.
+    /// The validation will fail if the property value is less than or equal to the specified value.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -636,9 +635,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a 'greater than or equal' validator on the current rule builder.
-    ///     The validation will succeed if the property value is greater than or equal the specified value.
-    ///     The validation will fail if the property value is less than the specified value.
+    /// Defines a 'greater than or equal' validator on the current rule builder.
+    /// The validation will succeed if the property value is greater than or equal the specified value.
+    /// The validation will fail if the property value is less than the specified value.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -652,9 +651,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a 'greater than or equal' validator on the current rule builder.
-    ///     The validation will succeed if the property value is greater than or equal the specified value.
-    ///     The validation will fail if the property value is less than the specified value.
+    /// Defines a 'greater than or equal' validator on the current rule builder.
+    /// The validation will succeed if the property value is greater than or equal the specified value.
+    /// The validation will fail if the property value is less than the specified value.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -668,9 +667,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a 'less than' validator on the current rule builder using a lambda expression.
-    ///     The validation will succeed if the property value is less than the specified value.
-    ///     The validation will fail if the property value is greater than or equal to the specified value.
+    /// Defines a 'less than' validator on the current rule builder using a lambda expression.
+    /// The validation will succeed if the property value is less than the specified value.
+    /// The validation will fail if the property value is greater than or equal to the specified value.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -690,9 +689,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a 'less than' validator on the current rule builder using a lambda expression.
-    ///     The validation will succeed if the property value is less than the specified value.
-    ///     The validation will fail if the property value is greater than or equal to the specified value.
+    /// Defines a 'less than' validator on the current rule builder using a lambda expression.
+    /// The validation will succeed if the property value is less than the specified value.
+    /// The validation will fail if the property value is greater than or equal to the specified value.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -716,9 +715,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a 'less than' validator on the current rule builder using a lambda expression.
-    ///     The validation will succeed if the property value is less than the specified value.
-    ///     The validation will fail if the property value is greater than or equal to the specified value.
+    /// Defines a 'less than' validator on the current rule builder using a lambda expression.
+    /// The validation will succeed if the property value is less than the specified value.
+    /// The validation will fail if the property value is greater than or equal to the specified value.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -739,9 +738,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a 'less than' validator on the current rule builder using a lambda expression.
-    ///     The validation will succeed if the property value is less than the specified value.
-    ///     The validation will fail if the property value is greater than or equal to the specified value.
+    /// Defines a 'less than' validator on the current rule builder using a lambda expression.
+    /// The validation will succeed if the property value is less than the specified value.
+    /// The validation will fail if the property value is greater than or equal to the specified value.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -765,9 +764,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a 'less than or equal' validator on the current rule builder using a lambda expression.
-    ///     The validation will succeed if the property value is less than or equal to the specified value.
-    ///     The validation will fail if the property value is greater than the specified value.
+    /// Defines a 'less than or equal' validator on the current rule builder using a lambda expression.
+    /// The validation will succeed if the property value is less than or equal to the specified value.
+    /// The validation will fail if the property value is greater than the specified value.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -785,9 +784,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a 'less than or equal' validator on the current rule builder using a lambda expression.
-    ///     The validation will succeed if the property value is less than or equal to the specified value.
-    ///     The validation will fail if the property value is greater than the specified value.
+    /// Defines a 'less than or equal' validator on the current rule builder using a lambda expression.
+    /// The validation will succeed if the property value is less than or equal to the specified value.
+    /// The validation will fail if the property value is greater than the specified value.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -808,9 +807,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a 'less than or equal' validator on the current rule builder using a lambda expression.
-    ///     The validation will succeed if the property value is less than or equal to the specified value.
-    ///     The validation will fail if the property value is greater than the specified value.
+    /// Defines a 'less than or equal' validator on the current rule builder using a lambda expression.
+    /// The validation will succeed if the property value is less than or equal to the specified value.
+    /// The validation will fail if the property value is greater than the specified value.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -828,9 +827,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a 'less than or equal' validator on the current rule builder using a lambda expression.
-    ///     The validation will succeed if the property value is less than or equal to the specified value.
-    ///     The validation will fail if the property value is greater than the specified value.
+    /// Defines a 'less than or equal' validator on the current rule builder using a lambda expression.
+    /// The validation will succeed if the property value is less than or equal to the specified value.
+    /// The validation will fail if the property value is greater than the specified value.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -851,9 +850,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a 'less than' validator on the current rule builder using a lambda expression.
-    ///     The validation will succeed if the property value is greater than the specified value.
-    ///     The validation will fail if the property value is less than or equal to the specified value.
+    /// Defines a 'less than' validator on the current rule builder using a lambda expression.
+    /// The validation will succeed if the property value is greater than the specified value.
+    /// The validation will fail if the property value is less than or equal to the specified value.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -872,9 +871,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a 'less than' validator on the current rule builder using a lambda expression.
-    ///     The validation will succeed if the property value is greater than the specified value.
-    ///     The validation will fail if the property value is less than or equal to the specified value.
+    /// Defines a 'less than' validator on the current rule builder using a lambda expression.
+    /// The validation will succeed if the property value is greater than the specified value.
+    /// The validation will fail if the property value is less than or equal to the specified value.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -896,9 +895,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a 'less than' validator on the current rule builder using a lambda expression.
-    ///     The validation will succeed if the property value is greater than the specified value.
-    ///     The validation will fail if the property value is less than or equal to the specified value.
+    /// Defines a 'less than' validator on the current rule builder using a lambda expression.
+    /// The validation will succeed if the property value is greater than the specified value.
+    /// The validation will fail if the property value is less than or equal to the specified value.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -917,9 +916,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a 'less than' validator on the current rule builder using a lambda expression.
-    ///     The validation will succeed if the property value is greater than the specified value.
-    ///     The validation will fail if the property value is less than or equal to the specified value.
+    /// Defines a 'less than' validator on the current rule builder using a lambda expression.
+    /// The validation will succeed if the property value is greater than the specified value.
+    /// The validation will fail if the property value is less than or equal to the specified value.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -941,9 +940,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a 'greater than' validator on the current rule builder using a lambda expression.
-    ///     The validation will succeed if the property value is greater than or equal the specified value.
-    ///     The validation will fail if the property value is less than the specified value.
+    /// Defines a 'greater than' validator on the current rule builder using a lambda expression.
+    /// The validation will succeed if the property value is greater than or equal the specified value.
+    /// The validation will fail if the property value is less than the specified value.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -961,9 +960,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a 'greater than' validator on the current rule builder using a lambda expression.
-    ///     The validation will succeed if the property value is greater than or equal the specified value.
-    ///     The validation will fail if the property value is less than the specified value.
+    /// Defines a 'greater than' validator on the current rule builder using a lambda expression.
+    /// The validation will succeed if the property value is greater than or equal the specified value.
+    /// The validation will fail if the property value is less than the specified value.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -984,9 +983,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a 'greater than or equal to' validator on the current rule builder using a lambda expression.
-    ///     The validation will succeed if the property value is greater than or equal the specified value.
-    ///     The validation will fail if the property value is less than the specified value.
+    /// Defines a 'greater than or equal to' validator on the current rule builder using a lambda expression.
+    /// The validation will succeed if the property value is greater than or equal the specified value.
+    /// The validation will fail if the property value is less than the specified value.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -1007,9 +1006,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a 'greater than or equal to' validator on the current rule builder using a lambda expression.
-    ///     The validation will succeed if the property value is greater than or equal the specified value.
-    ///     The validation will fail if the property value is less than the specified value.
+    /// Defines a 'greater than or equal to' validator on the current rule builder using a lambda expression.
+    /// The validation will succeed if the property value is greater than or equal the specified value.
+    /// The validation will fail if the property value is less than the specified value.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -1027,9 +1026,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines an 'inclusive between' validator on the current rule builder, but only for properties of types that
-    ///     implement IComparable.
-    ///     Validation will fail if the value of the property is outside of the specified range. The range is inclusive.
+    /// Defines an 'inclusive between' validator on the current rule builder, but only for properties of types that
+    /// implement IComparable.
+    /// Validation will fail if the value of the property is outside of the specified range. The range is inclusive.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -1044,8 +1043,8 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines an 'inclusive between' validator on the current rule builder.
-    ///     Validation will fail if the value of the property is outside of the specified range. The range is inclusive.
+    /// Defines an 'inclusive between' validator on the current rule builder.
+    /// Validation will fail if the value of the property is outside of the specified range. The range is inclusive.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -1060,9 +1059,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines an 'inclusive between' validator on the current rule builder, but only for properties of types that
-    ///     implement IComparable.
-    ///     Validation will fail if the value of the property is outside of the specified range. The range is inclusive.
+    /// Defines an 'inclusive between' validator on the current rule builder, but only for properties of types that
+    /// implement IComparable.
+    /// Validation will fail if the value of the property is outside of the specified range. The range is inclusive.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -1077,9 +1076,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines an 'exclusive between' validator on the current rule builder, but only for properties of types that
-    ///     implement IComparable.
-    ///     Validation will fail if the value of the property is outside of the specified range. The range is exclusive.
+    /// Defines an 'exclusive between' validator on the current rule builder, but only for properties of types that
+    /// implement IComparable.
+    /// Validation will fail if the value of the property is outside of the specified range. The range is exclusive.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -1094,8 +1093,8 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines an 'exclusive between' validator on the current rule builder.
-    ///     Validation will fail if the value of the property is outside of the specified range. The range is exclusive.
+    /// Defines an 'exclusive between' validator on the current rule builder.
+    /// Validation will fail if the value of the property is outside of the specified range. The range is exclusive.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -1110,9 +1109,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines an 'exclusive between' validator on the current rule builder, but only for properties of types that
-    ///     implement IComparable.
-    ///     Validation will fail if the value of the property is outside of the specified range. The range is exclusive.
+    /// Defines an 'exclusive between' validator on the current rule builder, but only for properties of types that
+    /// implement IComparable.
+    /// Validation will fail if the value of the property is outside of the specified range. The range is exclusive.
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -1127,16 +1126,16 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a credit card validator for the current rule builder that ensures that the specified string is a valid
-    ///     credit card number.
+    /// Defines a credit card validator for the current rule builder that ensures that the specified string is a valid
+    /// credit card number.
     /// </summary>
     public static IRuleBuilderOptions<T, string> CreditCard<T>(this IRuleBuilder<T, string> ruleBuilder) {
         return ruleBuilder.SetValidator(new CreditCardValidator<T>());
     }
 
     /// <summary>
-    ///     Defines a enum value validator on the current rule builder that ensures that the specific value is a valid enum
-    ///     value.
+    /// Defines a enum value validator on the current rule builder that ensures that the specific value is a valid enum
+    /// value.
     /// </summary>
     /// <typeparam name="T">Type of Enum being validated</typeparam>
     /// <typeparam name="TProperty">Type of property being validated</typeparam>
@@ -1148,8 +1147,8 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a scale precision validator on the current rule builder that ensures that the specific value has a certain
-    ///     scale and precision
+    /// Defines a scale precision validator on the current rule builder that ensures that the specific value has a certain
+    /// scale and precision
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
@@ -1164,8 +1163,8 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a scale precision validator on the current rule builder that ensures that the specific value has a certain
-    ///     scale and precision
+    /// Defines a scale precision validator on the current rule builder that ensures that the specific value has a certain
+    /// scale and precision
     /// </summary>
     /// <typeparam name="T">Type of object being validated</typeparam>
     /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
@@ -1180,7 +1179,7 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a custom validation rule
+    /// Defines a custom validation rule
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="TProperty"></typeparam>
@@ -1200,7 +1199,7 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a custom validation rule
+    /// Defines a custom validation rule
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="TProperty"></typeparam>
@@ -1222,7 +1221,7 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Allows rules to be built against individual elements in the collection.
+    /// Allows rules to be built against individual elements in the collection.
     /// </summary>
     /// <param name="ruleBuilder"></param>
     /// <param name="action"></param>
@@ -1254,8 +1253,8 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines a enum value validator on the current rule builder that ensures that the specific value is a valid enum
-    ///     name.
+    /// Defines a enum value validator on the current rule builder that ensures that the specific value is a valid enum
+    /// name.
     /// </summary>
     /// <typeparam name="T">Type of Enum being validated</typeparam>
     /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
@@ -1268,7 +1267,7 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines child rules for a nested property.
+    /// Defines child rules for a nested property.
     /// </summary>
     /// <param name="ruleBuilder">The rule builder.</param>
     /// <param name="action">Callback that will be invoked to build the rules.</param>
@@ -1295,9 +1294,9 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Defines one or more validators that can be used to validate sub-classes or implementors
-    ///     in an inheritance hierarchy. This is useful when the property being validated is an interface
-    ///     or base-class, but you want to define rules for properties of a specific subclass.
+    /// Defines one or more validators that can be used to validate sub-classes or implementors
+    /// in an inheritance hierarchy. This is useful when the property being validated is an interface
+    /// or base-class, but you want to define rules for properties of a specific subclass.
     /// </summary>
     /// <param name="ruleBuilder"></param>
     /// <param name="validatorConfiguration">Callback for setting up the inheritance validators.</param>

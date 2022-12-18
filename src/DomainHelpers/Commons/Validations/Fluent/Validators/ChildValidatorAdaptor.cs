@@ -3,37 +3,46 @@ using DomainHelpers.Core.Validations.Internal;
 namespace DomainHelpers.Core.Validations.Validators;
 
 /// <summary>
-///     Indicates that this validator wraps another validator.
+/// Indicates that this validator wraps another validator.
 /// </summary>
 public interface IChildValidatorAdaptor {
     /// <summary>
-    ///     The type of the underlying validator
+    /// The type of the underlying validator
     /// </summary>
     Type ValidatorType { get; }
 }
 
-public class ChildValidatorAdaptor<T, TProperty> : NoopPropertyValidator<T, TProperty>,
-    IAsyncPropertyValidator<T, TProperty>, IChildValidatorAdaptor {
-    private readonly IValidator<TProperty> _validator;
-    private readonly Func<ValidationContext<T>, TProperty, IValidator<TProperty>> _validatorProvider;
+public class ChildValidatorAdaptor<T, TProperty>
+    : NoopPropertyValidator<T, TProperty>, IAsyncPropertyValidator<T, TProperty>, IChildValidatorAdaptor
+    where T : notnull {
+    private readonly IValidator<TProperty>? _validator;
+    private readonly Func<ValidationContext<T>, TProperty, IValidator<TProperty>>? _validatorProvider;
 
-    public ChildValidatorAdaptor(IValidator<TProperty> validator, Type validatorType) {
+    public ChildValidatorAdaptor(IValidator<TProperty>? validator, Type validatorType) {
         _validator = validator;
         ValidatorType = validatorType;
     }
 
-    public ChildValidatorAdaptor(Func<ValidationContext<T>, TProperty, IValidator<TProperty>> validatorProvider,
-        Type validatorType) {
+    public ChildValidatorAdaptor(
+        Func<ValidationContext<T>, TProperty, IValidator<TProperty>>? validatorProvider,
+        Type validatorType
+    ) {
         _validatorProvider = validatorProvider;
         ValidatorType = validatorType;
     }
 
-    public string[] RuleSets { get; set; }
+    public string[]? RuleSets { get; set; }
 
     public override string Name => "ChildValidatorAdaptor";
 
-    public virtual async Task<bool> IsValidAsync(ValidationContext<T> context, TProperty value,
-        CancellationToken cancellation) {
+
+    public Type ValidatorType { get; }
+
+    public virtual async Task<bool> IsValidAsync(
+        ValidationContext<T> context,
+        TProperty value,
+        CancellationToken cancellation
+    ) {
         if (value == null) {
             return true;
         }
@@ -49,7 +58,7 @@ public class ChildValidatorAdaptor<T, TProperty> : NoopPropertyValidator<T, TPro
         // If we're inside a collection with RuleForEach, then preserve the CollectionIndex placeholder
         // and pass it down to child validator by caching it in the RootContextData which flows through to
         // the child validator. PropertyValidator.PrepareMessageFormatterForValidationError handles extracting this.
-        HandleCollectionIndex(context, out object originalIndex, out object currentIndex);
+        HandleCollectionIndex(context, out var originalIndex, out object currentIndex);
 
         await validator.ValidateAsync(newContext, cancellation);
 
@@ -57,8 +66,6 @@ public class ChildValidatorAdaptor<T, TProperty> : NoopPropertyValidator<T, TPro
 
         return true;
     }
-
-    public Type ValidatorType { get; }
 
     public override bool IsValid(ValidationContext<T> context, TProperty value) {
         if (value == null) {
@@ -76,7 +83,7 @@ public class ChildValidatorAdaptor<T, TProperty> : NoopPropertyValidator<T, TPro
         // If we're inside a collection with RuleForEach, then preserve the CollectionIndex placeholder
         // and pass it down to child validator by caching it in the RootContextData which flows through to
         // the child validator. PropertyValidator.PrepareMessageFormatterForValidationError handles extracting this.
-        HandleCollectionIndex(context, out object originalIndex, out object currentIndex);
+        HandleCollectionIndex(context, out var originalIndex, out object currentIndex);
 
         validator.Validate(newContext);
 
@@ -85,16 +92,18 @@ public class ChildValidatorAdaptor<T, TProperty> : NoopPropertyValidator<T, TPro
         return true;
     }
 
-    public virtual IValidator GetValidator(ValidationContext<T> context, TProperty value) {
+    public virtual IValidator? GetValidator(ValidationContext<T> context, TProperty value) {
         context.Guard("Cannot pass a null context to GetValidator", nameof(context));
 
         return _validatorProvider != null ? _validatorProvider(context, value) : _validator;
     }
 
-    protected virtual IValidationContext CreateNewValidationContextForChildValidator(ValidationContext<T> context,
-        TProperty value) {
-        IValidatorSelector selector = GetSelector(context, value);
-        ValidationContext<TProperty> newContext = context.CloneForChildValidator(value, true, selector);
+    protected virtual IValidationContext CreateNewValidationContextForChildValidator(
+        ValidationContext<T> context,
+        TProperty value
+    ) {
+        var selector = GetSelector(context, value);
+        var newContext = context.CloneForChildValidator(value, true, selector);
 
         if (!context.IsChildCollectionContext) {
             newContext.PropertyChain.Add(context.RawPropertyName);
@@ -103,11 +112,11 @@ public class ChildValidatorAdaptor<T, TProperty> : NoopPropertyValidator<T, TPro
         return newContext;
     }
 
-    private protected virtual IValidatorSelector GetSelector(ValidationContext<T> context, TProperty value) {
+    private protected virtual IValidatorSelector? GetSelector(ValidationContext<T> context, TProperty value) {
         return RuleSets?.Length > 0 ? new RulesetValidatorSelector(RuleSets) : null;
     }
 
-    private void HandleCollectionIndex(ValidationContext<T> context, out object originalIndex, out object index) {
+    private void HandleCollectionIndex(ValidationContext<T> context, out object? originalIndex, out object? index) {
         originalIndex = null;
         if (context.MessageFormatter.PlaceholderValues.TryGetValue("CollectionIndex", out index)) {
             context.RootContextData.TryGetValue("__FV_CollectionIndex", out originalIndex);
@@ -115,7 +124,7 @@ public class ChildValidatorAdaptor<T, TProperty> : NoopPropertyValidator<T, TPro
         }
     }
 
-    private void ResetCollectionIndex(ValidationContext<T> context, object originalIndex, object index) {
+    private void ResetCollectionIndex(ValidationContext<T> context, object? originalIndex, object index) {
         // Reset the collection index
         if (index != null) {
             if (originalIndex != null) {

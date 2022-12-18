@@ -4,7 +4,7 @@ namespace System.Collections.Immutable;
 
 internal class ImmutableDictionaryExtensions {
     /// <summary>
-    ///     Initialize immutable map with key and value pairs.
+    /// Initialize immutable map with key and value pairs.
     /// </summary>
     /// <typeparam name="TKey">Key type.</typeparam>
     /// <typeparam name="TValue">Item type.</typeparam>

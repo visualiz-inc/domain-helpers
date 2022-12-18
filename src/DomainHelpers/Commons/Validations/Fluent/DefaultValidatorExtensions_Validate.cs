@@ -5,7 +5,7 @@ namespace DomainHelpers.Core.Validations;
 
 public static partial class DefaultValidatorExtensions {
     /// <summary>
-    ///     Validates the specified instance using a combination of extra options
+    /// Validates the specified instance using a combination of extra options
     /// </summary>
     /// <param name="validator">The validator</param>
     /// <param name="instance">The instance to validate</param>
@@ -18,7 +18,7 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Validates the specified instance using a combination of extra options
+    /// Validates the specified instance using a combination of extra options
     /// </summary>
     /// <param name="validator">The validator</param>
     /// <param name="instance">The instance to validate</param>
@@ -32,8 +32,8 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Performs validation and then throws an exception if validation fails.
-    ///     This method is a shortcut for: Validate(instance, options => options.ThrowOnFailures());
+    /// Performs validation and then throws an exception if validation fails.
+    /// This method is a shortcut for: Validate(instance, options => options.ThrowOnFailures());
     /// </summary>
     /// <param name="validator">The validator this method is extending.</param>
     /// <param name="instance">The instance of the type we are validating.</param>
@@ -44,8 +44,8 @@ public static partial class DefaultValidatorExtensions {
     }
 
     /// <summary>
-    ///     Performs validation asynchronously and then throws an exception if validation fails.
-    ///     This method is a shortcut for: ValidateAsync(instance, options => options.ThrowOnFailures());
+    /// Performs validation asynchronously and then throws an exception if validation fails.
+    /// This method is a shortcut for: ValidateAsync(instance, options => options.ThrowOnFailures());
     /// </summary>
     /// <param name="validator">The validator this method is extending.</param>
     /// <param name="instance">The instance of the type we are validating.</param>

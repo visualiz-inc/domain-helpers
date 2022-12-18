@@ -2,24 +2,6 @@ using System.Text.RegularExpressions;
 
 namespace DomainHelpers.Core.Validations.Validators;
 
-/// <summary>
-///     Defines which mode should be used for email validation.
-/// </summary>
-public enum EmailValidationMode {
-    /// <summary>
-    ///     Uses a regular expression for email validation. This is the same regex used by the EmailAddressAttribute in .NET
-    ///     4.x.
-    /// </summary>
-    [Obsolete("Regex-based email validation is not recommended and is no longer supported.")]
-    Net4xRegex,
-
-    /// <summary>
-    ///     Uses the simplified ASP.NET Core logic for checking an email address, which just checks for the presence of an @
-    ///     sign.
-    /// </summary>
-    AspNetCoreCompatible
-}
-
 //Email regex matches the one used in the DataAnnotations EmailAddressAttribute for consistency/parity with DataAnnotations. This is not a fully comprehensive solution, but is "good enough" for most cases.
 [Obsolete("Regex-based email validation is not recommended and is no longer supported.")]
 public class EmailValidator<T> : PropertyValidator<T, string>, IRegularExpressionValidator, IEmailValidator {

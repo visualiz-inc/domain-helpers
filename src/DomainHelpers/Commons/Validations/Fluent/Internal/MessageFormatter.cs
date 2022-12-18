@@ -23,28 +23,28 @@ using System.Text.RegularExpressions;
 namespace DomainHelpers.Core.Validations.Internal;
 
 /// <summary>
-///     Assists in the construction of validation messages.
+/// Assists in the construction of validation messages.
 /// </summary>
 public class MessageFormatter {
     /// <summary>
-    ///     Default Property Name placeholder.
+    /// Default Property Name placeholder.
     /// </summary>
     public const string PropertyName = "PropertyName";
 
     /// <summary>
-    ///     Default Property Value placeholder.
+    /// Default Property Value placeholder.
     /// </summary>
     public const string PropertyValue = "PropertyValue";
     private static readonly Regex regex = new("{([^{}:]+)(?::([^{}]+))?}", RegexOptions.Compiled);
     private static readonly Regex _keyRegex = regex;
 
     /// <summary>
-    ///     Additional placeholder values
+    /// Additional placeholder values
     /// </summary>
     public Dictionary<string, object> PlaceholderValues { get; } = new(2);
 
     /// <summary>
-    ///     Adds a value for a validation message placeholder.
+    /// Adds a value for a validation message placeholder.
     /// </summary>
     /// <param name="name"></param>
     /// <param name="value"></param>
@@ -55,7 +55,7 @@ public class MessageFormatter {
     }
 
     /// <summary>
-    ///     Appends a property name to the message.
+    /// Appends a property name to the message.
     /// </summary>
     /// <param name="name">The name of the property</param>
     /// <returns></returns>
@@ -64,7 +64,7 @@ public class MessageFormatter {
     }
 
     /// <summary>
-    ///     Appends a property value to the message.
+    /// Appends a property value to the message.
     /// </summary>
     /// <param name="value">The value of the property</param>
     /// <returns></returns>
@@ -73,7 +73,7 @@ public class MessageFormatter {
     }
 
     /// <summary>
-    ///     Constructs the final message from the specified template.
+    /// Constructs the final message from the specified template.
     /// </summary>
     /// <param name="messageTemplate">Message template</param>
     /// <returns>The message with placeholders replaced with their appropriate values</returns>

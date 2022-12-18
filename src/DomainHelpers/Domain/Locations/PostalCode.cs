@@ -27,7 +27,7 @@ public readonly struct PostalCode {
     public string Value => new(new[] { _val0, _val1, _val2, _val3, _val4, _val5, _val6 });
 
     /// <summary>
-    ///     <see cref="PostalCode" /> 構造体を初期化して新しいインスタンスを生成します。
+    /// <see cref="PostalCode" /> 構造体を初期化して新しいインスタンスを生成します。
     /// </summary>
     /// <param name="code">郵便番号ソース.</param>
     /// <exception cref="ArgumentException">郵便番号の形式が無効な場合にスローされます。</exception>
@@ -78,7 +78,7 @@ public readonly struct PostalCode {
     }
 
     /// <summary>
-    ///     文字列に変換します。
+    /// 文字列に変換します。
     /// </summary>
     /// <returns></returns>
     public override string ToString() {
@@ -86,15 +86,15 @@ public readonly struct PostalCode {
     }
 
     /// <summary>
-    ///     文字列に変換します。
+    /// 文字列に変換します。
     /// </summary>
     /// <remarks>
-    ///     引数に書式設定を指定することができます。
-    ///     D|d -> 桁区切りにハイフン
-    ///     N|n -> 数値のみ
+    /// 引数に書式設定を指定することができます。
+    /// D|d -> 桁区切りにハイフン
+    /// N|n -> 数値のみ
     /// </remarks>
     /// <param name="format">
-    ///     書式設定。
+    /// 書式設定。
     /// </param>
     /// <returns></returns>
     public string ToString(string format) {

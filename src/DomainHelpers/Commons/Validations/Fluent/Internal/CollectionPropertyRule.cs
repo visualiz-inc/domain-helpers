@@ -5,27 +5,27 @@ using System.Reflection;
 namespace DomainHelpers.Core.Validations.Internal;
 
 /// <summary>
-///     Rule definition for collection properties
+/// Rule definition for collection properties
 /// </summary>
 /// <typeparam name="TElement"></typeparam>
 /// <typeparam name="T"></typeparam>
 internal class CollectionPropertyRule<T, TElement> : RuleBase<T, IEnumerable<TElement>, TElement>,
     ICollectionRule<T, TElement>, IValidationRuleInternal<T, TElement> {
     /// <summary>
-    ///     Initializes new instance of the CollectionPropertyRule class
+    /// Initializes new instance of the CollectionPropertyRule class
     /// </summary>
     public CollectionPropertyRule(MemberInfo member, Func<T, IEnumerable<TElement>> propertyFunc,
         LambdaExpression expression, Func<CascadeMode> cascadeModeThunk, Type typeToValidate)
         : base(member, propertyFunc, expression, cascadeModeThunk, typeToValidate) { }
 
     /// <summary>
-    ///     Filter that should include/exclude items in the collection.
+    /// Filter that should include/exclude items in the collection.
     /// </summary>
     public Func<TElement, bool> Filter { get; set; }
 
     /// <summary>
-    ///     Constructs the indexer in the property name associated with the error message.
-    ///     By default this is "[" + index + "]"
+    /// Constructs the indexer in the property name associated with the error message.
+    /// By default this is "[" + index + "]"
     /// </summary>
     public Func<T, IEnumerable<TElement>, TElement, int, string> IndexBuilder { get; set; }
 
@@ -154,11 +154,14 @@ internal class CollectionPropertyRule<T, TElement> : RuleBase<T, IEnumerable<TEl
     }
 
     /// <summary>
-    ///     Creates a new property rule from a lambda expression.
+    /// Creates a new property rule from a lambda expression.
     /// </summary>
-    public static CollectionPropertyRule<T, TElement> Create(Expression<Func<T, IEnumerable<TElement>>> expression,
-        Func<CascadeMode> cascadeModeThunk, bool bypassCache = false) {
-        MemberInfo member = expression.GetMember();
+    public static CollectionPropertyRule<T, TElement> Create(
+        Expression<Func<T, IEnumerable<TElement>>> expression,
+        Func<CascadeMode> cascadeModeThunk, 
+        bool bypassCache = false
+    ) {
+        var member = expression.GetMember();
         Func<T, IEnumerable<TElement>> compiled =
             AccessorCache<T>.GetCachedAccessor(member, expression, bypassCache, "FV_RuleForEach");
         return new CollectionPropertyRule<T, TElement>(member, x => compiled(x), expression, cascadeModeThunk,
@@ -166,7 +169,7 @@ internal class CollectionPropertyRule<T, TElement> : RuleBase<T, IEnumerable<TEl
     }
 
     /// <summary>
-    ///     Creates a new property rule from a lambda expression.
+    /// Creates a new property rule from a lambda expression.
     /// </summary>
     internal static CollectionPropertyRule<T, TElement> CreateTransformed<TOriginal>(
         Expression<Func<T, IEnumerable<TOriginal>>> expression, Func<TOriginal, TElement> transformer,
@@ -184,7 +187,7 @@ internal class CollectionPropertyRule<T, TElement> : RuleBase<T, IEnumerable<TEl
     }
 
     /// <summary>
-    ///     Creates a new property rule from a lambda expression.
+    /// Creates a new property rule from a lambda expression.
     /// </summary>
     internal static CollectionPropertyRule<T, TElement> CreateTransformed<TOriginal>(
         Expression<Func<T, IEnumerable<TOriginal>>> expression, Func<T, TOriginal, TElement> transformer,

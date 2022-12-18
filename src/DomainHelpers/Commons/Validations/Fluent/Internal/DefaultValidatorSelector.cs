@@ -1,11 +1,11 @@
 namespace DomainHelpers.Core.Validations.Internal;
 
 /// <summary>
-///     Default validator selector that will execute all rules that do not belong to a RuleSet.
+/// Default validator selector that will execute all rules that do not belong to a RuleSet.
 /// </summary>
 public class DefaultValidatorSelector : IValidatorSelector {
     /// <summary>
-    ///     Determines whether or not a rule should execute.
+    /// Determines whether or not a rule should execute.
     /// </summary>
     /// <param name="rule">The rule</param>
     /// <param name="propertyPath">Property path (eg Customer.Address.Line1)</param>

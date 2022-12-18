@@ -7,7 +7,7 @@ using System.Reflection;
 namespace DomainHelpers.Core.Validations;
 
 /// <summary>
-///     Configuration options for validators.
+/// Configuration options for validators.
 /// </summary>
 public class ValidatorConfiguration {
     private Func<Type, MemberInfo, LambdaExpression, string> _displayNameResolver = DefaultDisplayNameResolver;
@@ -17,57 +17,57 @@ public class ValidatorConfiguration {
 
 
     /// <summary>
-    ///     <para>
-    ///         Sets the default value for <see cref="AbstractValidator{T}.ClassLevelCascadeMode" />.
-    ///         Defaults to <see cref="DomainHelpers.Core.Validations.CascadeMode.Continue" /> if not set.
-    ///     </para>
-    ///     <para>
-    ///         This cannot be set to the deprecated
-    ///         <see cref="DomainHelpers.Core.Validations.CascadeMode.StopOnFirstFailure" />.
-    ///         <see cref="DomainHelpers.Core.Validations.CascadeMode.StopOnFirstFailure" />. Attempting to do so it will
-    ///         actually
-    ///         result in <see cref="DomainHelpers.Core.Validations.CascadeMode.Stop" /> being used.
-    ///     </para>
+    /// <para>
+    ///     Sets the default value for <see cref="AbstractValidator{T}.ClassLevelCascadeMode" />.
+    ///     Defaults to <see cref="DomainHelpers.Core.Validations.CascadeMode.Continue" /> if not set.
+    /// </para>
+    /// <para>
+    ///     This cannot be set to the deprecated
+    ///     <see cref="DomainHelpers.Core.Validations.CascadeMode.StopOnFirstFailure" />.
+    ///     <see cref="DomainHelpers.Core.Validations.CascadeMode.StopOnFirstFailure" />. Attempting to do so it will
+    ///     actually
+    ///     result in <see cref="DomainHelpers.Core.Validations.CascadeMode.Stop" /> being used.
+    /// </para>
     /// </summary>
     public CascadeMode DefaultClassLevelCascadeMode { get; set; } = CascadeMode.Continue;
 
     /// <summary>
-    ///     <para>
-    ///         Sets the default value for <see cref="AbstractValidator{T}.RuleLevelCascadeMode" />
-    ///         Defaults to <see cref="DomainHelpers.Core.Validations.CascadeMode.Continue" /> if not set.
-    ///     </para>
-    ///     <para>
-    ///         This cannot be set to the deprecated
-    ///         <see cref="DomainHelpers.Core.Validations.CascadeMode.StopOnFirstFailure" />.
-    ///         <see cref="DomainHelpers.Core.Validations.CascadeMode.StopOnFirstFailure" />. Attempting to do so it will
-    ///         actually
-    ///         result in <see cref="DomainHelpers.Core.Validations.CascadeMode.Stop" /> being used.
-    ///     </para>
+    /// <para>
+    ///     Sets the default value for <see cref="AbstractValidator{T}.RuleLevelCascadeMode" />
+    ///     Defaults to <see cref="DomainHelpers.Core.Validations.CascadeMode.Continue" /> if not set.
+    /// </para>
+    /// <para>
+    ///     This cannot be set to the deprecated
+    ///     <see cref="DomainHelpers.Core.Validations.CascadeMode.StopOnFirstFailure" />.
+    ///     <see cref="DomainHelpers.Core.Validations.CascadeMode.StopOnFirstFailure" />. Attempting to do so it will
+    ///     actually
+    ///     result in <see cref="DomainHelpers.Core.Validations.CascadeMode.Stop" /> being used.
+    /// </para>
     /// </summary>
     public CascadeMode DefaultRuleLevelCascadeMode { get; set; } = CascadeMode.Continue;
 
     /// <summary>
-    ///     Default severity level
+    /// Default severity level
     /// </summary>
     public Severity Severity { get; set; } = Severity.Error;
 
     /// <summary>
-    ///     Default property chain separator
+    /// Default property chain separator
     /// </summary>
     public string PropertyChainSeparator { get; set; } = ".";
 
     /// <summary>
-    ///     Default language manager
+    /// Default language manager
     /// </summary>
     public ILanguageManager LanguageManager { get; set; } = new LanguageManager();
 
     /// <summary>
-    ///     Customizations of validator selector
+    /// Customizations of validator selector
     /// </summary>
     public ValidatorSelectorOptions ValidatorSelectors { get; } = new();
 
     /// <summary>
-    ///     Specifies a factory for creating MessageFormatter instances.
+    /// Specifies a factory for creating MessageFormatter instances.
     /// </summary>
     public Func<MessageFormatter> MessageFormatterFactory {
         get => _messageFormatterFactory;
@@ -75,7 +75,7 @@ public class ValidatorConfiguration {
     }
 
     /// <summary>
-    ///     Pluggable logic for resolving property names
+    /// Pluggable logic for resolving property names
     /// </summary>
     public Func<Type, MemberInfo, LambdaExpression, string> PropertyNameResolver {
         get => _propertyNameResolver;
@@ -83,7 +83,7 @@ public class ValidatorConfiguration {
     }
 
     /// <summary>
-    ///     Pluggable logic for resolving display names
+    /// Pluggable logic for resolving display names
     /// </summary>
     public Func<Type, MemberInfo, LambdaExpression, string> DisplayNameResolver {
         get => _displayNameResolver;
@@ -91,20 +91,19 @@ public class ValidatorConfiguration {
     }
 
     /// <summary>
-    ///     Disables the expression accessor cache. Not recommended.
+    /// Disables the expression accessor cache. Not recommended.
     /// </summary>
     public bool DisableAccessorCache { get; set; }
 
     /// <summary>
-    ///     Pluggable resolver for default error codes
+    /// Pluggable resolver for default error codes
     /// </summary>
     public Func<IPropertyValidator, string> ErrorCodeResolver {
         get => _errorCodeResolver;
         set => _errorCodeResolver = value ?? DefaultErrorCodeResolver;
     }
 
-    private static string
-        DefaultPropertyNameResolver(Type type, MemberInfo memberInfo, LambdaExpression expression) {
+    private static string DefaultPropertyNameResolver(Type type, MemberInfo memberInfo, LambdaExpression expression) {
         if (expression != null) {
             PropertyChain chain = PropertyChain.FromExpression(expression);
             if (chain.Count > 0) {
@@ -115,8 +114,7 @@ public class ValidatorConfiguration {
         return memberInfo?.Name;
     }
 
-    private static string
-        DefaultDisplayNameResolver(Type type, MemberInfo memberInfo, LambdaExpression expression) {
+    private static string? DefaultDisplayNameResolver(Type type, MemberInfo memberInfo, LambdaExpression expression) {
         return null;
     }
 
@@ -126,17 +124,17 @@ public class ValidatorConfiguration {
 }
 
 /// <summary>
-///     Validator runtime options
+/// Validator runtime options
 /// </summary>
 public static class ValidatorOptions {
     /// <summary>
-    ///     Global configuration for all validators.
+    /// Global configuration for all validators.
     /// </summary>
     public static ValidatorConfiguration Global { get; } = new();
 }
 
 /// <summary>
-///     ValidatorSelector options
+/// ValidatorSelector options
 /// </summary>
 public class ValidatorSelectorOptions {
     private static readonly IValidatorSelector DefaultSelector = new DefaultValidatorSelector();
@@ -153,7 +151,7 @@ public class ValidatorSelectorOptions {
         ruleSets => new RulesetValidatorSelector(ruleSets);
 
     /// <summary>
-    ///     Factory func for creating the default validator selector
+    /// Factory func for creating the default validator selector
     /// </summary>
     public Func<IValidatorSelector> DefaultValidatorSelectorFactory {
         get => _defaultValidatorSelector;
@@ -161,7 +159,7 @@ public class ValidatorSelectorOptions {
     }
 
     /// <summary>
-    ///     Factory func for creating the member validator selector
+    /// Factory func for creating the member validator selector
     /// </summary>
     public Func<IEnumerable<string>, IValidatorSelector> MemberNameValidatorSelectorFactory {
         get => _memberNameValidatorSelector;
@@ -169,7 +167,7 @@ public class ValidatorSelectorOptions {
     }
 
     /// <summary>
-    ///     Factory func for creating the ruleset validator selector
+    /// Factory func for creating the ruleset validator selector
     /// </summary>
     public Func<IEnumerable<string>, IValidatorSelector> RulesetValidatorSelectorFactory {
         get => _rulesetValidatorSelector;
@@ -177,7 +175,7 @@ public class ValidatorSelectorOptions {
     }
 
     /// <summary>
-    ///     Factory func for creating the composite validator selector
+    /// Factory func for creating the composite validator selector
     /// </summary>
     public Func<IEnumerable<IValidatorSelector>, IValidatorSelector> CompositeValidatorSelectorFactory {
         get => _compositeValidatorSelectorFactory;

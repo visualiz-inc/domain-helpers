@@ -5,72 +5,108 @@ using System.Reflection;
 
 namespace DomainHelpers.Core.Validations.Internal;
 
-internal abstract class RuleBase<T, TProperty, TValue> : IValidationRule<T, TValue> {
-    private Func<CascadeMode> _cascadeModeThunk;
-    private string _displayName;
-    private Func<ValidationContext<T>, string> _displayNameFactory;
-    private string _propertyDisplayName;
-    private string _propertyName;
+internal abstract class RuleBase<T, TProperty, TValue> : IValidationRule<T, TValue>
+    where T : notnull {
+    private Func<CascadeMode>? _cascadeModeThunk;
+    private string? _displayName;
+    private Func<ValidationContext<T>, string>? _displayNameFactory;
+    private string? _propertyDisplayName;
+    private string? _propertyName;
+
+    public List<RuleComponent<T, TValue>> Components { get; } = new();
 
     /// <summary>
-    ///     Creates a new property rule.
+    /// Condition for all validators in this rule.
+    /// </summary>
+    internal Func<ValidationContext<T>, bool>? Condition { get; private set; }
+
+    /// <summary>
+    /// Asynchronous condition for all validators in this rule.
+    /// </summary>
+    internal Func<ValidationContext<T>, CancellationToken, Task<bool>>? AsyncCondition { get; private set; }
+
+    /// <summary>
+    /// Function that can be invoked to retrieve the value of the property.
+    /// </summary>
+    public Func<T, TProperty>? PropertyFunc { get; }
+
+    /// <summary>
+    /// Dependent rules
+    /// </summary>
+    internal List<IValidationRuleInternal<T>>? DependentRules { get; private protected set; }
+
+    /// <inheritdoc />
+    IEnumerable<IRuleComponent> IValidationRule.Components => Components;
+
+    /// <summary>
+    /// Property associated with this rule.
+    /// </summary>
+    public MemberInfo Member { get; }
+
+    /// <summary>
+    /// Expression that was used to create the rule.
+    /// </summary>
+    public LambdaExpression Expression { get; }
+
+    /// <summary>
+    /// Rule set that this rule belongs to (if specified)
+    /// </summary>
+    public string[]? RuleSets { get; set; }
+
+    /// <summary>
+    /// The current rule component.
+    /// </summary>
+    public IRuleComponent<T, TValue> Current => Components.LastOrDefault();
+
+    /// <summary>
+    /// Type of the property being validated
+    /// </summary>
+    public Type TypeToValidate { get; }
+
+    /// <inheritdoc />
+    public bool HasCondition => Condition != null;
+
+    /// <inheritdoc />
+    public bool HasAsyncCondition => AsyncCondition != null;
+
+    /// <summary>
+    /// Cascade mode for this rule.
+    /// </summary>
+    public CascadeMode CascadeMode {
+        get => _cascadeModeThunk?.Invoke() ?? throw new InvalidOperationException();
+        set => _cascadeModeThunk = () => value;
+    }
+
+    /// <summary>
+    /// Creates a new property rule.
     /// </summary>
     /// <param name="member">Property</param>
     /// <param name="propertyFunc">Function to get the property value</param>
     /// <param name="expression">Lambda expression used to create the rule</param>
     /// <param name="cascadeModeThunk">Function to get the cascade mode.</param>
     /// <param name="typeToValidate">Type to validate</param>
-    public RuleBase(MemberInfo member, Func<T, TProperty> propertyFunc, LambdaExpression expression,
-        Func<CascadeMode> cascadeModeThunk, Type typeToValidate) {
+    public RuleBase(
+        MemberInfo member,
+        Func<T, TProperty> propertyFunc,
+        LambdaExpression expression,
+        Func<CascadeMode> cascadeModeThunk,
+        Type typeToValidate
+    ) {
         Member = member;
         PropertyFunc = propertyFunc;
         Expression = expression;
         TypeToValidate = typeToValidate;
         _cascadeModeThunk = cascadeModeThunk;
 
-        Type containerType = typeof(T);
+        var containerType = typeof(T);
         PropertyName = ValidatorOptions.Global.PropertyNameResolver(containerType, member, expression);
         _displayNameFactory = context =>
             ValidatorOptions.Global.DisplayNameResolver(containerType, member, expression);
     }
 
-    public List<RuleComponent<T, TValue>> Components { get; } = new();
 
     /// <summary>
-    ///     Condition for all validators in this rule.
-    /// </summary>
-    internal Func<ValidationContext<T>, bool> Condition { get; private set; }
-
-    /// <summary>
-    ///     Asynchronous condition for all validators in this rule.
-    /// </summary>
-    internal Func<ValidationContext<T>, CancellationToken, Task<bool>> AsyncCondition { get; private set; }
-
-    /// <summary>
-    ///     Function that can be invoked to retrieve the value of the property.
-    /// </summary>
-    public Func<T, TProperty> PropertyFunc { get; }
-
-    /// <summary>
-    ///     Dependent rules
-    /// </summary>
-    internal List<IValidationRuleInternal<T>> DependentRules { get; private protected set; }
-
-    /// <inheritdoc />
-    IEnumerable<IRuleComponent> IValidationRule.Components => Components;
-
-    /// <summary>
-    ///     Property associated with this rule.
-    /// </summary>
-    public MemberInfo Member { get; }
-
-    /// <summary>
-    ///     Expression that was used to create the rule.
-    /// </summary>
-    public LambdaExpression Expression { get; }
-
-    /// <summary>
-    ///     Sets the display name for the property.
+    /// Sets the display name for the property.
     /// </summary>
     /// <param name="name">The property's display name</param>
     public void SetDisplayName(string name) {
@@ -79,7 +115,7 @@ internal abstract class RuleBase<T, TProperty, TValue> : IValidationRule<T, TVal
     }
 
     /// <summary>
-    ///     Sets the display name for the property using a function.
+    /// Sets the display name for the property using a function.
     /// </summary>
     /// <param name="factory">The function for building the display name</param>
     public void SetDisplayName(Func<ValidationContext<T>, string> factory) {
@@ -91,43 +127,14 @@ internal abstract class RuleBase<T, TProperty, TValue> : IValidationRule<T, TVal
         _displayName = null;
     }
 
-    /// <summary>
-    ///     Rule set that this rule belongs to (if specified)
-    /// </summary>
-    public string[] RuleSets { get; set; }
-
-    /// <summary>
-    ///     The current rule component.
-    /// </summary>
-    public IRuleComponent<T, TValue> Current => Components.LastOrDefault();
-
-    /// <summary>
-    ///     Type of the property being validated
-    /// </summary>
-    public Type TypeToValidate { get; }
-
-    /// <inheritdoc />
-    public bool HasCondition => Condition != null;
-
-    /// <inheritdoc />
-    public bool HasAsyncCondition => AsyncCondition != null;
-
-    /// <summary>
-    ///     Cascade mode for this rule.
-    /// </summary>
-    public CascadeMode CascadeMode {
-        get => _cascadeModeThunk();
-        set => _cascadeModeThunk = () => value;
-    }
-
     public void AddValidator(IPropertyValidator<T, TValue> validator) {
         RuleComponent<T, TValue> component = new(validator);
         Components.Add(component);
     }
 
     /// <summary>
-    ///     Returns the property name for the property being validated.
-    ///     Returns null if it is not a property being validated (eg a method call)
+    /// Returns the property name for the property being validated.
+    /// Returns null if it is not a property being validated (eg a method call)
     /// </summary>
     public string PropertyName {
         get => _propertyName;
@@ -138,7 +145,7 @@ internal abstract class RuleBase<T, TProperty, TValue> : IValidationRule<T, TVal
     }
 
     /// <summary>
-    ///     Allows custom creation of an error message
+    /// Allows custom creation of an error message
     /// </summary>
     public Func<IMessageBuilderContext<T, TValue>, string> MessageBuilder { get; set; }
 
@@ -149,7 +156,7 @@ internal abstract class RuleBase<T, TProperty, TValue> : IValidationRule<T, TVal
     }
 
     /// <summary>
-    ///     Applies a condition to the rule
+    /// Applies a condition to the rule
     /// </summary>
     /// <param name="predicate"></param>
     /// <param name="applyConditionTo"></param>
@@ -173,7 +180,7 @@ internal abstract class RuleBase<T, TProperty, TValue> : IValidationRule<T, TVal
     }
 
     /// <summary>
-    ///     Applies the condition to the rule asynchronously
+    /// Applies the condition to the rule asynchronously
     /// </summary>
     /// <param name="predicate"></param>
     /// <param name="applyConditionTo"></param>
@@ -221,27 +228,27 @@ internal abstract class RuleBase<T, TProperty, TValue> : IValidationRule<T, TVal
     }
 
     public void AddAsyncValidator(IAsyncPropertyValidator<T, TValue> asyncValidator,
-        IPropertyValidator<T, TValue> fallback = null) {
+        IPropertyValidator<T, TValue>? fallback = null) {
         throw new NotImplementedException();
     }
 
     /// <summary>
-    ///     Clear all validators from this rule.
+    /// Clear all validators from this rule.
     /// </summary>
     public void ClearValidators() {
         Components.Clear();
     }
 
     /// <summary>
-    ///     Display name for the property.
+    /// Display name for the property.
     /// </summary>
     public string GetDisplayName(ValidationContext<T> context) {
         return _displayNameFactory?.Invoke(context) ?? _displayName ?? _propertyDisplayName;
     }
 
     /// <summary>
-    ///     Prepares the <see cref="MessageFormatter" /> of <paramref name="context" /> for an upcoming
-    ///     <see cref="ValidationFailure" />.
+    /// Prepares the <see cref="MessageFormatter" /> of <paramref name="context" /> for an upcoming
+    /// <see cref="ValidationFailure" />.
     /// </summary>
     /// <param name="context">The validator context</param>
     /// <param name="value">Property value.</param>
@@ -263,7 +270,7 @@ internal abstract class RuleBase<T, TProperty, TValue> : IValidationRule<T, TVal
     }
 
     /// <summary>
-    ///     Creates an error validation result for this validator.
+    /// Creates an error validation result for this validator.
     /// </summary>
     /// <param name="context">The validator context</param>
     /// <param name="value">The property value</param>

@@ -5,25 +5,36 @@ using System.Reflection;
 namespace DomainHelpers.Core.Validations.Internal;
 
 /// <summary>
-///     Defines a rule associated with a property.
+/// Defines a rule associated with a property.
 /// </summary>
-internal class
-    PropertyRule<T, TProperty> : RuleBase<T, TProperty, TProperty>, IValidationRuleInternal<T, TProperty> {
-    public PropertyRule(MemberInfo member, Func<T, TProperty> propertyFunc, LambdaExpression expression,
-        Func<CascadeMode> cascadeModeThunk, Type typeToValidate)
-        : base(member, propertyFunc, expression, cascadeModeThunk, typeToValidate) { }
+internal class PropertyRule<T, TProperty>
+    : RuleBase<T, TProperty, TProperty>, IValidationRuleInternal<T, TProperty>
+        where T : notnull {
+    public PropertyRule(
+        MemberInfo member,
+        Func<T, TProperty> propertyFunc,
+        LambdaExpression expression,
+        Func<CascadeMode> cascadeModeThunk,
+        Type typeToValidate
+    ) : base(
+        member,
+        propertyFunc,
+        expression,
+        cascadeModeThunk,
+        typeToValidate
+    ) { }
 
     /// <summary>
-    ///     Performs validation using a validation context and adds collected validation failures to the Context.
+    /// Performs validation using a validation context and adds collected validation failures to the Context.
     /// </summary>
     /// <param name="context">Validation Context</param>
     /// <param name="useAsync">
-    ///     Whether asynchronous components are allowed to execute.
-    ///     This will be set to True when ValidateAsync is called on the root validator.
-    ///     This will be set to False when Validate is called on the root validator.
-    ///     When set to True, asynchronous components and asynchronous conditions will be executed.
-    ///     When set to False, an exception will be thrown if a component can only be executed asynchronously or if a component
-    ///     has an async condition associated with it.
+    /// Whether asynchronous components are allowed to execute.
+    /// This will be set to True when ValidateAsync is called on the root validator.
+    /// This will be set to False when Validate is called on the root validator.
+    /// When set to True, asynchronous components and asynchronous conditions will be executed.
+    /// When set to False, an exception will be thrown if a component can only be executed asynchronously or if a component
+    /// has an async condition associated with it.
     /// </param>
     /// <param name="cancellation"></param>
     public virtual async ValueTask ValidateAsync(ValidationContext<T> context, bool useAsync,
@@ -119,7 +130,7 @@ internal class
     }
 
     /// <summary>
-    ///     Creates a new property rule from a lambda expression.
+    /// Creates a new property rule from a lambda expression.
     /// </summary>
     public static PropertyRule<T, TProperty> Create(Expression<Func<T, TProperty>> expression,
         Func<CascadeMode> cascadeModeThunk, bool bypassCache = false) {
@@ -130,7 +141,7 @@ internal class
     }
 
     /// <summary>
-    ///     Creates a new property rule from a lambda expression.
+    /// Creates a new property rule from a lambda expression.
     /// </summary>
     internal static PropertyRule<T, TProperty> Create<TOld>(Expression<Func<T, TOld>> expression,
         Func<TOld, TProperty> transformer, Func<CascadeMode> cascadeModeThunk, bool bypassCache = false) {
@@ -145,7 +156,7 @@ internal class
     }
 
     /// <summary>
-    ///     Creates a new property rule from a lambda expression.
+    /// Creates a new property rule from a lambda expression.
     /// </summary>
     internal static PropertyRule<T, TProperty> Create<TOld>(Expression<Func<T, TOld>> expression,
         Func<T, TOld, TProperty> transformer, Func<CascadeMode> cascadeModeThunk, bool bypassCache = false) {
