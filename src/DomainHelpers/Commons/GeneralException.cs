@@ -1,15 +1,21 @@
 ﻿namespace System;
 
 /// <summary>
-///     Represents the general error.
+///  Represents the general error.
 /// </summary>
 public class GeneralException : Exception {
+    public string? DisplayMessage { get; }
+
+    public Ulid? EventId { get; }
+
+    public object? Payload { get; }
+
     /// <summary>
-    /// 
+    /// Initializes a new instance of the <see cref="GeneralException"/> class.
     /// </summary>
     /// <param name="message"></param>
     /// <param name="displayMessage"></param>
-    /// <param name="exceptionType"></param>
+    /// <param name="payload"></param>
     /// <param name="eventId"></param>
     /// <param name="exception"></param>
     public GeneralException(
@@ -30,12 +36,6 @@ public class GeneralException : Exception {
         Data.Add(nameof(DisplayMessage), displayMessage);
         Data.Add(nameof(Payload), payload);
     }
-
-    public string? DisplayMessage { get; }
-
-    public Ulid? EventId { get; }
-
-    public object? Payload { get; }
 
     public static GeneralException WithDisplayMessage(
         string displayMessage,
@@ -140,6 +140,21 @@ public class GeneralException : Exception {
             ex
         );
     }
+
+    public ImmutableArray<string> FluttenDisplayMessages() {
+        var messages = ArrayOf<string>().ToBuilder();
+
+        Exception? ex = this;
+        while (ex is not null) {
+            if (ex is GeneralException { DisplayMessage: { } message and not "" }) {
+                messages.Add(message);
+            }
+
+            ex = ex.InnerException;
+        }
+
+        return messages.ToImmutable();
+    }
 }
 
 /// <summary>
@@ -159,7 +174,7 @@ public class GeneralException<TPayload> : GeneralException {
         payload,
         eventId,
         error
-            ) { }
+    ) { }
 
     public new TPayload? Payload => (TPayload?)base.Payload;
 }
