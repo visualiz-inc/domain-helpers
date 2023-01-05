@@ -9,8 +9,8 @@ using System.Text.Json.Serialization;
 namespace System;
 
 /// <summary>
-///     Represents a Universally Unique Lexicographically Sortable Identifier (ULID).
-///     Spec: https://github.com/ulid/spec
+/// Represents a Universally Unique Lexicographically Sortable Identifier (ULID).
+/// Spec: https://github.com/ulid/spec
 /// </summary>
 [StructLayout(LayoutKind.Explicit, Size = 16)]
 [DebuggerDisplay("{ToString(),nq}")]
@@ -565,10 +565,10 @@ public readonly struct Ulid : IEquatable<Ulid>, IComparable<Ulid> {
     //}
 
     /// <summary>
-    ///     Convert this <c>Ulid</c> value to a <c>Guid</c> value with the same comparability.
+    /// Convert this <c>Ulid</c> value to a <c>Guid</c> value with the same comparability.
     /// </summary>
     /// <remarks>
-    ///     The byte arrangement between Ulid and Guid is not preserved.
+    /// The byte arrangement between Ulid and Guid is not preserved.
     /// </remarks>
     /// <returns>The converted <c>Guid</c> value</returns>
     public Guid ToGuid() {
