@@ -14,7 +14,7 @@ public abstract record PrefixedUlid {
     public PrefixedUlid() {
     }
 
-    void CheckIfValidAndSetUlid(string id) {
+    private void CheckIfValidAndSetUlid(string id) {
         if (id.StartsWith(Prefix) is false) {
             throw GeneralException.WithDisplayMessage($"Id must start with '{Prefix}'");
         }
@@ -40,6 +40,6 @@ public abstract record PrefixedUlid {
         return pid;
     }
 
-    public override string ToString() => FullValue;
+    public sealed override string ToString() => FullValue;
 }
 

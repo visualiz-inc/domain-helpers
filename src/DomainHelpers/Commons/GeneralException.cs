@@ -6,7 +6,7 @@
 public class GeneralException : Exception {
     public string? DisplayMessage { get; }
 
-    public Ulid? EventId { get; }
+    public Ulid EventId { get; }
 
     public object? Payload { get; }
 
@@ -29,7 +29,7 @@ public class GeneralException : Exception {
         exception) {
         Payload = payload;
         DisplayMessage = displayMessage;
-        EventId = eventId;
+        EventId = eventId ?? Ulid.NewUlid();
 
         // Additional data
         Data.Add(nameof(EventId), eventId.ToString());
@@ -168,7 +168,7 @@ public class GeneralException<TPayload> : GeneralException {
         string? displayMessage = null,
         Ulid? eventId = null,
         Exception? error = null
-        ) : base(
+    ) : base(
         message,
         displayMessage,
         payload,
