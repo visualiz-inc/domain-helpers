@@ -1,0 +1,13 @@
+﻿@using DomainHelper.Test.Blazor.TransitionGroup.Views.Comopnents;
+
+@if (WeatherForecast is not null) {
+    <td>@WeatherForecast.Date.ToShortDateString()</td>
+    <td>@WeatherForecast.TemperatureC</td>
+    <td>@WeatherForecast.TemperatureF</td>
+    <td>@WeatherForecast.Summary</td>
+}
+
+@code {
+    [Parameter]
+    public WeatherForecast? WeatherForecast { get; set; }
+}

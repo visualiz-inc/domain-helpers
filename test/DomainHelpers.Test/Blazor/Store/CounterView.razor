@@ -1,0 +1,16 @@
+@using DomainHelpers.Blazor.Store.Blazor;
+@using DomainHelper.Test.Blazor.Store.Core.Mock
+
+@inherits ObserverComponent
+@inject AsyncCounterStore AsyncCounterStore
+
+<MementoInitializer />
+
+<div>@AsyncCounterStore.State.Count</div>
+<button @onclick="CountUp">Click</button>
+
+@code {
+    async Task CountUp() {
+        await AsyncCounterStore.CountUpAsync();
+    }
+}

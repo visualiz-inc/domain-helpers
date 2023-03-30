@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
+        <PackageReference Include="xunit" Version="2.4.2" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="coverlet.collector" Version="3.2.0">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <!-- Blazor -->
+    <ItemGroup>
+        <PackageReference Include="bunit" Version="1.18.4" />
+        <PackageReference Include="Microsoft.AspNetCore.Components" Version="7.0.0" />
+    </ItemGroup>
+
+    <!-- Project Refelence -->
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\DomainHelpers.AspNetCore\DomainHelpers.AspNetCore.csproj" />
+        <ProjectReference Include="..\..\src\DomainHelpers.Blazor\DomainHelpers.Blazor.csproj" />
+        <ProjectReference Include="..\..\src\DomainHelpers.Generator\DomainHelpers.Generator.csproj" />
+        <ProjectReference Include="..\..\src\DomainHelpers\DomainHelpers.csproj" />
+    </ItemGroup>
+
+</Project>
