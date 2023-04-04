@@ -15,15 +15,31 @@ public enum SortDirection {
 }
 
 public static class OrderByExtensions {
-    public static IQueryable<T> Sort<T,TSortProperty>(this IQueryable< T> query,IEnumerable<(TSortProperty, SortDirection)> sorts) {
+    public static IQueryable<T> SortOrder<T, U, TSortProperty>(
+        this IQueryable<T> query,
+        Expression<Func<T, U>> selector,
+        IEnumerable<(TSortProperty, SortDirection)>? sorts
+    ) where TSortProperty : Enum {
+        if(sorts?.Count() is null or 0) {
+            return query;
+        }
 
         var q = query;
-        foreach(var s in sorts) {
-            var parameter = Expression.Parameter(typeof(T), "x");
-            var property = Expression.Property(parameter, "name");
-            var orderByLambda = Expression.Lambda<Func<T, object>>(Expression.Convert(property, typeof(object)), parameter);
+        var parameter = selector.Parameters.Single();
+        foreach (var (prop, direction) in sorts) {
+            var orderByLambda = Expression.Lambda<Func<T, object>>(
+                Expression.Convert(
+                    Expression.PropertyOrField(selector.Body, prop.ToString()),
+                    typeof(object)
+                ),
+                parameter
+            );
 
-            q = q.OrderBy(orderByLambda);
+            q = direction switch {
+                SortDirection.Asc => q.OrderBy(orderByLambda),
+                SortDirection.Desc => q.OrderByDescending(orderByLambda),
+                _ => q,
+            };
         }
 
         return q;
