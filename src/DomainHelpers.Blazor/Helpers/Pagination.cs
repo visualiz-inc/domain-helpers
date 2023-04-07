@@ -22,7 +22,9 @@ public readonly record struct PageState {
 
     public AvailablePageRange CurrentItemsAvailable { get; init; }
 
-    public int CurrentPage { get; init; }
+    public int ActualPage { get; init; }
+
+    public int CurrentPage => Math.Max(1, ActualPage);
 
     public OffsetFetch OffsetFetch { get; init; }
 }
@@ -88,7 +90,7 @@ public class Pagination {
 
     private PageState CreateState() => new() {
         CurrentItemsAvailable = CurrentItemsAvailable,
-        CurrentPage = CurrentPage,
+        ActualPage = CurrentPage,
         ItemsNumPerPage = ItemsNumPerPage,
         OffsetFetch = OffsetFetch,
         PageCount = PageCount,

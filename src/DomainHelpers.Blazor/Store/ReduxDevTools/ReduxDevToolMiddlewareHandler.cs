@@ -17,9 +17,7 @@ public class ReduxDevToolMiddlewareHandler : MiddlewareHandler {
         @"^(?:(?!\b" +
         @"System" +
         @"|Microsoft" +
-        @"|Memento.Blazor" +
-        @"|Memento.Core" +
-        @"|Memento.ReduxDevTool" +
+        @"|DomainHelpers" +
         @"\b).)*$";
 
     readonly Regex _stackTraceFilterRegex = new(_stackTraceFilterExpression, RegexOptions.Compiled);
