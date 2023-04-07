@@ -1,7 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace DomainHelpers.Commons.Collections.Extensions;
-
+namespace DomainHelpers.Commons.Collections.Extensions; 
 /// <summary>
 /// Immutable array factories.
 /// </summary>

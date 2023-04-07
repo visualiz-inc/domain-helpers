@@ -1,5 +1,4 @@
-﻿namespace DomainHelpers.Commons.Enums;
-
+﻿namespace DomainHelpers.Commons.Enums; 
 public class DisplayNameAttribute : Attribute {
     public DisplayNameAttribute(string displayName) {
         DisplayName = displayName;

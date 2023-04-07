@@ -1,8 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 
-namespace DomainHelpers.Commons.Primitives;
-
+namespace DomainHelpers.Commons.Primitives; 
 internal static class RandomProvider {
     [ThreadStatic] private static Random? random;
 

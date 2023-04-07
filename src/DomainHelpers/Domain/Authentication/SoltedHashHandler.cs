@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Security.Cryptography;
 
-namespace DomainHelpers.Domain.Authentication;
-
+namespace DomainHelpers.Domain.Authentication; 
 /// <summary>
 /// Represents salted hash generator.
 /// </summary>

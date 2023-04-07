@@ -1,5 +1,4 @@
-﻿namespace DomainHelpers.Commons.Text;
-
+﻿namespace DomainHelpers.Commons.Text; 
 public static class UriUtils {
     /// <summary>
     /// 対象のUriが子ディレクトリかどうかを判定します.

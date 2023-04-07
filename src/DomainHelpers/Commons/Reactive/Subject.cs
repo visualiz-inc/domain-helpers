@@ -1,5 +1,4 @@
-﻿namespace DomainHelpers.Commons.Reactive;
-
+﻿namespace DomainHelpers.Commons.Reactive; 
 public class Subject<T> : IObservable<T>, IObserver<T> {
     private bool didComplete;
     private Exception? exception;

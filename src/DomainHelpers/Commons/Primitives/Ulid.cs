@@ -6,8 +6,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 
-namespace DomainHelpers.Commons.Primitives;
-
+namespace DomainHelpers.Commons.Primitives; 
 /// <summary>
 /// Represents a Universally Unique Lexicographically Sortable Identifier (ULID).
 /// Spec: https://github.com/ulid/spec
@@ -22,13 +21,13 @@ public readonly struct Ulid : IEquatable<Ulid>, IComparable<Ulid> {
     private static readonly byte[] Base32Bytes = Encoding.UTF8.GetBytes(Base32Text);
 
     private static readonly byte[] CharToBase32 = {
-        255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-        255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-        255, 255, 255, 255, 255, 255, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 255, 255, 255, 255, 255, 255, 255, 10, 11, 12,
-        13, 14, 15, 16, 17, 255, 18, 19, 255, 20, 21, 255, 22, 23, 24, 25, 26, 255, 27, 28, 29, 30, 31, 255, 255,
-        255, 255, 255, 255, 10, 11, 12, 13, 14, 15, 16, 17, 255, 18, 19, 255, 20, 21, 255, 22, 23, 24, 25, 26, 255,
-        27, 28, 29, 30, 31
-    };
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 255, 255, 255, 255, 255, 255, 255, 10, 11, 12,
+    13, 14, 15, 16, 17, 255, 18, 19, 255, 20, 21, 255, 22, 23, 24, 25, 26, 255, 27, 28, 29, 30, 31, 255, 255,
+    255, 255, 255, 255, 10, 11, 12, 13, 14, 15, 16, 17, 255, 18, 19, 255, 20, 21, 255, 22, 23, 24, 25, 26, 255,
+    27, 28, 29, 30, 31
+};
 
     private static readonly DateTimeOffset UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
@@ -62,9 +61,9 @@ public readonly struct Ulid : IEquatable<Ulid>, IComparable<Ulid> {
 
     [IgnoreDataMember]
     public byte[] Random => new[] {
-        randomness0, randomness1, randomness2, randomness3, randomness4, randomness5, randomness6, randomness7,
-        randomness8, randomness9
-    };
+    randomness0, randomness1, randomness2, randomness3, randomness4, randomness5, randomness6, randomness7,
+    randomness8, randomness9
+};
 
     [IgnoreDataMember]
     public DateTimeOffset Time {

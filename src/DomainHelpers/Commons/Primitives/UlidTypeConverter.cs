@@ -1,8 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Globalization;
 
-namespace DomainHelpers.Commons.Primitives;
-
+namespace DomainHelpers.Commons.Primitives; 
 public class UlidTypeConverter : TypeConverter {
     private static readonly Type StringType = typeof(string);
     private static readonly Type GuidType = typeof(Guid);

@@ -2,8 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace DomainHelpers.Commons.Primitives;
-
+namespace DomainHelpers.Commons.Primitives; 
 public class UlidJsonConverter : JsonConverter<Ulid> {
     /// <summary>
     /// Read a Ulid value represented by a string from JSON.

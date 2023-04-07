@@ -1,5 +1,4 @@
-﻿namespace DomainHelpers.Commons.Collections;
-
+﻿namespace DomainHelpers.Commons.Collections; 
 public class NullableMap<TKey, TValue> : Dictionary<TKey, TValue>
     where TKey : notnull
     where TValue : class {

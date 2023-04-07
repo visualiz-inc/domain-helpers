@@ -1,6 +1,8 @@
-﻿using System.Linq.Expressions;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
-namespace DomainHelpers.EntityFrameworkCoreExtensions;
+namespace MoriFlocky.Infrastructure.AzureSql;
+
 public static class QueryExtensions {
     /// <summary>
     /// Filters the elements of an <see cref="IQueryable{T}"/> based on a selector and a collection of values.

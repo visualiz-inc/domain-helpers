@@ -1,8 +1,7 @@
 ﻿using DomainHelpers.Commons;
 using DomainHelpers.Commons.Text;
 
-namespace DomainHelpers.Domain.Indentifier;
-
+namespace DomainHelpers.Domain.Indentifier; 
 public abstract class IdentifierCode {
     public IdentifierCode(string src) {
         Values = src switch {

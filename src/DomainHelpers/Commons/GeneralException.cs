@@ -1,7 +1,6 @@
 ﻿using DomainHelpers.Commons.Primitives;
 
-namespace DomainHelpers.Commons;
-
+namespace DomainHelpers.Commons; 
 /// <summary>
 ///  Represents the general error.
 /// </summary>

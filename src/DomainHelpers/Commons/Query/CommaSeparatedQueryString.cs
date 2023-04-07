@@ -1,5 +1,4 @@
-﻿namespace DomainHelpers.Commons.Query;
-
+﻿namespace DomainHelpers.Commons.Query; 
 /// <summary>
 /// Represents a comma-separated query string.
 /// </summary>

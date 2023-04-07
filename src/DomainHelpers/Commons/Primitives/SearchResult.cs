@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace DomainHelpers.Commons.Primitives;
-
+namespace DomainHelpers.Commons.Primitives; 
 public abstract class SearchResult {
     public static SearchResult<T> From<T>(
         int total,

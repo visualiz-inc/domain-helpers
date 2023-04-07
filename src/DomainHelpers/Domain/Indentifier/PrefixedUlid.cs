@@ -1,8 +1,7 @@
 ﻿using DomainHelpers.Commons;
 using DomainHelpers.Commons.Primitives;
 
-namespace DomainHelpers.Domain.Indentifier;
-
+namespace DomainHelpers.Domain.Indentifier; 
 public abstract record PrefixedUlid {
     public abstract string Prefix { get; }
 
@@ -45,4 +44,3 @@ public abstract record PrefixedUlid {
 
     public sealed override string ToString() => FullValue;
 }
-

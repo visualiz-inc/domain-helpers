@@ -1,5 +1,4 @@
-﻿namespace DomainHelpers.Commons.Reactive;
-
+﻿namespace DomainHelpers.Commons.Reactive; 
 public class Observer<T> : IObserver<T> {
     private readonly Action onCompleted;
     private readonly Action<Exception> onError;

@@ -1,5 +1,4 @@
-﻿namespace DomainHelpers.Domain.Locations;
-
+﻿namespace DomainHelpers.Domain.Locations; 
 /// <summary>
 ///  郵便番号を表します
 /// </summary>
