@@ -1,4 +1,5 @@
-﻿namespace MoriFlocky.Domain.Common; 
+﻿namespace MoriFlocky.Domain.Common;
+
 public record StorageItemInfo {
     public string Name { get; }
 

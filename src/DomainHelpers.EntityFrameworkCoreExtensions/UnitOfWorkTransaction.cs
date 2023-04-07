@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
-using MoriFlocky.Domain.Common;
+﻿using DomainHelpers.Domain;
+using Microsoft.EntityFrameworkCore.Storage;
 
-namespace MoriFlocky.Infrastructure.AzureSql;
+namespace DomainHelpers.EntityFrameworkCoreExtensions;
 
 public class UnitOfWorkTransaction : IUnitOfWorkTransaction {
     private readonly IDbContextTransaction _transaction;

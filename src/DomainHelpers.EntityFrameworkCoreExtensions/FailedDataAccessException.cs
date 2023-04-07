@@ -1,7 +1,7 @@
 ﻿using DomainHelpers.Commons;
 using DomainHelpers.Commons.Primitives;
 
-namespace MoriFlocky.Infrastructure.AzureSql;
+namespace DomainHelpers.EntityFrameworkCoreExtensions;
 
 /// <summary>
 /// AzureSqlのデータへのアクセスの失敗を表します．

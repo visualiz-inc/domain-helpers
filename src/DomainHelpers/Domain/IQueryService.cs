@@ -1,7 +1,7 @@
-﻿namespace DomainHelpers.Domain {
-    namespace MoriFlocky.Domain.Common;
+﻿using DomainHelpers.Commons.Primitives;
 
-    public interface IQueryService<TEntity, TSearchOption> {
-        Task<SearchResult<TEntity>> SearchAsync(int offset, int fetch, TSearchOption option);
-    }
+namespace DomainHelpers.Domain; 
+
+public interface IQueryService<TEntity, TSearchOption> {
+    Task<SearchResult<TEntity>> SearchAsync(int offset, int fetch, TSearchOption option);
 }

@@ -1,4 +1,5 @@
-﻿namespace MoriFlocky.Domain.Common; 
+﻿namespace MoriFlocky.Domain.Common;
+
 /// <summary>
 /// バイナリデータの保存や読み出しをするサービスのメカニズムを提供します。
 /// </summary>

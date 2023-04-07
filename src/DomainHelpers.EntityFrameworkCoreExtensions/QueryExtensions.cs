@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace MoriFlocky.Infrastructure.AzureSql;
+namespace DomainHelpers.EntityFrameworkCoreExtensions;
 
 public static class QueryExtensions {
     /// <summary>

@@ -1,4 +1,5 @@
-﻿namespace DomainHelpers.Domain; 
+﻿namespace DomainHelpers.Domain;
+
 /// <summary>
 /// オブジェクトの永続化の管理を行うリポジトリを表します。
 /// </summary>
