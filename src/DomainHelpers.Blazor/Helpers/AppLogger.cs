@@ -16,13 +16,16 @@ public class AppLogger {
         _jsRuntime = jsRuntime;
     }
 
-    public void LogError(Exception ex, string message) {
+    public void LogError(Exception ex, string message, bool notify = true) {
         if (ex is GeneralException ge) {
             LogError(ge, message);
         }
         else {
             _logger.LogError(ex, message);
-            _subject.OnNext(new LogEventArgs(ex, message, null, null));
+
+            if (notify) {
+                _subject.OnNext(new LogEventArgs(ex, message, null, null));
+            }
         }
     }
 
