@@ -12,10 +12,11 @@ public class Store<TState> : AbstractStore<TState, Command.StateHasChanged>
 
     public void Mutate(Func<TState, TState> reducer) {
         var state = State;
-        ComputedAndApplyState(state, new Command.StateHasChanged(reducer(state)));
+        var type = GetType();
+        ComputedAndApplyState(state, new Command.StateHasChanged(reducer(state), type));
     }
 
     public void Mutate(TState state) {
-        ComputedAndApplyState(State, new Command.StateHasChanged(state));
+        ComputedAndApplyState(State, new Command.StateHasChanged(state, GetType()));
     }
 }

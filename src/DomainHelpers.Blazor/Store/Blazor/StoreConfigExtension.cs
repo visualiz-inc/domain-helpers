@@ -5,8 +5,13 @@ using System.Reflection;
 namespace DomainHelpers.Blazor.Store.Blazor;
 
 public static class StoreConfigExtension {
-    public static IServiceCollection AddMemento(this IServiceCollection services) {
-        services.AddScoped<StoreProvider>();
+    public static IServiceCollection AddMemento(this IServiceCollection services, bool isScoped = true) {
+        if (isScoped) {
+            services.AddScoped<StoreProvider>();
+        }
+        else {
+            services.AddSingleton<StoreProvider>();
+        }
         return services;
     }
 
@@ -17,10 +22,16 @@ public static class StoreConfigExtension {
         return collection;
     }
 
-    public static void ScanAssemblyAndAddStores(this IServiceCollection services, Assembly assembly) {
+    public static void ScanAssemblyAndAddStores(this IServiceCollection services, Assembly assembly, bool isScoped = true) {
         foreach (var type in assembly.GetTypes().Where(t => t.IsAssignableTo(typeof(IStore)))) {
-            services.AddScoped(type)
-                .AddScoped(p => (IStore)p.GetRequiredService(type));
+            if (isScoped) {
+                services.AddScoped(type)
+                    .AddScoped(p => (IStore)p.GetRequiredService(type));
+            }
+            else {
+                services.AddSingleton(type)
+                    .AddSingleton(p => (IStore)p.GetRequiredService(type));
+            }
         }
     }
 

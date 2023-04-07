@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace DomainHelpers.Blazor.Store.Core;
 
 public abstract record Command {
@@ -5,7 +7,9 @@ public abstract record Command {
 
     public record Restored : Command;
 
-    public record StateHasChanged(object State) : Command;
+    public record StateHasChanged(object State, [property: JsonIgnore] Type? StoreType = null) : Command {
+        public override string Type => $"{StoreType?.Name ?? "Store"}+{GetType().Name}";
+    }
 
     public virtual string Type {
         get {
@@ -26,7 +30,7 @@ public abstract record Command {
 
     IEnumerable<KeyValuePair<string, object>> GetPayloads() {
         foreach (var property in GetType().GetProperties()) {
-            if (property.Name is nameof(Payload) or nameof(Type)) {
+            if (property.Name is nameof(Payload) or nameof(Type) or "StoreType") {
                 continue;
             }
 
