@@ -33,10 +33,10 @@ public class HttpMediator {
     /// </exception>
     public async Task<TResponse> Send<TResponse>(IRequest<TResponse> request) {
         var response = await SendRequest(request);
-        if(typeof(TResponse) == typeof(Unit)) {
+        if (typeof(TResponse) == typeof(Unit)) {
             return default!;
         }
-        
+
         var result = await response.ReadFromJsonAsync<TResponse>();
         return result!;
     }
@@ -47,19 +47,50 @@ public class HttpMediator {
         var content = JsonContent.Create(request, requestType, options: options);
         var httpResponse = await _httpClient.PostAsync($"/mediator/{requestType.Name}", content);
         if (httpResponse.IsSuccessStatusCode is false) {
-            var problem = await httpResponse.Content.ReadFromJsonAsync<FailedResponse?>();
-            if (problem is not null) {
-                throw GeneralException.WithMessage(
-                    problem,
-                    problem.Title,
-                    problem.Title,
-                    eventId: problem.EventId
+            try {
+                var problem = await httpResponse.Content.ReadFromJsonAsync<FailedResponse?>();
+                if (problem is not null) {
+                    throw GeneralException.WithMessage(
+                        problem,
+                        problem.Title,
+                        problem.Title,
+                        eventId: problem.EventId
+                    );
+                }
+
+                throw new ApplicationException(httpResponse.ReasonPhrase);
+            }
+            catch (Exception ex) {
+                throw new RequestException(
+                    ErrorType.Unknown,
+                    httpResponse?.ReasonPhrase ?? "Request error",
+                    "リクエストに失敗しました",
+                    ex
                 );
             }
-
-            throw new ApplicationException(httpResponse.ReasonPhrase);
         }
 
         return httpResponse.Content;
+    }
+}
+
+public enum ErrorType {
+    NotConnected,
+    NotFound,
+    BadRequest,
+    Unauthorized,
+    Forbidden,
+    InternalServerError,
+    Unknown
+}
+
+public class RequestException : GeneralException<ErrorType> {
+    public RequestException(ErrorType type, string message, string? displayMessage = null, Exception? ex = null) : base(
+        type,
+        message,
+        displayMessage,
+        default,
+        ex
+    ) {
     }
 }
