@@ -37,10 +37,12 @@ public class GeneralRepository<TEntity, TId> : IRepository<TEntity, TId>
 
     /// <inheritdoc/>
     public virtual async Task SaveAsync(TEntity entity, CancellationToken cancellationToken = default) {
-        foreach (var e in _dbContext.ChangeTracker.Entries()) {
-            e.State = EntityState.Detached;
-        }
-        await SaveChangesAsync(cancellationToken);
+        //foreach (var e in _dbContext.ChangeTracker.Entries()) {
+        //    e.State = EntityState.Detached;
+        //}
+
+        //_dbContext.Entry
+        //await SaveChangesAsync(cancellationToken);
         _dbContext.Set<TEntity>().Update(entity);
 
         await SaveChangesAsync(cancellationToken);
@@ -87,7 +89,6 @@ public class GeneralRepository<TEntity, TId> : IRepository<TEntity, TId>
             new object[] { id },
             cancellationToken: cancellationToken
         ) is { } entity) {
-            RecursiveDetach(_dbContext, entity);
             return entity;
         }
 
