@@ -1,21 +1,27 @@
 ﻿using DomainHelpers.Domain;
+using DomainHelpers.Domain.Indentifier;
 using Microsoft.EntityFrameworkCore;
 using MoriFlocky.Domain.Accounts;
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection.Metadata;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DomainHelpers.EntityFrameworkCoreExtensions;
 
-public class GeneralRepository<TEntity, TId> : IRepository<TEntity, TId>
-    where TEntity : class
-    where TId : notnull {
+public class ImmutableEntityRepository<TEntity, TId> : IRepository<TEntity, TId>
+    where TEntity : ImmutableEntity<TEntity, TId>
+    where TId : notnull, PrefixedUlid, new() {
     private readonly DbContext _dbContext;
-    public GeneralRepository(DbContext dbContext) {
+    readonly ConcurrentDictionary<TId, TEntity> _founds = new();
+
+    public ImmutableEntityRepository(DbContext dbContext) {
         _dbContext = dbContext;
     }
 
@@ -37,14 +43,11 @@ public class GeneralRepository<TEntity, TId> : IRepository<TEntity, TId>
 
     /// <inheritdoc/>
     public virtual async Task SaveAsync(TEntity entity, CancellationToken cancellationToken = default) {
-        //foreach (var e in _dbContext.ChangeTracker.Entries()) {
-        //    e.State = EntityState.Detached;
-        //}
+        if (_founds.TryGetValue(entity.Id, out var found)) {
+            _dbContext.Entry(found).State = EntityState.Detached;
+        }
 
-        //_dbContext.Entry
-        //await SaveChangesAsync(cancellationToken);
         _dbContext.Set<TEntity>().Update(entity);
-
         await SaveChangesAsync(cancellationToken);
     }
 
@@ -80,7 +83,9 @@ public class GeneralRepository<TEntity, TId> : IRepository<TEntity, TId>
 
     /// <inheritdoc/>
     public virtual async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) {
-        return await _dbContext.SaveChangesAsync(cancellationToken);
+        var entries = await _dbContext.SaveChangesAsync(cancellationToken);
+
+        return entries;
     }
 
     /// <inheritdoc/>
@@ -89,6 +94,11 @@ public class GeneralRepository<TEntity, TId> : IRepository<TEntity, TId>
             new object[] { id },
             cancellationToken: cancellationToken
         ) is { } entity) {
+            if (_founds.TryAdd(id, entity) is false) {
+                _dbContext.Entry(_founds[id]).State = EntityState.Detached;
+                _founds[id] = entity;
+            }
+
             return entity;
         }
 
