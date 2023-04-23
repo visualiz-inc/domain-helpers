@@ -18,18 +18,29 @@ namespace DomainHelpers.EntityFrameworkCoreExtensions;
 
 public static class UseImmutableEntityOnModelBuilderExtensions {
     public static EntityTypeBuilder<TEntity> UseImmutableEntity<TEntity, TId>(this EntityTypeBuilder<TEntity> entity)
-    where TEntity : ImmutableEntity
+    where TEntity : Entity
     where TId : PrefixedUlid, new() {
-        entity.HasKey(nameof(ImmutableEntity<TEntity, TId>.Id));
-        entity.Property<TId>(nameof(ImmutableEntity<TEntity, TId>.Id))
+        entity.HasKey(nameof(Entity<TEntity, TId>.Id));
+        entity.Property<TId>(nameof(Entity<TEntity, TId>.Id))
+            .HasMaxLength(TotalLength(typeof(TEntity)))
+            .IsFixedLength()
             .HasConversion(id => id.ToString(), id => PrefixedUlid.Parse<TId>(id))
             .HasValueGenerator<IdGenerator<TId>>();
 
         return entity;
     }
+
+    static int TotalLength(Type type) {
+        var totalFieldInfo = type.GetField("TotalLength", BindingFlags.Public | BindingFlags.Static);
+        if (totalFieldInfo is { } info && totalFieldInfo.IsLiteral && totalFieldInfo.IsInitOnly is false) {
+            return (int)info.GetValue(null);
+        }
+
+        return 0;
+    }
 }
 
-public class IdGenerator<TId> : ValueGenerator<TId>  where TId : PrefixedUlid, new() {
+public class IdGenerator<TId> : ValueGenerator<TId> where TId : PrefixedUlid, new() {
     public override TId Next(EntityEntry entry) {
         if (entry == null) {
             throw new ArgumentNullException(nameof(entry));
