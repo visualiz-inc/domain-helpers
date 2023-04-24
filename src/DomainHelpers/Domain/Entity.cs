@@ -7,12 +7,18 @@ using System.Threading.Tasks;
 
 namespace DomainHelpers.Domain;
 
-public record Entity {
+public class Entity {
 }
 
-public record Entity<TEntity, TId>(TId id): Entity
+public class Entity<TEntity, TId>: Entity
     where TEntity : class
     where TId : PrefixedUlid {
-    public virtual TId Id { get; protected set; } = id;
+    public virtual  TId Id { get; init; }
+
+    public Entity(TId id) {
+        Id = id;
+    }
+
+    public Entity() { }
 }
 
