@@ -7,12 +7,18 @@ using System.Threading.Tasks;
 
 namespace DomainHelpers.Domain;
 
-public record ImmutableEntity {
+public class Entity {
 }
 
-public record ImmutableEntity<TEntity, TId>: ImmutableEntity
+public class Entity<TEntity, TId>: Entity
     where TEntity : class
     where TId : PrefixedUlid {
-    public virtual required TId Id { get; init; }
+    public virtual  TId Id { get; init; }
+
+    public Entity(TId id) {
+        Id = id;
+    }
+
+    public Entity() { }
 }
 

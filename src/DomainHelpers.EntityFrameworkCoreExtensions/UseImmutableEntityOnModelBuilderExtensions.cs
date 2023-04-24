@@ -17,11 +17,11 @@ using System.Threading.Tasks;
 namespace DomainHelpers.EntityFrameworkCoreExtensions;
 
 public static class UseImmutableEntityOnModelBuilderExtensions {
-    public static EntityTypeBuilder<TEntity> UseImmutableEntity<TEntity, TId>(this EntityTypeBuilder<TEntity> entity)
-    where TEntity : ImmutableEntity
-    where TId : PrefixedUlid, new() {
-        entity.HasKey(nameof(ImmutableEntity<TEntity, TId>.Id));
-        entity.Property<TId>(nameof(ImmutableEntity<TEntity, TId>.Id))
+    public static EntityTypeBuilder<TEntity> UseDomainEntity<TEntity, TId>(this EntityTypeBuilder<TEntity> entity)
+        where TEntity : Entity
+        where TId : PrefixedUlid, new() {
+        entity.HasKey(nameof(Entity<TEntity, TId>.Id));
+        entity.Property<TId>(nameof(Entity<TEntity, TId>.Id))
             .HasConversion(id => id.ToString(), id => PrefixedUlid.Parse<TId>(id))
             .HasValueGenerator<IdGenerator<TId>>();
 

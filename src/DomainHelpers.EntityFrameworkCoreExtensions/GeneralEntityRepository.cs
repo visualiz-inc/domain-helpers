@@ -15,13 +15,13 @@ using System.Threading.Tasks;
 
 namespace DomainHelpers.EntityFrameworkCoreExtensions;
 
-public class ImmutableEntityRepository<TEntity, TId> : IRepository<TEntity, TId>
-    where TEntity : ImmutableEntity<TEntity, TId>
+public class GeneralEntityRepository<TEntity, TId> : IRepository<TEntity, TId>
+    where TEntity : Entity<TEntity, TId>
     where TId : notnull, PrefixedUlid, new() {
     private readonly DbContext _dbContext;
     readonly ConcurrentDictionary<TId, TEntity> _founds = new();
 
-    public ImmutableEntityRepository(DbContext dbContext) {
+    public GeneralEntityRepository(DbContext dbContext) {
         _dbContext = dbContext;
     }
 
