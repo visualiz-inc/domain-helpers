@@ -43,7 +43,7 @@ public class HttpMediator {
 
     private async Task<HttpContent> SendRequest<T>(IRequest<T> request) {
         var requestType = request.GetType();
-        var options = new JsonSerializerOptions { PropertyNamingPolicy = null };
+        var options = new JsonSerializerOptions { PropertyNamingPolicy = null, WriteIndented = true };
         var content = JsonContent.Create(request, requestType, options: options);
         var httpResponse = await _httpClient.PostAsync($"/mediator/{requestType.Name}", content);
         if (httpResponse.IsSuccessStatusCode is false) {
@@ -53,18 +53,27 @@ public class HttpMediator {
                     throw GeneralException.WithMessage(
                         problem,
                         problem.Title,
-                        problem.Title,
-                        eventId: problem.EventId
+                        problem.Title
                     );
                 }
 
                 throw new ApplicationException(httpResponse.ReasonPhrase);
+            }
+            catch (GeneralException<FailedResponse> ex) {
+                throw new RequestException(
+                    ErrorType.Unknown,
+                    httpResponse?.ReasonPhrase ?? "Request error",
+                    "リクエストに失敗しました",
+                    ex.Payload,
+                    ex
+                );
             }
             catch (Exception ex) {
                 throw new RequestException(
                     ErrorType.Unknown,
                     httpResponse?.ReasonPhrase ?? "Request error",
                     "リクエストに失敗しました",
+                    null,
                     ex
                 );
             }
@@ -85,12 +94,20 @@ public enum ErrorType {
 }
 
 public class RequestException : GeneralException<ErrorType> {
-    public RequestException(ErrorType type, string message, string? displayMessage = null, Exception? ex = null) : base(
+    public FailedResponse? FailedResponse { get; private set; }
+    public RequestException(
+        ErrorType type,
+        string message,
+        string? displayMessage = null,
+        FailedResponse? failedResponse = null,
+        Exception? ex = null
+    ) : base(
         type,
         message,
         displayMessage,
         default,
         ex
     ) {
+        FailedResponse = failedResponse;
     }
 }

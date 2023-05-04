@@ -4,11 +4,11 @@ using DomainHelpers.Commons.Primitives;
 namespace DomainHelpers.Domain.Indentifier;
 
 public abstract record PrefixedUlid {
-    public abstract string Prefix { get; }
+    public abstract string PrefixWithSeparator { get; }
 
     public Ulid Value { get; private set; }
 
-    public string FullValue => $"{Prefix}{Value}";
+    public string FullValue => $"{PrefixWithSeparator}{Value}";
 
     public PrefixedUlid(string id) {
         CheckIfValidAndSetUlid(id);
@@ -18,11 +18,11 @@ public abstract record PrefixedUlid {
     }
 
     private void CheckIfValidAndSetUlid(string id) {
-        if (id.StartsWith(Prefix) is false) {
-            throw GeneralException.WithDisplayMessage($"Id must start with '{Prefix}'");
+        if (id.StartsWith(PrefixWithSeparator) is false) {
+            throw GeneralException.WithDisplayMessage($"Id must start with '{PrefixWithSeparator}'");
         }
 
-        var ulidText = id.Replace(Prefix, "");
+        var ulidText = id.Replace(PrefixWithSeparator, "");
         if (Ulid.TryParse(ulidText, out var ulid)) {
             Value = ulid;
         }

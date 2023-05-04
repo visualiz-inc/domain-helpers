@@ -68,8 +68,12 @@ public partial class PrefixedUlidGenerator : IIncrementalGenerator {
 
             partial record {{typeSymbol.Name}} : DomainHelpers.Domain.Indentifier.PrefixedUlid {
                 public const int TotalLength = {{prefix.Length + 1 + 26}};
+                public const string Prefix = "{{prefix}}";
+                public const string Separator = "{{separator}}";
 
-                public override string Prefix => "{{prefix}}{{separator}}";
+                public static {{typeSymbol.Name}} Default {get; } = Parse($"{{prefix}}{{separator}}{default(DomainHelpers.Commons.Primitives.Ulid)}");
+
+                public override string PrefixWithSeparator => "{{prefix}}{{separator}}";
  
                 public static {{typeSymbol.Name}} CreateNew() => DomainHelpers.Domain.Indentifier.PrefixedUlid.NewPrefixedUlid<{{typeSymbol.Name}}>();
 

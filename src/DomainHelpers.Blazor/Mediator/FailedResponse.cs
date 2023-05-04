@@ -1,5 +1,4 @@
-﻿using DomainHelpers.Commons.Primitives;
-using System.Text.Json;
+﻿using System.Text.Json;
 
 namespace DomainHelpers.Blazor.Mediator;
 
@@ -12,7 +11,7 @@ public record FailedResponse {
 
     public required string? Payload { get; init; }
 
-    public required Ulid EventId { get; init; }
+    public required string EventId { get; init; }
 
     public required string? Exception { get; init; }
 

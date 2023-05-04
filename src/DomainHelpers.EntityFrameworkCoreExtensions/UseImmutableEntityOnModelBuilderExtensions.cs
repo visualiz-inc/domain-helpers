@@ -3,27 +3,21 @@ using DomainHelpers.Domain.Indentifier;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.EntityFrameworkCore.ValueGeneration;
-using MoriFlocky.Application.Domain.Customers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DomainHelpers.EntityFrameworkCoreExtensions;
 
 public static class UseImmutableEntityOnModelBuilderExtensions {
     public static EntityTypeBuilder<TEntity> UseDomainEntity<TEntity, TId>(this EntityTypeBuilder<TEntity> entity)
-        where TEntity : Entity
+        where TEntity : Entity<TId>
         where TId : PrefixedUlid, new() {
-        entity.HasKey(nameof(Entity<TEntity, TId>.Id));
-        entity.Property<TId>(nameof(Entity<TEntity, TId>.Id))
+        entity.HasKey(nameof(Entity<TId>.Id));
+        entity.Property<TId>(nameof(Entity<TId>.Id))
             .HasConversion(id => id.ToString(), id => PrefixedUlid.Parse<TId>(id))
-            .HasValueGenerator<IdGenerator<TId>>();
+            .HasValueGenerator<IdGenerator<TId>>()
+            .HasMaxLength(TotalLength(typeof(TId)))
+            .IsFixedLength();
 
         return entity;
     }
@@ -34,18 +28,19 @@ public static class UseImmutableEntityOnModelBuilderExtensions {
             return (int)info.GetValue(null);
         }
 
-        return 0;
+        throw new Exception($"TotalLength has not been found.");
     }
-}
 
-public class IdGenerator<TId> : ValueGenerator<TId> where TId : PrefixedUlid, new() {
-    public override TId Next(EntityEntry entry) {
-        if (entry == null) {
-            throw new ArgumentNullException(nameof(entry));
+    public class IdGenerator<TId> : ValueGenerator<TId> where TId : PrefixedUlid, new() {
+        public override TId Next(EntityEntry entry) {
+            if (entry == null) {
+                throw new ArgumentNullException(nameof(entry));
+            }
+
+            return PrefixedUlid.NewPrefixedUlid<TId>();
         }
 
-        return PrefixedUlid.NewPrefixedUlid<TId>();
+        public override bool GeneratesTemporaryValues { get; }
     }
-
-    public override bool GeneratesTemporaryValues { get; }
 }
+

@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 
 namespace DomainHelpers.Commons.Text; 
+
 public static class StringExtensions {
     /// <summary>
     /// Concatenates the members of a constructed System.Collections.Generic.IEnumerable`1

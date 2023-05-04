@@ -2,22 +2,13 @@
 using DomainHelpers.Domain;
 using DomainHelpers.Domain.Indentifier;
 using Microsoft.EntityFrameworkCore;
-using MoriFlocky.Domain.Accounts;
-using System;
 using System.Collections;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DomainHelpers.EntityFrameworkCoreExtensions;
 
 public class GeneralEntityRepository<TEntity, TId> : IRepository<TEntity, TId>
-    where TEntity : Entity<TEntity, TId>
+    where TEntity : Entity< TId>
     where TId : notnull, PrefixedUlid, new() {
     private readonly DbContext _dbContext;
     readonly ConcurrentDictionary<TId, TEntity> _founds = new();

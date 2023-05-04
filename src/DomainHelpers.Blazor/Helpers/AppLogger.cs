@@ -4,7 +4,7 @@ using Microsoft.JSInterop;
 
 namespace DomainHelpers.Blazor.Helpers;
 
-public record LogEventArgs(Exception? Exception, string? Message, ImmutableArray<string>? Details, string? LogId);
+public record LogEventArgs(Exception? Exception, string? Message, ImmutableArray<string>? Details, string? LogId, string DebugInfo);
 
 public class AppLogger {
     private readonly ILogger<AppLogger> _logger;
@@ -24,16 +24,23 @@ public class AppLogger {
             _logger.LogError(ex, message);
 
             if (notify) {
-                _subject.OnNext(new LogEventArgs(ex, message, null, null));
+                _subject.OnNext(new LogEventArgs(ex, message, null, null, ""));
             }
         }
     }
 
     public void LogError(GeneralException ex, string? message = null) {
         var details = new List<string>();
-        if (ex is GeneralException<FailedResponse> failedResponseException) {
-            _ = LogJson(failedResponseException.Payload);
-            details.Add($"{failedResponseException.Payload}");
+        var id = ex.EventId.ToString();
+        var debugInfo = "";
+        if (ex is RequestException failedResponseException) {
+            _ = LogJson(failedResponseException);
+            if (failedResponseException.FailedResponse is { } response) {
+                debugInfo = response.Exception;
+                details.Add(response.Title);
+            }
+
+            id = failedResponseException.FailedResponse?.EventId.ToString();
         }
 
         details.AddRange(ex.FluttenDisplayMessages());
@@ -41,11 +48,10 @@ public class AppLogger {
         _subject.OnNext(new LogEventArgs(
             ex,
             message ?? ex.DisplayMessage,
-            ex.DisplayMessage is { }
-                ? ArrayOf(ex.DisplayMessage).AddRange(details)
-                : ArrayOfRange(details),
-            ex.EventId.ToString()
-         ));
+            ArrayOfRange(details),
+            id,
+            debugInfo
+        ));
     }
 
     public async Task LogJson(object? obj) {
@@ -54,7 +60,7 @@ public class AppLogger {
 
     public void LogError(string message) {
         _logger.LogError(message);
-        _subject.OnNext(new LogEventArgs(null, message, ArrayOf<string>(), null));
+        _subject.OnNext(new LogEventArgs(null, message, ArrayOf<string>(), null, ""));
     }
 
     public IDisposable Subscribe(Action<LogEventArgs> observer) {

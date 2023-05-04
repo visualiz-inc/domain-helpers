@@ -1,13 +1,13 @@
-﻿using DomainHelpers.Commons.Primitives;
+﻿using DomainHelpers.Domain.Indentifier;
 
-namespace DomainHelpers.Commons; 
+namespace DomainHelpers.Commons;
 /// <summary>
 ///  Represents the general error.
 /// </summary>
 public class GeneralException : Exception {
     public string? DisplayMessage { get; }
 
-    public Ulid EventId { get; }
+    public PrefixedUlid EventId { get; }
 
     public object? Payload { get; }
 
@@ -23,43 +23,44 @@ public class GeneralException : Exception {
         string message,
         string? displayMessage = null,
         object? payload = null,
-        Ulid? eventId = null,
+        PrefixedUlid? eventId = null,
         Exception? exception = null
     ) : base(
         message,
-        exception) {
+        exception
+    ) {
         Payload = payload;
         DisplayMessage = displayMessage;
-        EventId = eventId ?? Ulid.NewUlid();
+        EventId = eventId ?? GeneralExceptionId.CreateNew();
 
         // Additional data
-        Data.Add(nameof(EventId), eventId.ToString());
+        Data.Add(nameof(EventId), EventId.ToString());
         Data.Add(nameof(DisplayMessage), displayMessage);
         Data.Add(nameof(Payload), payload);
     }
 
     public static GeneralException WithDisplayMessage(
         string displayMessage,
-        Ulid? eventId = null
+        PrefixedUlid? eventId = null
     ) {
         return new GeneralException<object>(
             null,
             displayMessage,
             displayMessage,
-            eventId ?? Ulid.NewUlid()
+            eventId ?? GeneralExceptionId.CreateNew()
         );
     }
 
     public static GeneralException<TPayload> WithDisplayMessage<TPayload>(
         TPayload exceptionType,
         string displayMessage,
-        Ulid? eventId = null
+        PrefixedUlid? eventId = null
     ) {
         return new(
             exceptionType,
             displayMessage,
             displayMessage,
-            eventId ?? Ulid.NewUlid()
+            eventId ?? GeneralExceptionId.CreateNew()
         );
     }
 
@@ -67,13 +68,13 @@ public class GeneralException : Exception {
         string message,
         string? displayMessage,
         Exception? ex = null,
-        Ulid? eventId = null
+        PrefixedUlid? eventId = null
     ) {
         return new GeneralException<object>(
             null,
             message,
             displayMessage,
-            eventId ?? Ulid.NewUlid(),
+            eventId ?? GeneralExceptionId.CreateNew(),
             ex!
         );
     }
@@ -83,13 +84,13 @@ public class GeneralException : Exception {
         string message,
         string? displayMessage,
         Exception? ex = null,
-        Ulid? eventId = null
+        PrefixedUlid? eventId = null
     ) {
         return new(
             exceptionType,
             message,
             displayMessage,
-            eventId ?? Ulid.NewUlid(),
+            eventId ?? GeneralExceptionId.CreateNew(),
             ex!
         );
     }
@@ -170,7 +171,7 @@ public class GeneralException<TPayload> : GeneralException {
         TPayload? payload,
         string message,
         string? displayMessage = null,
-        Ulid? eventId = null,
+        PrefixedUlid? eventId = null,
         Exception? error = null
     ) : base(
         message,

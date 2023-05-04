@@ -91,7 +91,7 @@ internal class RemoteMediatrRequestHandler {
                             ? ex.ToString()
                             : "This info is valid on development mode only",
                         ["payload"] = ge.Payload is not null ? JsonSerializer.Serialize(ge.Payload) : "",
-                        ["eventId"] = ge.EventId,
+                        ["eventId"] = ServerErrorExceptionId.Parse($"{ServerErrorExceptionId.Prefix}{ServerErrorExceptionId.Separator}{ge.EventId.Value}").ToString(),
                         ["childDetails"] = ge.Payload is RequestFailed fr
                             ? fr.Details
                             : ImmutableArray.Create<string>(),
@@ -104,7 +104,7 @@ internal class RemoteMediatrRequestHandler {
                     extensions: new Dictionary<string, object?>() {
                         ["exception"] = _isDebug ? ex.ToString() : "Dev only",
                         ["payload"] = "",
-                        ["eventId"] = default(Ulid),
+                        ["eventId"] = ServerErrorExceptionId.Parse($"{ServerErrorExceptionId.Prefix}{ServerErrorExceptionId.Separator}{default(Ulid)}").ToString(),
                         ["childDetails"] = ImmutableArray.Create<string>(),
                     }
             ),

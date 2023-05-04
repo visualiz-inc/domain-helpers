@@ -1,5 +1,4 @@
 ﻿using DomainHelpers.Commons;
-using DomainHelpers.Commons.Primitives;
 
 namespace DomainHelpers.EntityFrameworkCoreExtensions;
 
@@ -14,7 +13,7 @@ public class GeneralDataAccessFailedException : GeneralException {
         exception.Message,
         displayMessage,
         null,
-        Ulid.NewUlid(),
+        GeneralExceptionId.CreateNew(),
         exception
     ) { }
 }
