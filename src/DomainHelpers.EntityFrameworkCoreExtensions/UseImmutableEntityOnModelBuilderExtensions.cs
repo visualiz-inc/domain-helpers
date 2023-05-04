@@ -25,7 +25,7 @@ public static class UseImmutableEntityOnModelBuilderExtensions {
     static int TotalLength(Type type) {
         var totalFieldInfo = type.GetField("TotalLength", BindingFlags.Public | BindingFlags.Static);
         if (totalFieldInfo is { } info && totalFieldInfo.IsLiteral && totalFieldInfo.IsInitOnly is false) {
-            return (int)info.GetValue(null);
+            return (int)(info.GetValue(null) ?? 0);
         }
 
         throw new Exception($"TotalLength has not been found.");

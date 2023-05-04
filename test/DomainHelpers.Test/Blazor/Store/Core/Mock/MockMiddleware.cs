@@ -3,19 +3,19 @@
 namespace DomainHelper.Test.Blazor.Store.Core.Mock;
 
 public class MockMiddleware : Middleware {
-    public new MockMiddlewarehandler? Handler { get; set; }
+    public new MockMiddlewareHandler? Handler { get; set; }
 
     protected override MiddlewareHandler Create(IServiceProvider provider) {
-        Handler = new MockMiddlewarehandler();
+        Handler = new MockMiddlewareHandler();
         return Handler;
     }
 
-    public class MockMiddlewarehandler : MiddlewareHandler {
+    public class MockMiddlewareHandler : MiddlewareHandler {
         public int ProviderDispatchCalledCount { get; private set; }
         public int HandleStoreDispatchCalledCount { get; private set; }
 
         public override RootState? HandleProviderDispatch(
-            RootState state,
+            RootState? state,
             StateChangedEventArgs e,
             NextProviderMiddlewareCallback next
         ) {
@@ -24,7 +24,7 @@ public class MockMiddleware : Middleware {
         }
 
         public override object? HandleStoreDispatch(
-            object state,
+            object? state,
             Command command,
             NextStoreMiddlewareCallback next
         ) {

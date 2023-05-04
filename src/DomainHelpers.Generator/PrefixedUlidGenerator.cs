@@ -67,7 +67,7 @@ public partial class PrefixedUlidGenerator : IIncrementalGenerator {
             {{ns}}
 
             partial record {{typeSymbol.Name}} : DomainHelpers.Domain.Indentifier.PrefixedUlid {
-                public const int TotalLength = {{prefix.Length + 1 + 26}};
+                public const int TotalLength = {{(prefix?.Length ?? 0) + 1 + 26}};
                 public const string Prefix = "{{prefix}}";
                 public const string Separator = "{{separator}}";
 

@@ -40,7 +40,7 @@ public class AppLogger {
                 details.Add(response.Title);
             }
 
-            id = failedResponseException.FailedResponse?.EventId.ToString();
+            id = failedResponseException.FailedResponse?.EventId.ToString() ?? "";
         }
 
         details.AddRange(ex.FluttenDisplayMessages());
@@ -50,7 +50,7 @@ public class AppLogger {
             message ?? ex.DisplayMessage,
             ArrayOfRange(details),
             id,
-            debugInfo
+            debugInfo ?? ""
         ));
     }
 

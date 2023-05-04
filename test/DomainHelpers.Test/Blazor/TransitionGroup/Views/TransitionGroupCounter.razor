@@ -1,6 +1,8 @@
-﻿
+﻿@using DomainHelpers.Blazor.TransitionGroup
+@using DomainHelpers.Test.Blazor.TransitionGroup.Views.Components
+
 <TransitionGroup>
-    @foreach(var item in _items) {
+    @foreach (var item in _items) {
         <GrowTransition @key="item" Key="item" In="true">
             <Counter />
         </GrowTransition>
