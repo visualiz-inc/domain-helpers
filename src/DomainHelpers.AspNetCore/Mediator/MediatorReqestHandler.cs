@@ -1,5 +1,6 @@
 ﻿using DomainHelpers.Commons;
 using DomainHelpers.Commons.Primitives;
+using DomainHelpers.Commons.Text;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -84,7 +85,7 @@ internal class RemoteMediatrRequestHandler {
             return ex switch {
                 GeneralException ge => Results.Problem(
                     title: ge.DisplayMessage,
-                    detail: ge.DisplayMessage,
+                    detail: ge.FluttenDisplayMessages().JoinStrings(","),
                     statusCode: StatusCodes.Status400BadRequest,
                     extensions: new Dictionary<string, object?>() {
                         ["exception"] = _isDebug

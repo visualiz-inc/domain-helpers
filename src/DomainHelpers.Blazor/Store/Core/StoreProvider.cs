@@ -77,14 +77,16 @@ public class StoreProvider : IObservable<RootStateChangedEventArgs>, IDisposable
         }
 
         // InitializeAsync all stores.
+        var tasks = new List<Task>();
         foreach (var store in ResolveAllStores()) {
             try {
-                await store.InitializeAsync(this);
+                tasks.Add(store.InitializeAsync(this));
             }
             catch (Exception ex) {
                 throw new InvalidDataException(@$"Failed to initialize memento provider ""{ex.Message}""", ex);
             }
         }
+        await Task.WhenAll(tasks);
     }
 
     public TStore ResolveStore<TStore>()

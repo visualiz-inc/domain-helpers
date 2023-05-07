@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 namespace DomainHelpers.Blazor.Helpers;
 
 public readonly record struct LoadingState {
-    private readonly ImmutableArray<string?> _loadings = ArrayOf<string?>();
+    private readonly ImmutableArray<string?>? _loadings = ArrayOf<string?>();
 
     public LoadingState(ImmutableArray<string?> loadings) {
         _loadings = loadings;
@@ -13,10 +13,9 @@ public readonly record struct LoadingState {
 
     public LoadingState() : this(ArrayOf<string?>()) { }
 
-    public bool IsLoading => _loadings is not [];
+    public bool IsLoading => _loadings is not ([] or null);
 
-    public bool IsGroupLoading(string? groupId) =>
-        _loadings.Any(x => x == groupId);
+    public bool IsGroupLoading(string? groupId) => _loadings?.Any(x => x == groupId) ?? false;
 }
 
 public class Loading {

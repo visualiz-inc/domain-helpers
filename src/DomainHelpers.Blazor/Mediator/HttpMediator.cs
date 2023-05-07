@@ -7,7 +7,7 @@ namespace DomainHelpers.Blazor.Mediator;
 /// <summary>
 /// サーバーにリクエストを送信するメディエータです．
 /// </summary>
-public class HttpMediator {
+public class HttpMediator : IMediator {
     private readonly HttpClient _httpClient;
 
     /// <summary>
@@ -16,6 +16,22 @@ public class HttpMediator {
     /// <param name="httpClient">HTTPクライアント．</param>
     public HttpMediator(HttpClient httpClient) {
         _httpClient = httpClient;
+    }
+
+    public IAsyncEnumerable<TResponse> CreateStream<TResponse>(IStreamRequest<TResponse> request, CancellationToken cancellationToken = default) {
+        throw new NotImplementedException();
+    }
+
+    public IAsyncEnumerable<object?> CreateStream(object request, CancellationToken cancellationToken = default) {
+        throw new NotImplementedException();
+    }
+
+    public Task Publish(object notification, CancellationToken cancellationToken = default) {
+        throw new NotImplementedException();
+    }
+
+    public Task Publish<TNotification>(TNotification notification, CancellationToken cancellationToken = default) where TNotification : INotification {
+        throw new NotImplementedException();
     }
 
     /// <summary>
@@ -39,6 +55,18 @@ public class HttpMediator {
 
         var result = await response.ReadFromJsonAsync<TResponse>();
         return result!;
+    }
+
+    public Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default) {
+        throw new NotImplementedException();
+    }
+
+    public Task Send<TRequest>(TRequest request, CancellationToken cancellationToken = default) where TRequest : IRequest {
+        throw new NotImplementedException();
+    }
+
+    public Task<object?> Send(object request, CancellationToken cancellationToken = default) {
+        throw new NotImplementedException();
     }
 
     private async Task<HttpContent> SendRequest<T>(IRequest<T> request) {
