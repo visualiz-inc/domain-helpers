@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace DomainHelpers.EntityFrameworkCoreExtensions;
 
-public static class UseImmutableEntityOnModelBuilderExtensions {
+public static class UseDomainEntityExtension {
     public static EntityTypeBuilder<TEntity> UseDomainEntity<TEntity, TId>(this EntityTypeBuilder<TEntity> entity)
         where TEntity : Entity<TId>
         where TId : PrefixedUlid, new() {
