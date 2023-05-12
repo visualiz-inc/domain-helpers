@@ -1,6 +1,8 @@
-﻿using DomainHelpers.Domain.Indentifier;
+﻿using DomainHelpers.Commons.Primitives;
+using DomainHelpers.Domain.Indentifier;
 
 namespace DomainHelpers.AspNetCore.Mediator;
+
 public record ServerErrorExceptionId : PrefixedUlid {
     public const int TotalLength = 39;
     public const string Prefix = "server_error";

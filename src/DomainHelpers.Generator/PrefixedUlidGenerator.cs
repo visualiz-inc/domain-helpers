@@ -71,7 +71,9 @@ public partial class PrefixedUlidGenerator : IIncrementalGenerator {
                 public const string Prefix = "{{prefix}}";
                 public const string Separator = "{{separator}}";
 
-                public static {{typeSymbol.Name}} Default {get; } = Parse($"{{prefix}}{{separator}}{default(DomainHelpers.Commons.Primitives.Ulid)}");
+                public static {{typeSymbol.Name}} Default {get; } = default!;
+
+                public static {{typeSymbol.Name}} Empty {get; } = Parse($"{{prefix}}{{separator}}{default(DomainHelpers.Commons.Primitives.Ulid)}");
 
                 public override string PrefixWithSeparator => "{{prefix}}{{separator}}";
  
@@ -80,7 +82,7 @@ public partial class PrefixedUlidGenerator : IIncrementalGenerator {
                 public static {{typeSymbol.Name}} Parse(string id) {
                     return DomainHelpers.Domain.Indentifier.PrefixedUlid.Parse<{{typeSymbol.Name}}>(id);
                 }
-                
+
                 public static implicit operator string({{typeSymbol.Name}} id) => id.ToString();
 
                 public static implicit operator {{typeSymbol.Name}}(string id) => Parse(id);
