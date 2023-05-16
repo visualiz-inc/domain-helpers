@@ -18,7 +18,7 @@ public class AppLogger {
 
     public void LogError(Exception ex, string message, bool notify = true) {
         if (ex is GeneralException ge) {
-            LogError(ge, message+ "2222222222222");
+            LogError(ge, message);
         }
         else {
             _logger.LogError(ex, message);
