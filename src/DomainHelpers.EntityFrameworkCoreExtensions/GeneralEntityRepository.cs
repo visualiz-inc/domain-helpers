@@ -8,7 +8,7 @@ using System.Collections.Concurrent;
 namespace DomainHelpers.EntityFrameworkCoreExtensions;
 
 public class GeneralEntityRepository<TEntity, TId> : IRepository<TEntity, TId>
-    where TEntity : Entity< TId>
+    where TEntity : Entity<TId>
     where TId : notnull, PrefixedUlid, new() {
     private readonly DbContext _dbContext;
     readonly ConcurrentDictionary<TId, TEntity> _founds = new();
@@ -45,6 +45,10 @@ public class GeneralEntityRepository<TEntity, TId> : IRepository<TEntity, TId>
 
     /// <inheritdoc/>
     public virtual async Task SaveAsync(TEntity entity, CancellationToken cancellationToken = default) {
+        if (entity.Id is null) {
+            throw GeneralException.WithMessage("Entity Id is null", null);
+        }
+
         try {
             if (_founds.TryGetValue(entity.Id, out var found)) {
                 RecursiveDetach(_dbContext, found);
