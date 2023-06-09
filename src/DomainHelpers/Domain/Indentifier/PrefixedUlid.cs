@@ -32,6 +32,10 @@ public abstract record PrefixedUlid {
     }
 
     public static T Parse<T>(string rawId) where T : PrefixedUlid, new() {
+        if(rawId is null or "") {
+            return null!;
+        }
+
         var pid = new T();
         pid.CheckIfValidAndSetUlid(rawId);
         return pid;

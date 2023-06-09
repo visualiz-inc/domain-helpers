@@ -7,7 +7,20 @@ public abstract record Command {
 
     public record Restored : Command;
 
-    public record StateHasChanged(object State, [property: JsonIgnore] Type? StoreType = null) : Command {
+    public record StateHasChanged(
+        object State,
+        Command? Command = null,
+        [property: JsonIgnore] Type? StoreType = null
+    ) : Command {
+        public override string Type => $"{StoreType?.Name ?? "Store"}+{GetType().Name}";
+    }
+
+    public record StateHasChanged<TCommand>(
+        object State,
+        TCommand? Command = null,
+        [property: JsonIgnore] Type? StoreType = null
+    ) : Command
+        where TCommand : Command {
         public override string Type => $"{StoreType?.Name ?? "Store"}+{GetType().Name}";
     }
 

@@ -240,7 +240,7 @@ public abstract class AbstractStore<TState, TCommand>
     }
 
     internal void InvokeObserver(StateChangedEventArgs<TState> e) {
-        foreach (var obs in _observers) {
+        foreach (var obs in _observers.ToArray()) {
             obs.OnNext(e);
         }
     }
