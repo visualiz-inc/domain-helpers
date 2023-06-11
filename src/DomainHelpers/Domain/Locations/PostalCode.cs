@@ -1,4 +1,4 @@
-﻿namespace DomainHelpers.Domain.Locations; 
+﻿namespace DomainHelpers.Domain.Locations;
 /// <summary>
 ///  郵便番号を表します
 /// </summary>
@@ -44,15 +44,7 @@ public struct PostalCode {
     /// <exception cref="ArgumentException">郵便番号の形式が無効な場合にスローされます。</exception>
     public PostalCode(string code) {
         var normalized = code switch {
-            ({ Length: 7 or 8 })
-                => code.Replace("-", "") switch {
-                    var s when Validate(s) => s,
-                    _
-                        => throw new ArgumentException(
-                            "郵便番号は0-9の数値またはハイフンのみで構成されている必要があります。",
-                            nameof(code)
-                        )
-                },
+            ({ Length: 7 or 8 }) => code.Replace("-", ""),
             _ => throw new ArgumentException("郵便番号は000-0000または0000000の形式で指定してください。")
         };
 
