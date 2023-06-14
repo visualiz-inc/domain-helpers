@@ -1,4 +1,6 @@
-﻿namespace DomainHelpers.Domain.Locations;
+﻿using System.Runtime.CompilerServices;
+
+namespace DomainHelpers.Domain.Locations;
 /// <summary>
 ///  郵便番号を表します
 /// </summary>
@@ -16,15 +18,23 @@ public struct PostalCode {
         _val5 = '0',
         _val6 = '0';
 
-    public string Left => new(new[] { _val0, _val1, _val2 });
+    char Val0 => NullCharToZero(_val0);
+    char Val1 => NullCharToZero(_val1);
+    char Val2 => NullCharToZero(_val2);
+    char Val3 => NullCharToZero(_val3);
+    char Val4 => NullCharToZero(_val4);
+    char Val5 => NullCharToZero(_val5);
+    char Val6 => NullCharToZero(_val6);
 
-    public string Right => new(new[] { _val3, _val4, _val5, _val6 });
+    public string Left => new(new[] { Val0, Val1, Val2 });
+
+    public string Right => new(new[] { Val3, Val4, Val5, Val6 });
 
     /// <summary>
     ///  郵便番号値を表します。
     /// </summary>
     public string Value {
-        get => new(new[] { _val0, _val1, _val2, _val3, _val4, _val5, _val6 });
+        get => new(new[] { Val0, Val1, Val2, Val3, Val4, Val5, Val6 });
         set {
             var normalized = new PostalCode(value).Value;
             _val0 = normalized[0];
@@ -44,7 +54,15 @@ public struct PostalCode {
     /// <exception cref="ArgumentException">郵便番号の形式が無効な場合にスローされます。</exception>
     public PostalCode(string code) {
         var normalized = code switch {
-            ({ Length: 7 or 8 }) => code.Replace("-", ""),
+            ({ Length: 7 or 8 })
+                => code.Replace("-", "") switch {
+                    var s when Validate(s) => s,
+                    _
+                        => throw new ArgumentException(
+                            "郵便番号は0-9の数値またはハイフンのみで構成されている必要があります。",
+                            nameof(code)
+                        )
+                },
             _ => throw new ArgumentException("郵便番号は000-0000または0000000の形式で指定してください。")
         };
 
@@ -56,6 +74,9 @@ public struct PostalCode {
         _val5 = normalized[5];
         _val6 = normalized[6];
     }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static char NullCharToZero(char c) => c == 0 ? '0' : c;
 
     /// <summary>
     ///  入力文字列が数値またはハイフンのみで構成されているかチェックします。
