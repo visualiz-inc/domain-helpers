@@ -108,7 +108,7 @@ internal class RemoteMediatrRequestHandler {
                         ["eventId"] = ServerErrorExceptionId.Parse($"{ServerErrorExceptionId.Prefix}{ServerErrorExceptionId.Separator}{default(Ulid)}").ToString(),
                         ["childDetails"] = ImmutableArray.Create<string>(),
                     }
-            ),
+                ),
             };
         }
     }

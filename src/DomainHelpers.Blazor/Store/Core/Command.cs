@@ -9,7 +9,7 @@ public abstract record Command {
 
     public record StateHasChanged(
         object State,
-        Command? Command = null,
+        object? Command = null,
         [property: JsonIgnore] Type? StoreType = null
     ) : Command {
         public override string Type => $"{StoreType?.Name ?? "Store"}+{GetType().Name}";
@@ -17,10 +17,10 @@ public abstract record Command {
 
     public record StateHasChanged<TCommand>(
         object State,
-        TCommand? Command = null,
+        TCommand? Command = default,
         [property: JsonIgnore] Type? StoreType = null
     ) : Command
-        where TCommand : Command {
+        where TCommand : notnull {
         public override string Type => $"{StoreType?.Name ?? "Store"}+{GetType().Name}";
     }
 
