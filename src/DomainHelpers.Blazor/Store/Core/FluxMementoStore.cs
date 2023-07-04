@@ -4,7 +4,8 @@ namespace DomainHelpers.Blazor.Store.Core;
 
 public record Context<TState, TMessage>(TState State, TMessage Message);
 
-public abstract class FluxMementoStore<TState, TCommand>
+public abstract class FluxMementoStore
+    <TState, TCommand>
     : FluxStore<TState, TCommand>
         where TState : class
         where TCommand : Command, new() {
@@ -90,10 +91,11 @@ public abstract class FluxMementoStore<TState, TCommand>
 
                 var lastState = State;
                 State = state.State;
-                InvokeObserver(new StateChangedEventArgs<TState> {
+                InvokeObserver(new StateChangedEventArgs<TState, TCommand> {
                     LastState = lastState,
                     State = State,
-                    Command = new Command.Restored(),
+                    Command = null,
+                    StateChangeType = StateChangeType.Restored,
                     Sender = this,
                 });
             },
