@@ -16,7 +16,7 @@ public class MockMiddleware : Middleware {
 
         public override RootState? HandleProviderDispatch(
             RootState? state,
-            StateChangedEventArgs e,
+            IStateChangedEventArgs<object, Command> e,
             NextProviderMiddlewareCallback next
         ) {
             ProviderDispatchCalledCount++;

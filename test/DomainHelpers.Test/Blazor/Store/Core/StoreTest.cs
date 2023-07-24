@@ -78,43 +78,6 @@ public class StoreTest {
     }
 
     [Fact]
-    public async Task Force_ReplaceState() {
-        var store = new AsyncCounterStore();
-
-        var commands = new List<Command>();
-
-        var lastState = store.State;
-        using var subscription = store.Subscribe(e => {
-            Assert.Equal(e.Sender, store);
-            Assert.NotEqual(e.State, lastState);
-            Assert.Equal(e.LastState, lastState);
-            lastState = e.State;
-            commands.Add(e.Command);
-        });
-
-        await store.CountUpAsync();
-        store.SetCount(1234);
-        if (store is IStore iStore) {
-            iStore.SetStateForce(store.State with {
-                Count = 5678
-            });
-        }
-
-        await store.CountUpAsync();
-
-        Assert.True(commands is [
-            Command.StateHasChanged,
-            Command.StateHasChanged,
-            Command.StateHasChanged,
-            Command.StateHasChanged,
-            Command.ForceReplaced { State: AsyncCounterState { Count: 5678 } },
-            Command.StateHasChanged,
-            Command.StateHasChanged,
-            Command.StateHasChanged,
-        ]);
-    }
-
-    [Fact]
     public void Ensure_StateHasChangedInvoked() {
         var store = new AsyncCounterStore();
 

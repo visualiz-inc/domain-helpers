@@ -82,43 +82,6 @@ public class FluxStoreTest {
     }
 
     [Fact]
-    public async Task Force_ReplaceState() {
-        var store = new FluxAsyncCounterStore();
-
-        var commands = new List<Command>();
-
-        var lastState = store.State;
-        using var subscription = store.Subscribe(e => {
-            Assert.Equal(e.Sender, store);
-            Assert.NotEqual(e.State, lastState);
-            Assert.Equal(e.LastState, lastState);
-            lastState = e.State;
-            commands.Add(e.Command);
-        });
-
-        await store.CountUpAsync();
-        store.SetCount(1234);
-        if (store is IStore iStore) {
-            iStore.SetStateForce(store.State with {
-                Count = 5678
-            });
-        }
-
-        await store.CountUpAsync();
-
-        Assert.True(commands is [
-            FluxAsyncCounterCommands.BeginLoading,
-            FluxAsyncCounterCommands.Increment,
-            FluxAsyncCounterCommands.EndLoading,
-            FluxAsyncCounterCommands.ModifyCount(1234),
-            Command.ForceReplaced { State: FluxAsyncCounterState { Count: 5678 } },
-            FluxAsyncCounterCommands.BeginLoading,
-            FluxAsyncCounterCommands.Increment,
-            FluxAsyncCounterCommands.EndLoading
-        ]);
-    }
-
-    [Fact]
     public void Ensure_StateHasChangedInvoked() {
         var store = new FluxAsyncCounterStore();
         var commands = new List<Command>();

@@ -6,13 +6,14 @@ using Microsoft.AspNetCore.Components.RenderTree;
 using System.Diagnostics;
 
 namespace DomainHelpers.Blazor.TransitionGroup; 
+
 /// <summary>
 /// The <TransitionGroup> component manages a set of transition components <Transition> in a list.
 /// </summary>
 public class TransitionGroup : ComponentBase, IDisposable {
     RenderChildrenContext? _lastContext;
     readonly TransitionGroupContext _animatableComponentContext = new();
-    readonly ThrottledExecutor<byte> _executor = new();
+    readonly Blazor.Store.Core.Executors.ThrottledExecutor<byte> _executor = new();
     readonly IDisposable _subscription;
 
     /// <summary>

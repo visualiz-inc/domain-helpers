@@ -1,4 +1,5 @@
-﻿using DomainHelpers.Blazor.Store.ReduxDevTools.Internals;
+﻿using DomainHelpers.Blazor.Store.Core;
+using DomainHelpers.Blazor.Store.ReduxDevTools.Internals;
 using Microsoft.JSInterop;
 using System.Text.Json;
 
@@ -103,7 +104,7 @@ internal sealed class JavaScriptDevToolInteropHandler : IDevToolInteropHandler, 
         var optionsJson = BuildOptionsJson(options);
         var isOpenDevtool = options.OpenDevTool ? "true" : "false";
         var code = $$"""
-        const config = {
+            const config = {
                 {{optionsJson}},
                 features: {
                     pause: true, // start/pause recording of dispatched actions
@@ -169,5 +170,4 @@ internal sealed class JavaScriptDevToolInteropHandler : IDevToolInteropHandler, 
 
         return string.Join(",", values);
     }
-
 }

@@ -77,7 +77,7 @@ public class DevToolWebSocketConnection
                             break;
                         case "login":
                             socket.Send($$"""
-                        {
+                            {
                                 "rid": {{cid}},
                                 "data" : "log"
                             }
@@ -85,7 +85,7 @@ public class DevToolWebSocketConnection
                             break;
                         case "#subscribe":
                             socket.Send($$"""
-                        { "rid": {{cid}} }
+                                { "rid": {{cid}} }
                             """
                           );
                             break;
@@ -126,14 +126,14 @@ public class DevToolWebSocketConnection
             }
 
             await connection.Send($$"""
-        {
-                "rid": {{cid}},
-                "data" : {
-                    "id": "{{id}}",
-                    "pingTimeout": {{_pingTimeout}},
-                    "isAuthenticated": false
+                {
+                    "rid": {{cid}},
+                    "data" : {
+                        "id": "{{id}}",
+                        "pingTimeout": {{_pingTimeout}},
+                        "isAuthenticated": false
+                    }
                 }
-            }
             """);
         }
 
