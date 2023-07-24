@@ -1,5 +1,4 @@
-﻿namespace DomainHelpers.Blazor.TransitionGroup.Internal;
-
+﻿namespace DomainHelpers.Blazor.TransitionGroup.Internal; 
 internal class ThrottledExecutor<T> {
     volatile int LockFlag;
     DateTime LastInvokeTime;

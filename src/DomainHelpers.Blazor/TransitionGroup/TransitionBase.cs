@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace DomainHelpers.Blazor.TransitionGroup;
-
+namespace DomainHelpers.Blazor.TransitionGroup; 
 /// <summary>
 /// An abstract class to implement transition.
 /// </summary>

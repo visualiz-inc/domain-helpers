@@ -1,8 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace DomainHelpers.Blazor.Store.ReduxDevTools.Internals;
-
+namespace DomainHelpers.Blazor.Store.ReduxDevTools.Internals; 
 public record StoreAction {
     [JsonPropertyName("action")]
     public required ActionItem Action { get; init; }
@@ -25,13 +24,13 @@ public record ActionItemFromDevtool(
 
 public record ActionItem(
     [property:JsonPropertyName("type")]
-    string? Type,
+string? Type,
     [property:JsonPropertyName("payload")]
-    object? Payload,
+object? Payload,
     [property:JsonPropertyName("declaredType")]
-    string? DeclaredType,
+string? DeclaredType,
     [property:JsonPropertyName("storeName")]
-    string StoreName
+string StoreName
 );
 
 public record HistoryStateContextJson {
@@ -62,5 +61,5 @@ public record HistoryStateContextJson {
 
 public record ComputedState(
     [property:JsonPropertyName("state")]
-    object State
+object State
 );

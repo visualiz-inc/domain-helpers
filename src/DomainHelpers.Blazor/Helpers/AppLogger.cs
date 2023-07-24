@@ -2,8 +2,7 @@ using DomainHelpers.Commons;
 using DomainHelpers.Commons.Reactive;
 using Microsoft.JSInterop;
 
-namespace DomainHelpers.Blazor.Helpers;
-
+namespace DomainHelpers.Blazor.Helpers; 
 public record LogEventArgs(Exception? Exception, string? Message, ImmutableArray<string>? Details, string? LogId, string DebugInfo);
 
 public class AppLogger {

@@ -1,7 +1,6 @@
 using System.Collections.Concurrent;
 
-namespace DomainHelpers.Blazor.Store.Core.Executors;
-
+namespace DomainHelpers.Blazor.Store.Core.Executors; 
 /// <summary>
 /// Provides a feature to wait for the end of asynchronous processing and connect to the next processing.
 /// </summary>
@@ -24,10 +23,10 @@ public class ConcatAsyncOperationExecutor {
     }
 
     /// <summary>
-    /// Waits for the end of asynchronous processing and cancats to the next processing.
+    /// Waits for the end of asynchronous processing and concat to the next processing.
     /// </summary>
     /// <param name="operation">The async operation.</param>
-    /// <returns>The async oparation contains a result of processing. </returns>
+    /// <returns>The async operation contains a result of processing. </returns>
     public Task ExecuteAsync(Func<Task> operation) {
         var source = new TaskCompletionSource<byte>();
         _operations.Enqueue(new Operation<byte>(async () => {
@@ -73,8 +72,8 @@ public class ConcatAsyncOperationExecutor {
 
         public async Task HandleAsync() {
             try {
-                var reslut = await _func.Invoke();
-                _taskSource.SetResult(reslut);
+                var result = await _func.Invoke();
+                _taskSource.SetResult(result);
             }
             catch (Exception ex) {
                 _taskSource.SetException(ex);

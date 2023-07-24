@@ -2,8 +2,7 @@
 using DomainHelpers.Commons.Reactive;
 using System.Runtime.CompilerServices;
 
-namespace DomainHelpers.Blazor.Helpers;
-
+namespace DomainHelpers.Blazor.Helpers; 
 public readonly record struct LoadingState {
     private readonly ImmutableArray<string?>? _loadings = ArrayOf<string?>();
 

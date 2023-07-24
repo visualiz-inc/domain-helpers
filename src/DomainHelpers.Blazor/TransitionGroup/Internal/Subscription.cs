@@ -1,5 +1,4 @@
-﻿namespace DomainHelpers.Blazor.TransitionGroup.Internal;
-
+﻿namespace DomainHelpers.Blazor.TransitionGroup.Internal; 
 class Subscription : IDisposable {
     private readonly Action Action;
     private bool IsDisposed;

@@ -1,13 +1,12 @@
-﻿using DomainHelpers.Blazor.Store.Core;
-using DomainHelpers.Blazor.Store.ReduxDevTools.Internals;
+﻿using DomainHelpers.Blazor.Store.ReduxDevTools.Internals;
 
 namespace DomainHelpers.Blazor.Store.ReduxDevTools;
-
-internal class RemoteDevtoolInteropHandler : IDevtoolInteropHandler, IAsyncDisposable {
+internal class RemoteDevToolInteropHandler
+    : IDevToolInteropHandler, IAsyncDisposable {
     readonly string _instanceId = Guid.NewGuid().ToString();
     readonly DevToolWebSocketConnection _webSocketConnection;
 
-    public RemoteDevtoolInteropHandler(DevToolWebSocketConnection webSocketConnection) {
+    public RemoteDevToolInteropHandler(DevToolWebSocketConnection webSocketConnection) {
         _webSocketConnection = webSocketConnection;
 
         _webSocketConnection.MessageHandled += (id, json) => {

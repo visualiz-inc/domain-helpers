@@ -1,7 +1,6 @@
 ﻿using Microsoft.JSInterop;
 
-namespace DomainHelpers.Blazor.Helpers.JsInetrop;
-
+namespace DomainHelpers.Blazor.Helpers.JsInetrop; 
 public class ClipBoardHelper {
     private readonly IJSRuntime _jsRuntime;
 

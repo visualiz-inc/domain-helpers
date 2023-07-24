@@ -1,14 +1,12 @@
-﻿using DomainHelpers.Blazor.Store.Core;
-using DomainHelpers.Blazor.Store.ReduxDevTools.Internals;
+﻿using DomainHelpers.Blazor.Store.ReduxDevTools.Internals;
 using Microsoft.JSInterop;
 using System.Text.Json;
 
 namespace DomainHelpers.Blazor.Store.ReduxDevTools;
-
 /// <summary>
 /// Interop for dev tools
 /// </summary>
-internal sealed class JavaScriptDevToolInteropHandler : IDevtoolInteropHandler, IDisposable {
+internal sealed class JavaScriptDevToolInteropHandler : IDevToolInteropHandler, IDisposable {
     private const string _sendToReduxDevToolDirectly = "mementoReduxDispatch";
     private const string _toJsInitMethodName = "mementoReduxDevToolInit";
     private const string _reduxDevToolsVariableName = "mementoReduxDevTool";
@@ -105,7 +103,7 @@ internal sealed class JavaScriptDevToolInteropHandler : IDevtoolInteropHandler, 
         var optionsJson = BuildOptionsJson(options);
         var isOpenDevtool = options.OpenDevTool ? "true" : "false";
         var code = $$"""
-            const config = {
+        const config = {
                 {{optionsJson}},
                 features: {
                     pause: true, // start/pause recording of dispatched actions
@@ -163,11 +161,11 @@ internal sealed class JavaScriptDevToolInteropHandler : IDevtoolInteropHandler, 
     static string BuildOptionsJson(ReduxDevToolOption options) {
         var stack = options.StackTraceEnabled ? "true" : "false";
         var values = new List<string> {
-            $"name: \"{options.Name}\"",
-            $"maxAge: {options.MaximumHistoryLength}",
-            $"latency: {options.Latency.TotalMilliseconds}",
-            $"trace: {stack}",
-        };
+        $"name: \"{options.Name}\"",
+        $"maxAge: {options.MaximumHistoryLength}",
+        $"latency: {options.Latency.TotalMilliseconds}",
+        $"trace: {stack}",
+    };
 
         return string.Join(",", values);
     }

@@ -1,11 +1,10 @@
 using Microsoft.JSInterop;
 
-namespace DomainHelpers.Blazor.Helpers.JsInetrop;
-
+namespace DomainHelpers.Blazor.Helpers.JsInetrop; 
 public class ScrollHelper {
     private const string FuncName = "ScrollTop";
     private const string Src = $$"""
-        function {{FuncName}}(id) {
+    function {{FuncName}}(id) {
             var el = document.getElementById(id);
             el.scrollTop = 0;
         }        

@@ -1,5 +1,4 @@
-﻿namespace DomainHelpers.Blazor.TransitionGroup;
-
+﻿namespace DomainHelpers.Blazor.TransitionGroup; 
 public enum TransitionState {
     Entering,
     Entered,

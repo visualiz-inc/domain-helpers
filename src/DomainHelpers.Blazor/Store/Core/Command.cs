@@ -1,7 +1,7 @@
+using System.Reflection;
 using System.Text.Json.Serialization;
 
-namespace DomainHelpers.Blazor.Store.Core;
-
+namespace DomainHelpers.Blazor.Store.Core; 
 public enum StateHasChangedType {
     StateHasChanged,
     ForceReplaced,
@@ -53,8 +53,6 @@ public record Command {
 
         public new TMessage? Message => (TMessage?)base.Message;
 
-        public override string Type => $"{StoreType?.Name ?? "Store"}+{GetType().Name}";
-
         public StateHasChanged(TState mutateState, TMessage? message = default, Type? storeType = null)
             : base(mutateState, message, storeType) {
 
@@ -93,23 +91,25 @@ public record Command {
     /// <summary>
     /// Gets the payload properties of the command as a dictionary.
     /// </summary>
-    public Dictionary<string, object> Payload => GetPayloads()
-        .ToDictionary(x => x.Key, x => x.Value);
+    public Dictionary<string, object> Payload => GetPayloads();
 
     /// <summary>
     /// Gets the payload properties of the command as a collection of key-value pairs.
     /// </summary>
     /// <returns>An enumerable collection of key-value pairs representing the payload properties.</returns>
-    IEnumerable<KeyValuePair<string, object>> GetPayloads() {
-        foreach (var property in GetType().GetProperties()) {
+    Dictionary<string, object> GetPayloads() {
+        var dic = new Dictionary<string, object>();
+        foreach (var property in GetType().GetProperties(BindingFlags.Instance)) {
             if (property.Name is nameof(Payload) or nameof(Type)) {
                 continue;
             }
 
             var value = property.GetValue(this);
-            if (value is not null) {
-                yield return new KeyValuePair<string, object>(property.Name, value);
+            if (value is not null && dic.ContainsKey(property.Name)) {
+                dic.Add(property.Name, value);
             }
         }
+
+        return dic;
     }
 }

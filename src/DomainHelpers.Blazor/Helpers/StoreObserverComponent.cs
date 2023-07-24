@@ -1,7 +1,6 @@
 ﻿using DomainHelpers.Blazor.Store.Blazor;
 
-namespace DomainHelpers.Blazor.Helpers;
-
+namespace DomainHelpers.Blazor.Helpers; 
 public class StoreObserverComponent : ObserverComponent {
     ImmutableArray<IDisposable> _disposables = ImmutableArray<IDisposable>.Empty;
 
@@ -35,4 +34,3 @@ public class StoreObserverComponent : ObserverComponent {
         }
     }
 }
-

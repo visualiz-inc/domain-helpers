@@ -1,8 +1,5 @@
-﻿using DomainHelpers.Blazor.Store.Core;
-
-namespace DomainHelpers.Blazor.Store.ReduxDevTools.Internals;
-
-public interface IDevtoolInteropHandler {
+﻿namespace DomainHelpers.Blazor.Store.ReduxDevTools.Internals;
+public interface IDevToolInteropHandler {
     Action<string>? MessageHandled { get; set; }
 
     Action? SyncRequested { get; set; }

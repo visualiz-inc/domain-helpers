@@ -1,11 +1,10 @@
-﻿using DomainHelpers.Blazor.Store.Core;
-using DomainHelpers.Blazor.Store.ReduxDevTools.Internals;
+﻿using DomainHelpers.Blazor.Store.ReduxDevTools.Internals;
 using Fleck;
 using System.Text.Json;
 
 namespace DomainHelpers.Blazor.Store.ReduxDevTools;
-
-public class DevToolWebSocketConnection : IDisposable {
+public class DevToolWebSocketConnection
+    : IDisposable {
     const int _pingTimeout = 600000;
 
     readonly WebSocketServer _server;
@@ -78,7 +77,7 @@ public class DevToolWebSocketConnection : IDisposable {
                             break;
                         case "login":
                             socket.Send($$"""
-                            {
+                        {
                                 "rid": {{cid}},
                                 "data" : "log"
                             }
@@ -86,7 +85,7 @@ public class DevToolWebSocketConnection : IDisposable {
                             break;
                         case "#subscribe":
                             socket.Send($$"""
-                            { "rid": {{cid}} }
+                        { "rid": {{cid}} }
                             """
                           );
                             break;
@@ -127,7 +126,7 @@ public class DevToolWebSocketConnection : IDisposable {
             }
 
             await connection.Send($$"""
-            {
+        {
                 "rid": {{cid}},
                 "data" : {
                     "id": "{{id}}",

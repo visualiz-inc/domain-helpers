@@ -1,5 +1,4 @@
-﻿namespace DomainHelpers.Blazor.Store.Core;
-
+﻿namespace DomainHelpers.Blazor.Store.Core; 
 /// <summary>
 /// Represents a store for managing state of type TState.
 /// You can observe the state by subscribing to the StateChanged event.
@@ -9,7 +8,6 @@
 public class Store<TState, TMessage> : AbstractStore<TState, Command.StateHasChanged<TState, TMessage>>
     where TState : class
     where TMessage : notnull {
-
     /// <summary>
     /// Initializes a new instance of the Store class.
     /// </summary>
@@ -25,7 +23,7 @@ public class Store<TState, TMessage> : AbstractStore<TState, Command.StateHasCha
     /// <param name="message">The StateHasChanged command to apply.</param>
     /// <returns>The new state after applying the command.</returns>
     static TState Reducer(TState state, Command.StateHasChanged<TState, TMessage> message) {
-        return (TState)message.State;
+        return message.State;
     }
 
     /// <summary>
@@ -54,7 +52,7 @@ public class Store<TState, TMessage> : AbstractStore<TState, Command.StateHasCha
 /// You can observe the state by subscribing to the StateChanged event.
 /// </summary>
 /// <typeparam name="TState">The type of state managed by the store.</typeparam>
-public class Store<TState> : Store<TState, Command.StateHasChanged<TState, string>>
+public class Store<TState> : Store<TState, string>
         where TState : class {
     public Store(StateInitializer<TState> initializer) : base(initializer) {
     }

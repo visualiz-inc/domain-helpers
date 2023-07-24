@@ -1,12 +1,10 @@
-﻿using DomainHelpers.Blazor.Store.Core;
-using System.Data;
+﻿using System.Data;
 using System.Text.Json;
 
 namespace DomainHelpers.Blazor.Store.ReduxDevTools.Internals;
-
 internal record HistoryState {
     public required int Id { get; set; }
-    public required Command Command { get; init; }
+    public required Command? Command { get; init; }
     public required string StoreBagKey { get; init; }
     public required Dictionary<string, object> RootState { get; init; }
     public required string? Stacktrace { get; init; }
@@ -77,7 +75,7 @@ internal sealed class LiftedHistoryContainer : IDisposable {
         await SyncWithPlugin();
     }
 
-    public async Task PushAsync(StateChangedEventArgs e, RootState rootState, string stackTrace) {
+    public async Task PushAsync(IStateChangedEventArgs<object, Command> e, RootState rootState, string stackTrace) {
         if (IsLocked) {
             await SyncWithPlugin();
             SetStatesToStore(CurrentHistory);
@@ -235,9 +233,9 @@ internal sealed class LiftedHistoryContainer : IDisposable {
             }
             else {
                 var store = storeBag[history.StoreBagKey];
-                var state = store.Reducer(
+                var state = store.ReducerHandle(
                     beforeState[history.StoreBagKey],
-                    history.Command
+                    history.Command!
                 );
 
                 beforeState[history.StoreBagKey] = state;
@@ -266,9 +264,9 @@ internal sealed class LiftedHistoryContainer : IDisposable {
                           y.Id,
                           new() {
                               Action = new(
-                                  y.Command.Type,
-                                  y.Command.Payload,
-                                  y.Command.GetFullTypeName(),
+                                  y.Command?.Type,
+                                  y.Command?.Payload,
+                                  y.Command?.GetFullTypeName(),
                                   y.StoreBagKey
                               ),
                               Type = "PERFORM_ACTION",
@@ -331,7 +329,7 @@ internal sealed class LiftedHistoryContainer : IDisposable {
         _subscription = null;
     }
 
-    static Dictionary<string, object> DeserializeStates(Dictionary<string, IStore> storeBag, JsonElement stateJson) {
+    static Dictionary<string, object> DeserializeStates(Dictionary<string, IStore<object, Command>> storeBag, JsonElement stateJson) {
         var rootState = new Dictionary<string, object>();
         foreach (var key in stateJson.EnumerateObject()) {
             var storeState = key.Value.Deserialize(storeBag[key.Name].GetStateType())

@@ -1,24 +1,68 @@
-using DomainHelpers.Blazor.Store.Core.Internals;
+using System.Collections.Concurrent;
 
 namespace DomainHelpers.Blazor.Store.Core;
-
+/// <summary>
+/// Represents a provider that manages all stores and middlewares.
+/// The root state tree is provided from this class.
+/// Implements the IObservable and IDisposable interfaces.
+/// </summary>
 public class StoreProvider : IObservable<RootStateChangedEventArgs>, IDisposable {
     readonly IServiceProvider _serviceContainer;
-    readonly List<IDisposable> _subscriptions = new();
-    readonly List<IObserver<RootStateChangedEventArgs>> _observers = new();
-    readonly object _locker = new();
+    readonly ConcurrentDictionary<Guid, IDisposable> _subscriptions = new();
+    readonly ConcurrentDictionary<Guid, IObserver<RootStateChangedEventArgs>> _observers = new();
+    readonly IReadOnlyList<IStore<object, Command>> _stores;
+    readonly IReadOnlyList<Middleware> _middleware;
 
-    readonly ImmutableArray<IStore> _stores;
-    readonly ImmutableArray<Middleware> _middleware;
-
+    /// <summary>
+    /// Gets a value indicating whether the provider has initialized.
+    /// </summary>
     public bool IsInitialized { get; private set; }
 
-    public StoreProvider(IServiceProvider container) {
+    public bool HasDisposed { get; private set; }
+
+    /// <summary>
+    /// Initializes a new instance of the StoreProvider class.
+    /// </summary>
+    /// <param name="container">The service container used to resolve stores and middleware.</param>
+    /// <param name="stores">The stores.</param>
+    /// <param name="middlewares">The middlewares.</param>
+    public StoreProvider(
+        IServiceProvider container,
+        IReadOnlyCollection<IStore<object, Command>>? stores = null,
+        IReadOnlyCollection<Middleware>? middlewares = null
+    ) {
         _serviceContainer = container;
-        _stores = _serviceContainer.GetAllStores().ToImmutableArray();
-        _middleware = _serviceContainer.GetAllMiddleware().ToImmutableArray();
+        _stores = _serviceContainer.GetAllStores().ToImmutableArray().AddRange(stores ?? ImmutableArray<IStore<object, Command>>.Empty);
+        _middleware = _serviceContainer.GetAllMiddleware().ToImmutableArray().AddRange(middlewares ?? ImmutableArray<Middleware>.Empty);
     }
 
+    /// <summary>
+    /// Disposes the store provider and its resources.
+    /// </summary>
+    public void Dispose() {
+        if (HasDisposed) {
+            return;
+        }
+
+        HasDisposed = true;
+
+        foreach (var (_, subscription) in _subscriptions) {
+            subscription.Dispose();
+        }
+
+        foreach (var middleware in GetAllMiddleware()) {
+            middleware.Dispose();
+        }
+
+        foreach (var store in _stores) {
+            store.Dispose();
+        }
+    }
+
+    /// <summary>
+    /// Captures the current root state of all stores.
+    /// </summary>
+    /// <returns>A RootState instance representing the current state of all stores.</returns>
     public RootState CaptureRootState() {
         var map = new Dictionary<string, object>();
         foreach (var item in ResolveAllStores()) {
@@ -28,8 +72,12 @@ public class StoreProvider : IObservable<RootStateChangedEventArgs>, IDisposable
         return new RootState(map);
     }
 
-    public Dictionary<string, IStore> CaptureStoreBag() {
-        var map = new Dictionary<string, IStore>();
+    /// <summary>
+    /// Captures a dictionary containing all stores keyed by their type name.
+    /// </summary>
+    /// <returns>A dictionary containing all stores keyed by their type name.</returns>
+    public Dictionary<string, IStore<object, Command>> CaptureStoreBag() {
+        var map = new Dictionary<string, IStore<object, Command>>();
         foreach (var item in ResolveAllStores()) {
             map.Add(item.GetType().Name, item);
         }
@@ -52,7 +100,7 @@ public class StoreProvider : IObservable<RootStateChangedEventArgs>, IDisposable
         IsInitialized = true;
         // observe all stores.
         foreach (var store in ResolveAllStores()) {
-            var subscription = store.Subscribe(new StoreObserver(e => {
+            var subscription = store.Subscribe(new StoreObserver<object, Command>(e => {
                 var handler = GetMiddlewareInvokeHandler();
                 var rootState = handler(CaptureRootState(), e);
                 if (rootState is not null) {
@@ -63,7 +111,9 @@ public class StoreProvider : IObservable<RootStateChangedEventArgs>, IDisposable
                     });
                 }
             }));
-            _subscriptions.Add(subscription);
+            if (_subscriptions.TryAdd(Guid.NewGuid(), subscription) is false) {
+                throw new InvalidOperationException("Failed to add subscription.");
+            }
         }
 
         // Initialize all middleware.
@@ -77,20 +127,24 @@ public class StoreProvider : IObservable<RootStateChangedEventArgs>, IDisposable
         }
 
         // InitializeAsync all stores.
-        var tasks = new List<Task>();
         foreach (var store in ResolveAllStores()) {
             try {
-                tasks.Add(store.InitializeAsync(this));
+                await store.InitializeAsync(this);
             }
             catch (Exception ex) {
                 throw new InvalidDataException(@$"Failed to initialize memento provider ""{ex.Message}""", ex);
             }
         }
-        await Task.WhenAll(tasks);
     }
 
+    /// <summary>
+    /// Resolves a store of the specified type.
+    /// </summary>
+    /// <typeparam name="TStore">The type of the store to resolve.</typeparam>
+    /// <returns>An instance of the specified store type.</returns>
+    /// <exception cref="ArgumentException">Thrown when the specified store type is not registered in the provider.</exception>
     public TStore ResolveStore<TStore>()
-        where TStore : IStore {
+        where TStore : IStore<object, Command> {
         if (_serviceContainer.GetService(typeof(TStore)) is TStore store) {
             return store;
         }
@@ -98,37 +152,56 @@ public class StoreProvider : IObservable<RootStateChangedEventArgs>, IDisposable
         throw new ArgumentException($"{typeof(TStore).Name} is not registered in provider.");
     }
 
-    public IEnumerable<IStore> ResolveAllStores() {
+    /// <summary>
+    /// Resolves all stores registered in the provider.
+    /// </summary>
+    /// <returns>An IEnumerable containing all registered stores.</returns>
+    public IEnumerable<IStore<object, Command>> ResolveAllStores() {
         return _stores;
     }
 
+    /// <summary>
+    /// Gets all middleware registered in the provider.
+    /// </summary>
+    /// <returns>An IEnumerable containing all registered middleware.</returns>
     public IEnumerable<Middleware> GetAllMiddleware() {
         return _middleware;
     }
 
+    /// <summary>
+    /// Subscribes the provided observer to the store provider.
+    /// </summary>
+    /// <param name="observer">The observer to subscribe to the store provider.</param>
+    /// <returns>An IDisposable instance that can be used to unsubscribe from the store provider.</returns>
     public IDisposable Subscribe(IObserver<RootStateChangedEventArgs> observer) {
-        lock (_locker) {
-            _observers.Add(observer);
+        var id = Guid.NewGuid();
+        if (_observers.TryAdd(id, observer) is false) {
+            throw new InvalidOperationException("Failed to add observer.");
         }
 
         return new StoreSubscription(GetType().FullName ?? "Store", () => {
-            lock (_locker) {
-                _observers.Remove(observer);
+            if (_observers.TryRemove(new(id, observer)) is false) {
+                throw new InvalidOperationException("Failed to remove observer.");
             }
         });
     }
 
+    /// <summary>
+    /// Subscribes an action to the store provider.
+    /// </summary>
+    /// <param name="observer">The action to subscribe to the store provider.</param>
+    /// <returns>An IDisposable instance that can be used to unsubscribe from the store provider.</returns>
     public IDisposable Subscribe(Action<RootStateChangedEventArgs> observer)
         => Subscribe(new StoreProviderObserver(observer));
 
-    internal Func<RootState?, StateChangedEventArgs, RootState?> GetMiddlewareInvokeHandler() {
+    internal Func<RootState?, IStateChangedEventArgs<object, Command>, RootState?> GetMiddlewareInvokeHandler() {
         // process middleware
         var middleware = GetAllMiddleware()
             ?? Array.Empty<Middleware>();
         return middleware.Aggregate(
-            (RootState? s, StateChangedEventArgs _) => s,
+            (RootState? s, IStateChangedEventArgs<object, Command> _) => s,
             (before, middleware) =>
-                (RootState? s, StateChangedEventArgs m) => middleware.Handler.HandleProviderDispatch(
+                (RootState? s, IStateChangedEventArgs<object, Command> m) => middleware.Handler.HandleProviderDispatch(
                     s,
                     m,
                     (_s, _m) => before(_s, m)
@@ -137,22 +210,8 @@ public class StoreProvider : IObservable<RootStateChangedEventArgs>, IDisposable
     }
 
     private void InvokeObserver(RootStateChangedEventArgs e) {
-        foreach (var observer in _observers) {
+        foreach (var (_, observer) in _observers) {
             observer.OnNext(e);
-        }
-    }
-
-    public void Dispose() {
-        foreach (var subscription in _subscriptions) {
-            subscription.Dispose();
-        }
-
-        foreach (var middleware in GetAllMiddleware()) {
-            middleware.Dispose();
-        }
-
-        foreach (var store in _stores) {
-            store.Dispose();
         }
     }
 }

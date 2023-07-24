@@ -1,5 +1,4 @@
-namespace DomainHelpers.Blazor.Store.Core.Internals;
-
+namespace DomainHelpers.Blazor.Store.Core.Internals; 
 internal class GeneralObserver<T> : IObserver<T> {
     readonly Action<T> _action;
 
@@ -20,12 +19,13 @@ internal class GeneralObserver<T> : IObserver<T> {
     }
 }
 
-internal class StoreObserver
-    : IObserver<StateChangedEventArgs> {
-    readonly Action<StateChangedEventArgs> _action;
+internal class StoreObserver<TState, TCommand>
+    : IObserver<IStateChangedEventArgs<TState, TCommand>>
+    where TState : class
+    where TCommand : Command {
+    readonly Action<IStateChangedEventArgs<TState, TCommand>> _action;
 
-    public StoreObserver(
-        Action<StateChangedEventArgs> action) {
+    public StoreObserver(Action<IStateChangedEventArgs<TState, TCommand>> action) {
         _action = action;
     }
 
@@ -37,7 +37,7 @@ internal class StoreObserver
         throw new NotImplementedException();
     }
 
-    public void OnNext(StateChangedEventArgs value) {
+    public void OnNext(IStateChangedEventArgs<TState, TCommand> value) {
         _action(value);
     }
 }

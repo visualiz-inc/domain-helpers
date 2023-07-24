@@ -1,8 +1,6 @@
-﻿using DomainHelpers.Blazor.Store.Core;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace DomainHelpers.Blazor.Store.ReduxDevTools;
-
 public static class RemoveReduxDevToolExtensions {
     /// <summary>
     /// Add <see cref="RemoteReduxDevToolMiddleware"/> to services.

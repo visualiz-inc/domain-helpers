@@ -1,8 +1,7 @@
 ﻿using DomainHelpers.Commons.Reactive;
 using OneOf;
 
-namespace DomainHelpers.Blazor.Helpers;
-
+namespace DomainHelpers.Blazor.Helpers; 
 using PageStateChangedEvent = OneOf<CommitPage, ModifyTotalItems>;
 
 public record CommitPage(PageState State);

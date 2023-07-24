@@ -1,7 +1,6 @@
 ﻿using MudBlazor;
 
-namespace DomainHelpers.Blazor.Helpers;
-
+namespace DomainHelpers.Blazor.Helpers; 
 public record Sort<TColumn>(TColumn Column, SortDirection Direction)
     where TColumn : unmanaged, Enum;
 

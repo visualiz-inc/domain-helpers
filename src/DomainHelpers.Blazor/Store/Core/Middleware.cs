@@ -1,5 +1,4 @@
-﻿namespace DomainHelpers.Blazor.Store.Core;
-
+﻿namespace DomainHelpers.Blazor.Store.Core; 
 public abstract class Middleware : IDisposable {
     MiddlewareHandler? _handler;
 

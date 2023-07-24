@@ -1,5 +1,4 @@
-namespace DomainHelpers.Blazor.Store.Core;
-
+namespace DomainHelpers.Blazor.Store.Core; 
 public class CommandNotHandledException : Exception {
     public Command Command { get; }
 

@@ -1,13 +1,9 @@
-﻿using DomainHelpers.Blazor.Store.Core;
-using DomainHelpers.Blazor.Store.Core.Executors;
-using DomainHelpers.Blazor.Store.ReduxDevTools.Internals;
+﻿using DomainHelpers.Blazor.Store.ReduxDevTools.Internals;
 using System.Diagnostics;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using static DomainHelpers.Blazor.Store.Core.Command;
 
 namespace DomainHelpers.Blazor.Store.ReduxDevTools;
-
 /// <remarks>
 /// Reference to the redux devtool instrument.
 /// https://github.com/zalmoxisus/redux-devtools-instrument/blob/master/src/instrument.js
@@ -17,7 +13,9 @@ public class ReduxDevToolMiddlewareHandler : MiddlewareHandler {
         @"^(?:(?!\b" +
         @"System" +
         @"|Microsoft" +
-        @"|DomainHelpers" +
+        @"|Memento.Blazor" +
+        @"|Memento.Core" +
+        @"|Memento.ReduxDevTool" +
         @"\b).)*$";
 
     readonly Regex _stackTraceFilterRegex = new(_stackTraceFilterExpression, RegexOptions.Compiled);
@@ -25,16 +23,16 @@ public class ReduxDevToolMiddlewareHandler : MiddlewareHandler {
     readonly ThrottledExecutor<HistoryStateContextJson> _throttledExecutor = new() { LatencyMs = 1000 };
     readonly LiftedHistoryContainer _liftedStore;
     readonly StoreProvider _storeProvider;
-    readonly IDevtoolInteropHandler _interopHandler;
+    readonly IDevToolInteropHandler _interopHandler;
     readonly ReduxDevToolOption _option;
 
     IDisposable? _subscription;
 
-    public ReduxDevToolMiddlewareHandler(IDevtoolInteropHandler devtoolInteropHandler, IServiceProvider provider, ReduxDevToolOption option) {
+    public ReduxDevToolMiddlewareHandler(IDevToolInteropHandler devtoolInteropHandler, IServiceProvider provider, ReduxDevToolOption option) {
         _option = option;
         _interopHandler = devtoolInteropHandler;
         _interopHandler.MessageHandled = HandleMessage;
-        _interopHandler.SyncRequested = () => {           
+        _interopHandler.SyncRequested = () => {
             _liftedStore?.SyncWithPlugin();
         };
 
@@ -60,7 +58,7 @@ public class ReduxDevToolMiddlewareHandler : MiddlewareHandler {
 
     public override RootState? HandleProviderDispatch(
         RootState? state,
-        StateChangedEventArgs e,
+        IStateChangedEventArgs<object, Command> e,
         NextProviderMiddlewareCallback next
     ) {
         if (state is null) {
@@ -94,7 +92,7 @@ public class ReduxDevToolMiddlewareHandler : MiddlewareHandler {
         await _liftedStore.ResetAsync();
     }
 
-    public async Task SendAsync(StateChangedEventArgs e, RootState rootState, string stackTrace) {
+    public async Task SendAsync(IStateChangedEventArgs<object, Command> e, RootState rootState, string stackTrace) {
         if (e.StateChangeType is StateChangeType.ForceReplaced) {
             return;
         }

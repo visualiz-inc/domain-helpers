@@ -3,8 +3,7 @@ using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.RenderTree;
 using System.Runtime.InteropServices;
 
-namespace DomainHelpers.Blazor.TransitionGroup.Internal;
-
+namespace DomainHelpers.Blazor.TransitionGroup.Internal; 
 #pragma warning disable BL0006
 
 enum RenderFrame {
