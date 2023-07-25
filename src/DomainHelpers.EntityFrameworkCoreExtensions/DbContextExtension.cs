@@ -11,4 +11,12 @@ public static class DbContextExtension {
 
         return null;
     }
+
+    public static async Task<TEntity?> FindByIdAsync<TEntity>(this DbSet<TEntity> dbset, object id) where TEntity : class {
+        if (await dbset.FindAsync(id) is { } e) {
+            return e;
+        }
+
+        return null;
+    }
 }
