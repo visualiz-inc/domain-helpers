@@ -11,7 +11,6 @@ public class GeneralEntityRepository<TEntity, TId> : IRepository<TEntity, TId>
     where TEntity : Entity<TId>
     where TId : notnull, PrefixedUlid, new() {
     private readonly DbContext _dbContext;
-    readonly ConcurrentDictionary<TId, TEntity> _founds = new();
 
     public GeneralEntityRepository(DbContext dbContext) {
         _dbContext = dbContext;
@@ -50,10 +49,6 @@ public class GeneralEntityRepository<TEntity, TId> : IRepository<TEntity, TId>
         }
 
         try {
-            if (_founds.TryGetValue(entity.Id, out var found)) {
-                RecursiveDetach(_dbContext, found);
-            }
-
             _dbContext.Set<TEntity>().Update(entity);
             await SaveChangesAsync(cancellationToken);
         }
@@ -126,11 +121,6 @@ public class GeneralEntityRepository<TEntity, TId> : IRepository<TEntity, TId>
                 new object[] { id },
                 cancellationToken: cancellationToken
             ) is { } entity) {
-                if (_founds.TryAdd(id, entity) is false) {
-                    _dbContext.Entry(_founds[id]).State = EntityState.Detached;
-                    _founds[id] = entity;
-                }
-
                 return entity;
             }
 
