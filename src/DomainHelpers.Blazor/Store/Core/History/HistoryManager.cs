@@ -1,6 +1,4 @@
-using DomainHelpers.Blazor.Store.Core.Executors;
-
-namespace DomainHelpers.Blazor.Store.Core.History; 
+namespace DomainHelpers.Blazor.Store.Core.History;
 public class HistoryManager {
     private int _maxHistoryCount = 8;
     private readonly FutureHistoryStack<IHistoryCommandItem<object>> _future = new();

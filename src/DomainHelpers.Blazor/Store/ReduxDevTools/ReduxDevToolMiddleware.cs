@@ -1,6 +1,4 @@
-﻿using DomainHelpers.Blazor.Store.ReduxDevTools.Internals;
-
-namespace DomainHelpers.Blazor.Store.ReduxDevTools;
+﻿namespace DomainHelpers.Blazor.Store.ReduxDevTools;
 /// <summary>
 /// Represents the Redux Developer Tool middleware used for debugging and profiling Redux stores.
 /// </summary>

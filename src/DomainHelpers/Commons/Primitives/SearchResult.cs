@@ -6,7 +6,7 @@ public abstract class SearchResult {
         int total,
         int offset,
         int fetch,
-        ImmutableArray<T> items
+        IReadOnlyList<T> items
     ) {
         return new() {
             Total = total,
@@ -24,7 +24,7 @@ public record SearchResult<T> {
 
     public required int Fetch { get; init; }
 
-    public required ImmutableArray<T> Items { get; init; }
+    public required IReadOnlyList<T> Items { get; init; }
 
     public SearchResult() { }
 
@@ -33,7 +33,7 @@ public record SearchResult<T> {
         int hitCount,
         int offset,
         int fetch,
-        ImmutableArray<T> items
+        IReadOnlyList<T> items
     ) {
         Total = hitCount;
         Items = items;

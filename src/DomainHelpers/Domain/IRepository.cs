@@ -9,7 +9,9 @@ public interface IRepository<TEntity, TId> {
     /// </summary>
     /// <param name="EntityId">検索するTEntityのEntityId。</param>
     /// <returns>見つかったEntity、または見つからなかった場合はnull。</returns>
-    Task<TEntity?> FindAsync(TId EntityId,CancellationToken cancellationToken = default);
+    Task<TEntity?> FindAsync(TId EntityId, CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyList<TEntity>> FindByIdsAsync(IEnumerable<TId> ids, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// 新しいEntityをリポジトリに非同期で追加します。

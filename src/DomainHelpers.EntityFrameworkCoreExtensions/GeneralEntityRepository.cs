@@ -2,8 +2,6 @@
 using DomainHelpers.Domain;
 using DomainHelpers.Domain.Indentifier;
 using Microsoft.EntityFrameworkCore;
-using System.Collections;
-using System.Collections.Concurrent;
 
 namespace DomainHelpers.EntityFrameworkCoreExtensions;
 
@@ -131,32 +129,14 @@ public class GeneralEntityRepository<TEntity, TId> : IRepository<TEntity, TId>
         }
     }
 
-    public static void RecursiveDetach(DbContext context, object entity, bool isTopLevel = true) {
-        if (entity == null) return;
-
-        var entityType = entity.GetType();
-        var entry = context.Entry(entity);
-        if (entry.State is not EntityState.Detached && isTopLevel) {
-            entry.State = EntityState.Detached;
+    /// <inheritdoc/>
+    public async Task<IReadOnlyList<TEntity>> FindByIdsAsync(IEnumerable<TId> ids, CancellationToken cancellationToken = default) {
+        try {
+            var items = await _dbContext.Set<TEntity>().Where(x => ids.Contains(x.Id)).ToArrayAsync();
+            return items;
         }
-
-        // Get all navigation properties
-        var navigationProperties = entityType.GetProperties()
-            .Where(p => p.PropertyType.IsGenericType &&
-                        p.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>));
-
-        // Detach entities in the navigation properties
-        foreach (var navProp in navigationProperties) {
-            var relatedEntities = (IEnumerable?)navProp.GetValue(entity);
-            if (relatedEntities == null) continue;
-
-            var relatedEntityType = navProp.PropertyType.GetGenericArguments()[0];
-
-            foreach (var relatedEntity in relatedEntities) {
-                context.Entry(relatedEntity).State = EntityState.Deleted;
-
-                RecursiveDetach(context, entity, false);
-            }
+        catch (Exception e) {
+            throw GeneralException.WithException(e);
         }
     }
 }

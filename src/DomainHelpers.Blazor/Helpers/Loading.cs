@@ -2,19 +2,18 @@
 using DomainHelpers.Commons.Reactive;
 using System.Runtime.CompilerServices;
 
-namespace DomainHelpers.Blazor.Helpers; 
-public readonly record struct LoadingState {
-    private readonly ImmutableArray<string?>? _loadings = ArrayOf<string?>();
+namespace DomainHelpers.Blazor.Helpers;
 
-    public LoadingState(ImmutableArray<string?> loadings) {
+public readonly record struct LoadingState {
+    private readonly IReadOnlySet<string?>? _loadings;
+
+    public LoadingState(IReadOnlySet<string?>? loadings = null) {
         _loadings = loadings;
     }
 
-    public LoadingState() : this(ArrayOf<string?>()) { }
+    public bool IsLoading => _loadings is not ({ Count: 0 } or null);
 
-    public bool IsLoading => _loadings is not ([] or null);
-
-    public bool IsGroupLoading(string? groupId) => _loadings?.Any(x => x == groupId) ?? false;
+    public bool IsGroupLoading(string? groupId) => _loadings?.Contains(groupId) ?? false;
 }
 
 public class Loading {
@@ -60,20 +59,20 @@ public class Loading {
     private LoadingState CreateData() {
         lock (_locker) {
             return new LoadingState(
-                _loadings.Values.ToImmutableArray()
+                _loadings.Values.ToHashSet()
             );
         }
     }
 
     private class Disposable : IDisposable {
-        private readonly Action action;
+        private readonly Action _action;
 
         public Disposable(Action action) {
-            this.action = action;
+            _action = action;
         }
 
         public void Dispose() {
-            action();
+            _action();
         }
     }
 }

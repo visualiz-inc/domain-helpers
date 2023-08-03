@@ -1,6 +1,4 @@
-﻿using DomainHelpers.Blazor.Store.ReduxDevTools.Internals;
-
-namespace DomainHelpers.Blazor.Store.ReduxDevTools;
+﻿namespace DomainHelpers.Blazor.Store.ReduxDevTools;
 internal class RemoteDevToolInteropHandler
     : IDevToolInteropHandler, IAsyncDisposable {
     readonly string _instanceId = Guid.NewGuid().ToString();

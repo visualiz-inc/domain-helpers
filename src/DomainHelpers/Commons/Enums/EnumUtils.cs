@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DomainHelpers.Commons.Enums;
+﻿namespace DomainHelpers.Commons.Enums;
 
 public static class EnumUtils {
     public static IEnumerable<(string Name, TEnum Value)> GetNameAndValues<TEnum>()
