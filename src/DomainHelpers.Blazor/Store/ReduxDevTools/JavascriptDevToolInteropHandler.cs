@@ -43,7 +43,6 @@ internal sealed class JavaScriptDevToolInteropHandler : IDevToolInteropHandler, 
         _isInitializing = true;
         try {
             var script = GetClientScripts(_option);
-
             await _jsRuntime.InvokeVoidAsync("eval", """
                 function isDevToolInstalled(){
                     return !!window.__REDUX_DEVTOOLS_EXTENSION__

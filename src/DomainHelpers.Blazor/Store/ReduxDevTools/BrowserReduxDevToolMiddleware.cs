@@ -22,6 +22,11 @@ public sealed class BrowserReduxDevToolMiddleware : Middleware {
     /// <param name="provider">The service provider used to resolve dependencies.</param>
     /// <returns>A new <see cref="ReduxDevToolMiddlewareHandler"/> instance for the Redux Developer Tool middleware.</returns>
     protected override ReduxDevToolMiddlewareHandler Create(IServiceProvider provider) {
+       var p = provider.GetServices<IJSRuntime>();
+      //  p.InvokeVoidAsync("console.log", "AAAAAAAAAAAAA");
+
+        Console.WriteLine(p);
+
         var jsHandler = new JavaScriptDevToolInteropHandler(
             (IJSRuntime)(
                 provider.GetService(typeof(IJSRuntime)) ?? throw new Exception()

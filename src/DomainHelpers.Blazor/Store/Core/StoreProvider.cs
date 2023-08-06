@@ -32,8 +32,14 @@ public class StoreProvider : IObservable<RootStateChangedEventArgs>, IDisposable
         IReadOnlyCollection<Middleware>? middlewares = null
     ) {
         _serviceContainer = container;
-        _stores = _serviceContainer.GetAllStores().ToImmutableArray().AddRange(stores ?? ImmutableArray<IStore<object, Command>>.Empty);
-        _middleware = _serviceContainer.GetAllMiddleware().ToImmutableArray().AddRange(middlewares ?? ImmutableArray<Middleware>.Empty);
+        _stores = [
+            .. _serviceContainer.GetAllStores(),
+            .. stores ?? []
+        ];
+        _middleware = [
+            .. _serviceContainer.GetAllMiddleware(),
+            .. middlewares ?? []
+        ];
     }
 
     /// <summary>
@@ -94,7 +100,7 @@ public class StoreProvider : IObservable<RootStateChangedEventArgs>, IDisposable
     /// <exception cref="InvalidDataException">Throws when registered middleware and stores are incorrect.</exception>
     public async Task InitializeAsync() {
         if (IsInitialized) {
-            throw new InvalidOperationException("Already initialized.");
+            return;
         }
 
         IsInitialized = true;

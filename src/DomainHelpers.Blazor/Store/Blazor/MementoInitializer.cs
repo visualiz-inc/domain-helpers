@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 namespace DomainHelpers.Blazor.Store.Blazor;
 /// <summary>
@@ -14,8 +15,10 @@ public class MementoInitializer : ComponentBase, IDisposable {
     protected override async Task OnAfterRenderAsync(bool firstRender) {
         await base.OnAfterRenderAsync(firstRender);
         if (firstRender) {
-            await StoreProvider.InitializeAsync();
-            await Initialized.InvokeAsync();
+            await InvokeAsync(async () => {
+                await StoreProvider.InitializeAsync();
+                await Initialized.InvokeAsync();
+            });
         }
     }
 
