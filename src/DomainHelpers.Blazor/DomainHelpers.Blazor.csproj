@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <EnablePreviewFeatures>True</EnablePreviewFeatures>
@@ -11,14 +11,14 @@
     <ItemGroup>
         <InternalsVisibleTo Include="DomainHelpers.Test" />
 
-        <PackageReference Include="Microsoft.AspNetCore.Components" Version="7.0.9" />
-        <PackageReference Include="Microsoft.JSInterop" Version="7.0.9" />
+        <PackageReference Include="Microsoft.AspNetCore.Components" Version="8.0.0-preview.6.23329.11" />
+        <PackageReference Include="Microsoft.JSInterop" Version="8.0.0-preview.6.23329.11" />
 
         <PackageReference Include="Fleck" Version="1.2.0" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0-preview.6.23329.7" />
 
         <PackageReference Include="MediatR" Version="12.1.1" />
-        <PackageReference Include="MudBlazor" Version="6.7.0" />
+        <PackageReference Include="MudBlazor" Version="6.8.0" />
         <PackageReference Include="OneOf" Version="3.0.255" />
     </ItemGroup>
 
