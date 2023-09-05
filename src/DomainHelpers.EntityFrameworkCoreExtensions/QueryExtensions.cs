@@ -12,7 +12,7 @@ public static class QueryExtensions {
     /// <param name="selector">An expression to select a property to be used for filtering.</param>
     /// <param name="values">A collection of values to be used for filtering.</param>
     /// <returns>An <see cref="IQueryable{T}"/> that contains elements from the input sequence that satisfy the filter condition.</returns>
-    public static IQueryable<T> FilterOr<T, U>(this IQueryable<T> q, Expression<Func<T, U>> selector, ICollection<U>? values) {
+    public static IQueryable<T> FilterOr<T, U>(this IQueryable<T> q, Expression<Func<T, U>> selector, IReadOnlyCollection<U>? values) {
         if (values is null or { Count: 0 }) {
             return q;
         }
