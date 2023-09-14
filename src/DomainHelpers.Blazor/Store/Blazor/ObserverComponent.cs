@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 
 namespace DomainHelpers.Blazor.Store.Blazor;
+
 /// <summary>
 /// The base class for components that observe state changes in a store.
 /// Injected stores that implements <see cref="IStore"/> interface will all be subscribed state change events
@@ -12,6 +13,7 @@ public class ObserverComponent : ComponentBase, IDisposable {
     private readonly IDisposable _invokerSubscription;
     private readonly ThrottledExecutor<IStateChangedEventArgs<object, Command>> _stateHasChangedThrottler = new();
     private IReadOnlyCollection<IDisposable>? _disposables;
+    private IEnumerable<IWatcher>? _watchers;
 
     /// <summary>
     /// Initializes a new instance of <see cref="ObserverComponent"/> class.
@@ -53,6 +55,17 @@ public class ObserverComponent : ComponentBase, IDisposable {
             _stateHasChangedThrottler.Invoke(e);
         });
         _disposables = OnHandleDisposable().ToArray();
+
+        _watchers = OnHandleWatchers(new());
+    }
+
+    /// <inheritdoc />
+    protected override void OnAfterRender(bool firstRender) {
+        base.OnAfterRender(firstRender);
+
+        foreach (var watcher in _watchers ?? []) {
+            watcher.InvokeOnParameterSet();
+        }
     }
 
     /// <summary>
@@ -69,7 +82,7 @@ public class ObserverComponent : ComponentBase, IDisposable {
             _invokerSubscription.Dispose();
             _stateSubscription.Dispose();
 
-            foreach (var d in _disposables ?? ImmutableArray<IDisposable>.Empty) {
+            foreach (var d in _disposables ?? []) {
                 d.Dispose();
             }
         }
@@ -80,6 +93,38 @@ public class ObserverComponent : ComponentBase, IDisposable {
     /// </summary>
     /// <returns>The disposables.</returns>
     protected virtual IEnumerable<IDisposable> OnHandleDisposable() {
-        return Enumerable.Empty<IDisposable>();
+        return [];
+    }
+
+    protected virtual IEnumerable<IWatcher> OnHandleWatchers(WatcherFactory watcherFactory) {
+        return [];
+    }
+}
+
+public class WatcherFactory {
+    public IWatcher Watch<T>(Action<T> action, Func<T> selector, bool once = false) {
+        return new Watcher<T>(action, selector, once);
+    }
+}
+
+public interface IWatcher {
+    internal void InvokeOnParameterSet();
+}
+
+internal class Watcher<T>(Action<T> action, Func<T> selector, bool once = false) : IWatcher {
+    T? _last = default;
+    bool _invoked;
+
+    void IWatcher.InvokeOnParameterSet() {
+        if (once && _invoked) {
+            return;
+        }
+
+        var val = selector.Invoke();
+        if (val?.Equals(_last) is false) {
+            _invoked = true;
+            _last = val;
+            action(val);
+        }
     }
 }
