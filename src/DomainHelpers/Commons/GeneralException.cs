@@ -114,7 +114,6 @@ public class GeneralException : Exception {
         };
     }
 
-
     public static GeneralException WithChild(
         GeneralException ex,
         string message,
@@ -172,12 +171,12 @@ public class GeneralException<TPayload>(
     string? displayMessage = null,
     PrefixedUlid? eventId = null,
     Exception? error = null
-    ) : GeneralException(
+) : GeneralException(
     message,
     displayMessage,
     payload,
     eventId,
     error
-    ) {
+) {
     public new TPayload? Payload => (TPayload?)base.Payload;
 }
