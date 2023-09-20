@@ -5,7 +5,7 @@ public abstract class TaskCollectionHandler {
     }
 }
 
-public class ParallelCollectionExecutor<T> {
+public class ParallelCollectionExecutor<T>(ICollection<T> tasks, int parallelCount = 100) {
     private int _progress;
     private bool _isInvoked = false;
 
@@ -13,16 +13,11 @@ public class ParallelCollectionExecutor<T> {
 
     public int Count => Tasks.Count;
 
-    private System.Collections.Concurrent.ConcurrentQueue<T> Tasks { get; }
+    private System.Collections.Concurrent.ConcurrentQueue<T> Tasks { get; } = new System.Collections.Concurrent.ConcurrentQueue<T>(tasks);
 
-    private int ParallelCount { get; }
+    private int ParallelCount { get; } = parallelCount;
 
     public TimeSpan DeleyPerStartup { get; } = TimeSpan.FromMilliseconds(100);
-
-    public ParallelCollectionExecutor(ICollection<T> tasks, int parallelCount = 100) {
-        Tasks = new System.Collections.Concurrent.ConcurrentQueue<T>(tasks);
-        ParallelCount = parallelCount;
-    }
 
     public async Task RunAsync(Func<T, Task> handler) {
         if (_isInvoked) {

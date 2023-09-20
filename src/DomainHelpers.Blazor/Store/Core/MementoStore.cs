@@ -1,17 +1,13 @@
 using DomainHelpers.Blazor.Store.Core.History;
 
 namespace DomainHelpers.Blazor.Store.Core; 
-public abstract class MementoStore<TState, TMessage>
-    : AbstractMementoStore<TState, Command.StateHasChanged<TState, TMessage>>
+public abstract class MementoStore<TState, TMessage>(
+    StateInitializer<TState> initializer,
+    HistoryManager historyManager
+    )
+    : AbstractMementoStore<TState, Command.StateHasChanged<TState, TMessage>>(initializer, historyManager, Reducer)
         where TState : class
         where TMessage : notnull {
-
-    public MementoStore(
-        StateInitializer<TState> initializer,
-        HistoryManager historyManager
-    ) : base(initializer, historyManager, Reducer) {
-
-    }
 
     /// <summary>
     /// Reduces the state using the provided StateHasChanged command.
@@ -49,8 +45,6 @@ public abstract class MementoStore<TState, TMessage>
 /// You can observe the state by subscribing to the StateChanged event.
 /// </summary>
 /// <typeparam name="TState">The type of state managed by the store.</typeparam>
-public class MementoStore<TState> : MementoStore<TState, string>
+public class MementoStore<TState>(StateInitializer<TState> initializer, HistoryManager historyManager) : MementoStore<TState, string>(initializer, historyManager)
         where TState : class {
-    public MementoStore(StateInitializer<TState> initializer, HistoryManager historyManager) : base(initializer, historyManager) {
-    }
 }

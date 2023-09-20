@@ -7,12 +7,23 @@ namespace DomainHelpers.Blazor.Store.Core;
 /// </summary>
 /// <typeparam name="TState">The type of the state managed by the store.</typeparam>
 /// <typeparam name="TCommand">The type of the commands used to mutate the state.</typeparam>
-public abstract class AbstractStore<TState, TCommand>
+/// <remarks>
+/// Initializes a new instance of the <see cref="AbstractStore{TState, TCommand}"/> class.
+/// </remarks>
+/// <param name="initializer">An initializer that creates an initial state.</param>
+/// <param name="reducer">A reducer that changes a store state.</param>
+/// <exception cref="ArgumentNullException">Thrown when <paramref name="initializer"/> returns null.</exception>
+public abstract class AbstractStore<TState, TCommand>(
+    StateInitializer<TState> initializer,
+    Reducer<TState, TCommand> reducer
+    )
     : IStore<TState, TCommand>, IDisposable
         where TState : class
         where TCommand : Command {
     readonly ConcurrentDictionary<Guid, IObserver<IStateChangedEventArgs<TState, TCommand>>> _observers = new();
-    readonly Reducer<TState, TCommand> _reducer;
+    readonly Reducer<TState, TCommand> _reducer = (state, command) => {
+        return reducer(state, command);
+    };
 
     StoreProvider? _provider;
     Func<TState, TCommand, object?>? _middlewareHandler;
@@ -23,12 +34,13 @@ public abstract class AbstractStore<TState, TCommand>
     /// <summary>
     /// Gets the state initializer for the store.
     /// </summary>
-    protected StateInitializer<TState> Initializer { get; }
+    protected StateInitializer<TState> Initializer { get; } = initializer;
 
     /// <summary>
     /// Gets the current state of the store.
     /// </summary>
-    public TState State { get; internal set; }
+    public TState State { get; internal set; } = initializer()
+            ?? throw new ArgumentNullException("initializer must be returned not null.");
 
     /// <summary>
     /// Gets a value indicating whether the store is initialized.
@@ -43,25 +55,6 @@ public abstract class AbstractStore<TState, TCommand>
         ?? throw new InvalidDataException("Store has not initialized.");
 
     public Reducer<object, Command> ReducerHandle => (s, c) => _reducer.Invoke((TState)s, (TCommand)c);
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="AbstractStore{TState, TCommand}"/> class.
-    /// </summary>
-    /// <param name="initializer">An initializer that creates an initial state.</param>
-    /// <param name="reducer">A reducer that changes a store state.</param>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="initializer"/> returns null.</exception>
-    public AbstractStore(
-        StateInitializer<TState> initializer,
-        Reducer<TState, TCommand> reducer
-    ) {
-        Initializer = initializer;
-        State = initializer()
-            ?? throw new ArgumentNullException("initializer must be returned not null.");
-
-        _reducer = (state, command) => {
-            return reducer(state, command);
-        };
-    }
 
     /// <summary>
     /// Disposes the store and its resources.

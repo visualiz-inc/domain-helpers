@@ -166,20 +166,18 @@ public class GeneralException : Exception {
 /// Represents the general error.
 /// </summary>
 /// <typeparam name="TError">Error info.</typeparam>
-public class GeneralException<TPayload> : GeneralException {
-    public GeneralException(
-        TPayload? payload,
-        string message,
-        string? displayMessage = null,
-        PrefixedUlid? eventId = null,
-        Exception? error = null
-    ) : base(
-        message,
-        displayMessage,
-        payload,
-        eventId,
-        error
-    ) { }
-
+public class GeneralException<TPayload>(
+    TPayload? payload,
+    string message,
+    string? displayMessage = null,
+    PrefixedUlid? eventId = null,
+    Exception? error = null
+    ) : GeneralException(
+    message,
+    displayMessage,
+    payload,
+    eventId,
+    error
+    ) {
     public new TPayload? Payload => (TPayload?)base.Payload;
 }

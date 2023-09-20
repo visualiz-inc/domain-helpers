@@ -5,15 +5,10 @@ using Microsoft.JSInterop;
 namespace DomainHelpers.Blazor.Helpers; 
 public record LogEventArgs(Exception? Exception, string? Message, ImmutableArray<string>? Details, string? LogId, string DebugInfo);
 
-public class AppLogger {
-    private readonly ILogger<AppLogger> _logger;
+public class AppLogger(ILogger<AppLogger> logger, IJSRuntime jsRuntime) {
+    private readonly ILogger<AppLogger> _logger = logger;
     private readonly Subject<LogEventArgs> _subject = new();
-    private readonly IJSRuntime _jsRuntime;
-
-    public AppLogger(ILogger<AppLogger> logger, IJSRuntime jsRuntime) {
-        _logger = logger;
-        _jsRuntime = jsRuntime;
-    }
+    private readonly IJSRuntime _jsRuntime = jsRuntime;
 
     public void LogError(Exception ex, string message, bool notify = true) {
         if (ex is GeneralException ge) {

@@ -3,12 +3,8 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace DomainHelpers.EntityFrameworkCoreExtensions;
 
-public class UnitOfWorkTransaction : IUnitOfWorkTransaction {
-    private readonly IDbContextTransaction _transaction;
-
-    public UnitOfWorkTransaction(IDbContextTransaction transaction) {
-        _transaction = transaction;
-    }
+public class UnitOfWorkTransaction(IDbContextTransaction transaction) : IUnitOfWorkTransaction {
+    private readonly IDbContextTransaction _transaction = transaction;
 
     public ValueTask DisposeAsync() {
         return _transaction.DisposeAsync();

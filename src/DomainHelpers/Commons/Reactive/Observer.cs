@@ -1,15 +1,8 @@
 ﻿namespace DomainHelpers.Commons.Reactive; 
-public class Observer<T> : IObserver<T> {
-    private readonly Action onCompleted;
-    private readonly Action<Exception> onError;
-    private readonly Action<T> onNext;
-
-    public Observer(Action<T> onNext, Action<Exception> onError, Action onCompleted) {
-        this.onNext = onNext;
-        this.onError = onError;
-        this.onCompleted = onCompleted;
-    }
-
+public class Observer<T>(Action<T> onNext, Action<Exception> onError, Action onCompleted) : IObserver<T> {
+    private readonly Action onCompleted = onCompleted;
+    private readonly Action<Exception> onError = onError;
+    private readonly Action<T> onNext = onNext;
 
     public void OnCompleted() {
         onCompleted();

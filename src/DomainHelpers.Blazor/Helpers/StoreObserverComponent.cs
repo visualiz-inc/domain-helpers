@@ -22,12 +22,8 @@ public class StoreObserverComponent : ObserverComponent {
         }
     }
 
-    class Disposable : IDisposable {
-        readonly Action _action;
-
-        public Disposable(Action action) {
-            _action = action;
-        }
+    class Disposable(Action action) : IDisposable {
+        readonly Action _action = action;
 
         public void Dispose() {
             _action();

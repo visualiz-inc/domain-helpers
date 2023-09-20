@@ -1,20 +1,18 @@
-﻿namespace DomainHelpers.Blazor.Store.Core; 
+﻿namespace DomainHelpers.Blazor.Store.Core;
 /// <summary>
 /// Represents a store for managing state of type TState.
 /// You can observe the state by subscribing to the StateChanged event.
 /// </summary>
 /// <typeparam name="TState">The type of state managed by the store.</typeparam>
 /// <typeparam name="TMessage">The type of message that describes what state change has occurred.</typeparam>
-public class Store<TState, TMessage> : AbstractStore<TState, Command.StateHasChanged<TState, TMessage>>
+/// <remarks>
+/// Initializes a new instance of the Store class.
+/// </remarks>
+/// <param name="initializer">The state initializer for creating the initial state.</param>
+/// <param name="command">The type of message that describes what state change has occurred.</param>
+public class Store<TState, TMessage>(StateInitializer<TState> initializer) : AbstractStore<TState, Command.StateHasChanged<TState, TMessage>>(initializer, Reducer)
     where TState : class
     where TMessage : notnull {
-    /// <summary>
-    /// Initializes a new instance of the Store class.
-    /// </summary>
-    /// <param name="initializer">The state initializer for creating the initial state.</param>
-    /// <param name="command">The type of message that describes what state change has occurred.</param>
-    public Store(StateInitializer<TState> initializer) : base(initializer, Reducer) {
-    }
 
     /// <summary>
     /// Reduces the state using the provided StateHasChanged command.
@@ -52,8 +50,6 @@ public class Store<TState, TMessage> : AbstractStore<TState, Command.StateHasCha
 /// You can observe the state by subscribing to the StateChanged event.
 /// </summary>
 /// <typeparam name="TState">The type of state managed by the store.</typeparam>
-public class Store<TState> : Store<TState, string>
+public class Store<TState>(StateInitializer<TState> initializer) : Store<TState, string>(initializer)
         where TState : class {
-    public Store(StateInitializer<TState> initializer) : base(initializer) {
-    }
 }

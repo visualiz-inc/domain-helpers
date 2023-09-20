@@ -5,14 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DomainHelpers.EntityFrameworkCoreExtensions;
 
-public class GeneralEntityRepository<TEntity, TId> : IRepository<TEntity, TId>
+public class GeneralEntityRepository<TEntity, TId>(DbContext dbContext) : IRepository<TEntity, TId>
     where TEntity : Entity<TId>
     where TId : notnull, PrefixedUlid, new() {
-    private readonly DbContext _dbContext;
-
-    public GeneralEntityRepository(DbContext dbContext) {
-        _dbContext = dbContext;
-    }
+    private readonly DbContext _dbContext = dbContext;
 
     /// <inheritdoc/>
     public virtual async Task AddAsync(TEntity entity, CancellationToken cancellationToken = default) {

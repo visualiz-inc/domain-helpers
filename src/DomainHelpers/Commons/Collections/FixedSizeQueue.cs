@@ -1,15 +1,10 @@
 ﻿namespace DomainHelpers.Commons.Collections; 
-public class FixedSizeQueue<T> {
-    public FixedSizeQueue(int size) {
-        Queue = new Queue<T>(size);
-        Size = size;
-    }
-
-    public int Size { get; private set; }
+public class FixedSizeQueue<T>(int size) {
+    public int Size { get; private set; } = size;
 
     public IReadOnlyCollection<T> Items => Queue.ToList();
 
-    private System.Collections.Generic.Queue<T> Queue { get; }
+    private System.Collections.Generic.Queue<T> Queue { get; } = new Queue<T>(size);
 
     public void Enqueue(T item) {
         Queue.Enqueue(item);

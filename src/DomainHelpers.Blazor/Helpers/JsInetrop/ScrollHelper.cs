@@ -1,7 +1,7 @@
 using Microsoft.JSInterop;
 
 namespace DomainHelpers.Blazor.Helpers.JsInetrop; 
-public class ScrollHelper {
+public class ScrollHelper(JSRuntime jsRuntime) {
     private const string FuncName = "ScrollTop";
     private const string Src = $$"""
         function {{FuncName}}(id) {
@@ -9,14 +9,10 @@ public class ScrollHelper {
             el.scrollTop = 0;
         }        
         """;
-    private readonly JSRuntime _jsRuntime;
+    private readonly JSRuntime _jsRuntime = jsRuntime;
 
     static ScrollHelper() {
 
-    }
-
-    public ScrollHelper(JSRuntime jsRuntime) {
-        _jsRuntime = jsRuntime;
     }
 
     public async Task ScrollToTop() {

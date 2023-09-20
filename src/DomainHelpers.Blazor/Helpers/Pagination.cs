@@ -28,14 +28,14 @@ public readonly record struct PageState {
     public OffsetFetch OffsetFetch { get; init; }
 }
 
-public class Pagination {
+public class Pagination(int itemsNumPerPage = 50) {
     private int _page = 1;
     private readonly Subject<PageStateChangedEvent> _subject = new();
     private int _totalItemsCount = 0;
 
     public PageState PageState => CreateState();
 
-    public int ItemsNumPerPage { get; }
+    public int ItemsNumPerPage { get; } = itemsNumPerPage;
 
     public int TotalItemsCount {
         get => _totalItemsCount;
@@ -67,10 +67,6 @@ public class Pagination {
         (CurrentPage - 1) * ItemsNumPerPage,
         ItemsNumPerPage
     );
-
-    public Pagination(int itemsNumPerPage = 50) {
-        ItemsNumPerPage = itemsNumPerPage;
-    }
 
     public IDisposable Subscribe(Action<PageStateChangedEvent> action) => _subject.Subscribe(action);
 

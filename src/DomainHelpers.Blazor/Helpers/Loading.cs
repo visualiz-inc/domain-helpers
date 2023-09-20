@@ -64,12 +64,8 @@ public class Loading {
         }
     }
 
-    private class Disposable : IDisposable {
-        private readonly Action _action;
-
-        public Disposable(Action action) {
-            _action = action;
-        }
+    private class Disposable(Action action) : IDisposable {
+        private readonly Action _action = action;
 
         public void Dispose() {
             _action();

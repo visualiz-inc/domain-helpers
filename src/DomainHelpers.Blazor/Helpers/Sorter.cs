@@ -4,13 +4,9 @@ namespace DomainHelpers.Blazor.Helpers;
 public record Sort<TColumn>(TColumn Column, SortDirection Direction)
     where TColumn : unmanaged, Enum;
 
-public class Sorter<TColumn> : Dictionary<TColumn, SortDirection>
+public class Sorter<TColumn>(bool isMultiple = false) : Dictionary<TColumn, SortDirection>
     where TColumn : unmanaged, Enum {
-    readonly bool _isMultiple = false;
-
-    public Sorter(bool isMultiple = false) {
-        _isMultiple = isMultiple;
-    }
+    readonly bool _isMultiple = isMultiple;
 
     public new SortDirection this[TColumn key] {
         get => TryGetValue(key, out var v) ? v : default!;

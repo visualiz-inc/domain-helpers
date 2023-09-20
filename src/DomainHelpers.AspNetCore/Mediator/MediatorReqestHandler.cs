@@ -23,29 +23,20 @@ public record RemoteMediatrOptions {
     public string UnknownErrorMessage { get; init; } = "Unknown request error occurred.";
 }
 
-internal class RemoteMediatrRequestHandler {
-    private readonly Assembly _assembly;
-    private readonly IServiceScopeFactory _serviceScopeFactory;
-    private readonly IAuthorizationPolicyProvider? _authorizationPolicyProvider;
-    private readonly RemoteMediatrOptions _options;
-    private readonly ILogger<RemoteMediatrRequestHandler> _logger;
-    private readonly bool _isDebug;
-
-    public RemoteMediatrRequestHandler(
-        Assembly assembly,
-        IServiceScopeFactory serviceScopeFactory,
-        IAuthorizationPolicyProvider? authorizationPolicyProvider,
-        RemoteMediatrOptions options,
-        ILogger<RemoteMediatrRequestHandler> logger,
-        bool isDebug
+internal class RemoteMediatrRequestHandler(
+    Assembly assembly,
+    IServiceScopeFactory serviceScopeFactory,
+    IAuthorizationPolicyProvider? authorizationPolicyProvider,
+    RemoteMediatrOptions options,
+    ILogger<RemoteMediatrRequestHandler> logger,
+    bool isDebug
     ) {
-        _assembly = assembly;
-        _serviceScopeFactory = serviceScopeFactory;
-        _authorizationPolicyProvider = authorizationPolicyProvider;
-        _options = options;
-        _logger = logger;
-        _isDebug = isDebug;
-    }
+    private readonly Assembly _assembly = assembly;
+    private readonly IServiceScopeFactory _serviceScopeFactory = serviceScopeFactory;
+    private readonly IAuthorizationPolicyProvider? _authorizationPolicyProvider = authorizationPolicyProvider;
+    private readonly RemoteMediatrOptions _options = options;
+    private readonly ILogger<RemoteMediatrRequestHandler> _logger = logger;
+    private readonly bool _isDebug = isDebug;
 
     public async Task<IResult> HandleRequest(string requestType, HttpContext context) {
         var type = (

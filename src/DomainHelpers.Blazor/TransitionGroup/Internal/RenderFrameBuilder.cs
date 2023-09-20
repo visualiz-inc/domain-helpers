@@ -87,16 +87,12 @@ struct Frame {
     }
 };
 
-class RenderFrameBuilder {
+class RenderFrameBuilder(object key) {
     readonly List<Frame> _frames = new();
 
-    public object Key { get; }
+    public object Key { get; } = key;
 
     public bool IsAnimationElement { get; set; }
-
-    public RenderFrameBuilder(object key) {
-        Key = key;
-    }
 
     public void Add(Frame frame) {
         _frames.Add(frame);

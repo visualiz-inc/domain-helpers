@@ -2,20 +2,16 @@
 using MediatR;
 using System.Text.Json;
 
-namespace DomainHelpers.Blazor.Mediator; 
+namespace DomainHelpers.Blazor.Mediator;
 /// <summary>
 /// サーバーにリクエストを送信するメディエータです．
 /// </summary>
-public class HttpMediator : IMediator {
-    private readonly HttpClient _httpClient;
-
-    /// <summary>
-    /// <see cref="HttpMediator"/> クラスのインスタンスを初期化します.
-    /// </summary>
-    /// <param name="httpClient">HTTPクライアント．</param>
-    public HttpMediator(HttpClient httpClient) {
-        _httpClient = httpClient;
-    }
+/// <remarks>
+/// <see cref="HttpMediator"/> クラスのインスタンスを初期化します.
+/// </remarks>
+/// <param name="httpClient">HTTPクライアント．</param>
+public class HttpMediator(HttpClient httpClient) : IMediator {
+    private readonly HttpClient _httpClient = httpClient;
 
     public IAsyncEnumerable<TResponse> CreateStream<TResponse>(IStreamRequest<TResponse> request, CancellationToken cancellationToken = default) {
         throw new NotImplementedException();
@@ -120,21 +116,18 @@ public enum ErrorType {
     Unknown
 }
 
-public class RequestException : GeneralException<ErrorType> {
-    public FailedResponse? FailedResponse { get; private set; }
-    public RequestException(
-        ErrorType type,
-        string message,
-        string? displayMessage = null,
-        FailedResponse? failedResponse = null,
-        Exception? ex = null
-    ) : base(
-        type,
-        message,
-        displayMessage,
-        default,
-        ex
+public class RequestException(
+    ErrorType type,
+    string message,
+    string? displayMessage = null,
+    FailedResponse? failedResponse = null,
+    Exception? ex = null
+    ) : GeneralException<ErrorType>(
+    type,
+    message,
+    displayMessage,
+    default,
+    ex
     ) {
-        FailedResponse = failedResponse;
-    }
+    public FailedResponse? FailedResponse { get; private set; } = failedResponse;
 }
