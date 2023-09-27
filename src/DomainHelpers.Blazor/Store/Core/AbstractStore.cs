@@ -1,6 +1,21 @@
 ﻿using System.Collections.Concurrent;
 
 namespace DomainHelpers.Blazor.Store.Core;
+
+public class StateInitializer<TState> where TState : class {
+    readonly Func<TState> _initializer;
+
+    public TState GetState() => _initializer();
+
+    public StateInitializer(Func<TState> initializer) {
+        _initializer = initializer;
+    }
+
+    public static implicit operator StateInitializer<TState>(TState state) {
+        return new StateInitializer<TState>(() => state);
+    }
+}
+
 /// <summary>
 /// Represents an abstract store that maintains state and handles commands.
 /// Implements the IStore, IObservable, and IDisposable interfaces.
@@ -16,8 +31,7 @@ namespace DomainHelpers.Blazor.Store.Core;
 public abstract class AbstractStore<TState, TCommand>(
     StateInitializer<TState> initializer,
     Reducer<TState, TCommand> reducer
-    )
-    : IStore<TState, TCommand>, IDisposable
+) : IStore<TState, TCommand>, IDisposable
         where TState : class
         where TCommand : Command {
     readonly ConcurrentDictionary<Guid, IObserver<IStateChangedEventArgs<TState, TCommand>>> _observers = new();
@@ -39,8 +53,8 @@ public abstract class AbstractStore<TState, TCommand>(
     /// <summary>
     /// Gets the current state of the store.
     /// </summary>
-    public TState State { get; internal set; } = initializer()
-            ?? throw new ArgumentNullException("initializer must be returned not null.");
+    public TState State { get; internal set; } = initializer.GetState()
+        ?? throw new ArgumentNullException("initializer must be returned not null.");
 
     /// <summary>
     /// Gets a value indicating whether the store is initialized.
@@ -60,7 +74,7 @@ public abstract class AbstractStore<TState, TCommand>(
     /// Disposes the store and its resources.
     /// </summary>
     public void Dispose() {
-        foreach (var d in _disposables ?? ImmutableArray.Create<IDisposable>()) {
+        foreach (var d in _disposables ?? []) {
             d.Dispose();
         }
 
@@ -184,7 +198,16 @@ public abstract class AbstractStore<TState, TCommand>(
     /// </summary>
     /// <param name="provider">The store provider.</param>
     /// <returns>A Task representing the initialization process.</returns>
-    protected virtual Task OnInitializedAsync(StoreProvider provider) {
+    internal protected virtual Task OnInitializedAsync(StoreProvider provider) {
+        return OnInitializedAsync();
+    }
+
+    /// <summary>
+    /// Called when the store is initialized asynchronously.
+    /// </summary>
+    /// <param name="provider">The store provider.</param>
+    /// <returns>A Task representing the initialization process.</returns>
+    protected virtual Task OnInitializedAsync() {
         return Task.CompletedTask;
     }
 
@@ -240,7 +263,6 @@ public abstract class AbstractStore<TState, TCommand>(
             return (null, null);
         }
     }
-
 
     async Task IStore<TState, TCommand>.InitializeAsync(StoreProvider provider) {
         _provider = provider;

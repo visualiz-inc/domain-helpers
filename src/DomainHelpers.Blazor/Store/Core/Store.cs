@@ -10,7 +10,8 @@
 /// </remarks>
 /// <param name="initializer">The state initializer for creating the initial state.</param>
 /// <param name="command">The type of message that describes what state change has occurred.</param>
-public class Store<TState, TMessage>(StateInitializer<TState> initializer) : AbstractStore<TState, Command.StateHasChanged<TState, TMessage>>(initializer, Reducer)
+public class Store<TState, TMessage>(TState initializer)
+    : AbstractStore<TState, Command.StateHasChanged<TState, TMessage>>(initializer, Reducer)
     where TState : class
     where TMessage : notnull {
 
@@ -50,6 +51,6 @@ public class Store<TState, TMessage>(StateInitializer<TState> initializer) : Abs
 /// You can observe the state by subscribing to the StateChanged event.
 /// </summary>
 /// <typeparam name="TState">The type of state managed by the store.</typeparam>
-public class Store<TState>(StateInitializer<TState> initializer) : Store<TState, string>(initializer)
+public class Store<TState>(TState initializer) : Store<TState, string>(initializer)
         where TState : class {
 }
