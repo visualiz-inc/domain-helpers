@@ -1,46 +1,62 @@
 ﻿using DomainHelpers.Commons.Reactive;
 using MudBlazor;
-using System;
-using System.Collections;
-using System.Data.Common;
-using System.Diagnostics.CodeAnalysis;
 
 namespace DomainHelpers.Blazor.Helpers;
-public record struct SorterItem<TColumn>(TColumn Column, SortDirection Direction)
-    where TColumn : unmanaged, Enum;
 
-public readonly struct SorterState<TColumn> : IReadOnlyCollection<SorterItem<TColumn>>
-    where TColumn : unmanaged, Enum {
+public record struct SorterItem<TColumn>(
+    int Index,
+    TColumn Column,
+    SortDirection Direction
+);
+
+public readonly struct SorterState<TColumn> where TColumn : unmanaged, Enum {
     readonly IReadOnlyDictionary<TColumn, SortDirection>? _bag;
+    readonly IList<TColumn>? _priorities;
 
     public int Count => _bag?.Count ?? 0;
 
-    public SorterState(IReadOnlyDictionary<TColumn, SortDirection> bag) {
+    public SorterState(
+        IReadOnlyDictionary<TColumn, SortDirection> bag,
+        IList<TColumn> priorities
+    ) {
         _bag = bag;
+        _priorities = priorities;
     }
 
     public SortDirection this[TColumn key] {
         get => _bag?.TryGetValue(key, out var v) is true ? v : SortDirection.None;
     }
 
-    IEnumerator IEnumerable.GetEnumerator() {
-        return _bag?.Select(x => new SorterItem<TColumn>(x.Key, x.Value)).GetEnumerator()
-            ?? Enumerable.Empty<SorterItem<TColumn>>().GetEnumerator();
-    }
+    public int? IndexOf(TColumn column) => _priorities?.IndexOf(column) switch {
+        null or < 0 => null,
+        var v => v + 1,
+    };
 
-    IEnumerator<SorterItem<TColumn>> IEnumerable<SorterItem<TColumn>>.GetEnumerator() {
-        return _bag?.Select(x => new SorterItem<TColumn>(x.Key, x.Value)).GetEnumerator()
-            ?? Enumerable.Empty<SorterItem<TColumn>>().GetEnumerator();
+    public IReadOnlyList<SorterItem<TColumn>> Sorts {
+        get {
+            if (_priorities is { } arr && _bag is { } b) {
+                return arr.Select((x, i) => new SorterItem<TColumn>(i, x, b[x])).ToArray();
+            }
+
+            return [];
+        }
     }
 }
 
 public class Sorter<TColumn>(bool _isMultiple = false) : IObservable<SorterState<TColumn>>
     where TColumn : unmanaged, Enum {
     readonly Dictionary<TColumn, SortDirection> _bag = new();
+    readonly List<TColumn> _priorities = [];
+
     readonly Subject<SorterState<TColumn>> _subject = new();
 
+    public SorterState<TColumn> State => new(
+        new Dictionary<TColumn, SortDirection>(_bag),
+        new List<TColumn>(_priorities)
+    );
+
     public IDisposable Subscribe(Action<SorterState<TColumn>> action) =>
-        Subscribe(action);
+        _subject.Subscribe(action);
 
     public IDisposable Subscribe(IObserver<SorterState<TColumn>> observer) =>
         _subject.Subscribe(observer);
@@ -50,20 +66,35 @@ public class Sorter<TColumn>(bool _isMultiple = false) : IObservable<SorterState
         set {
             if (_isMultiple is false) {
                 _bag.Clear();
+                _priorities.Clear();
             }
 
             if (_bag.ContainsKey(key)) {
-                _bag[key] = value;
+                if (value == SortDirection.None) {
+                    _bag.Remove(key);
+                    _priorities.Remove(key);
+                }
+                else {
+                    _bag[key] = value;
+                }
             }
             else {
                 _bag.Add(key, value);
+                _priorities.Add(key);
             }
 
-            _subject.OnNext(new(new Dictionary<TColumn, SortDirection>(_bag)));
+            _subject.OnNext(State);
         }
     }
 
+    public void Clear() {
+        _bag.Clear();
+        _priorities.Clear();
+
+        _subject.OnNext(State);
+    }
+
     public IReadOnlyList<SorterItem<TColumn>> Sorts =>
-        _bag.Select(x => new SorterItem<TColumn>(x.Key, x.Value))
+        _priorities.Select((x, i) => new SorterItem<TColumn>(i, x, this[x]))
             .ToArray();
 }

@@ -1,31 +1,32 @@
-﻿namespace DomainHelpers.Commons.Reactive; 
-public class Subject<T> : IObservable<T>, IObserver<T> {
-    private bool didComplete;
-    private Exception? exception;
+﻿namespace DomainHelpers.Commons.Reactive;
 
-    private readonly object locker = new();
-    private ImmutableArray<IObserver<T>> observers = ImmutableArray.Create<IObserver<T>>();
+public class Subject<T> : IObservable<T>, IObserver<T> {
+    private bool _didComplete;
+    private Exception? _exception;
+
+    private readonly object _locker = new();
+    private IObserver<T>[] _observers = [];
 
     public IDisposable Subscribe(IObserver<T> observer) {
-        lock (locker) {
-            if (exception is not null) {
-                observer.OnError(exception);
+        lock (_locker) {
+            if (_exception is not null) {
+                observer.OnError(_exception);
             }
-            else if (didComplete) {
+            else if (_didComplete) {
                 observer.OnCompleted();
             }
             else {
-                if (!observers.Contains(observer)) {
-                    observers = observers.Add(observer);
+                if (!_observers.Contains(observer)) {
+                    _observers = [.. _observers, observer];
                 }
             }
         }
 
         return new ObservableSubscription(
             () => {
-                lock (locker) {
-                    if (observers.Contains(observer)) {
-                        observers = observers.Remove(observer);
+                lock (_locker) {
+                    if (_observers.Contains(observer)) {
+                        _observers = [.. _observers.Where(o => o != observer)];
                     }
                 }
             }
@@ -33,41 +34,41 @@ public class Subject<T> : IObservable<T>, IObserver<T> {
     }
 
     public void OnNext(T value) {
-        if (didComplete) {
+        if (_didComplete) {
             return;
         }
 
-        foreach (var observer in observers) {
+        foreach (var observer in _observers) {
             observer.OnNext(value);
         }
     }
 
     public void OnCompleted() {
-        if (didComplete) {
+        if (_didComplete) {
             return;
         }
 
-        foreach (var observer in observers) {
+        foreach (var observer in _observers) {
             observer.OnCompleted();
         }
 
-        didComplete = true;
+        _didComplete = true;
     }
 
     public void OnError(Exception error) {
-        if (didComplete) {
+        if (_didComplete) {
             return;
         }
 
-        foreach (var observer in observers) {
+        foreach (var observer in _observers) {
             observer.OnError(error);
         }
 
-        exception = error;
-        didComplete = true;
+        _exception = error;
+        _didComplete = true;
     }
 
-    public IDisposable Subscribe(Action<T> aciton) {
-        return Subscribe(new Observer<T>(aciton, _ => { }, () => { }));
+    public IDisposable Subscribe(Action<T> action) {
+        return Subscribe(new Observer<T>(action, _ => { }, () => { }));
     }
 }
