@@ -40,7 +40,7 @@ public class Sorter<TColumn>(bool _isMultiple = false) : IObservable<SorterState
     readonly Subject<SorterState<TColumn>> _subject = new();
 
     public IDisposable Subscribe(Action<SorterState<TColumn>> action) =>
-        Subscribe(action);
+        _subject.Subscribe(action);
 
     public IDisposable Subscribe(IObserver<SorterState<TColumn>> observer) =>
         _subject.Subscribe(observer);
