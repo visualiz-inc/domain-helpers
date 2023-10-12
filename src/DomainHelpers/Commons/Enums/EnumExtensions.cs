@@ -8,7 +8,7 @@ public static class EnumExtensions {
     }
 
     public static string? ToDisplayName(this Enum e) {
-        return e.GetType().GetField(e.ToString())?.GetCustomAttribute<EnumDisplayNameAttribute>()?.DisplayName ?? "";
+        return e.GetType().GetField(e.ToString())?.GetCustomAttribute<EnumDisplayNameAttribute>()?.DisplayName;
     }
 
     public static TEnum CastTo<TEnum>(this Enum e, bool ignoreCase = true)
