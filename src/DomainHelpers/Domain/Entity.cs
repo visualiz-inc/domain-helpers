@@ -31,14 +31,13 @@ public abstract class Entity {
     }
 }
 
-public abstract class Entity<TId>(TId id) : Entity
-    where TId : PrefixedUlid {
+public abstract class Entity<TId>(TId id) : Entity {
     int? _requestedHashCode;
 
     public virtual TId Id { get; protected set; } = id;
 
     public bool IsTransient() {
-        return this.Id == default;
+        return this.Id.Equals(default);
     }
 
     public override bool Equals(object? obj) {

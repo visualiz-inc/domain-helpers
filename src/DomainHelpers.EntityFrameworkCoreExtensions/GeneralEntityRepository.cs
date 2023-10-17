@@ -7,7 +7,7 @@ namespace DomainHelpers.EntityFrameworkCoreExtensions;
 
 public class GeneralEntityRepository<TEntity, TId>(DbContext dbContext) : IRepository<TEntity, TId>
     where TEntity : Entity<TId>
-    where TId : notnull, PrefixedUlid, new() {
+    where TId : notnull, new() {
     private readonly DbContext _dbContext = dbContext;
 
     /// <inheritdoc/>
