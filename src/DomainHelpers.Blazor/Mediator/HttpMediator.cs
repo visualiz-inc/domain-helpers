@@ -48,7 +48,12 @@ public class HttpMediator(HttpClient httpClient) : IMediator {
             return default!;
         }
 
-        var result = await response.ReadFromJsonAsync<TResponse>();
+        var json = await response.ReadAsStringAsync();
+        if (json is "" or null) {
+            return default!;
+        }
+
+        var result =  JsonSerializer.Deserialize<TResponse>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive =true});
         return result!;
     }
 
