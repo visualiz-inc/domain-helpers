@@ -1,6 +1,6 @@
 ﻿namespace DomainHelpers.Blazor.TransitionGroup.Internal; 
 class TransitionGroupContext {
-    public HashSet<object> AnimatingElements { get; } = new();
+    public HashSet<object> AnimatingElements { get; } = [];
 
     public event Action<object>? RemoveAnimationRequested;
 

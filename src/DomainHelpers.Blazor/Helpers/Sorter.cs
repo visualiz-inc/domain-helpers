@@ -45,7 +45,7 @@ public readonly struct SorterState<TColumn> where TColumn : unmanaged, Enum {
 
 public class Sorter<TColumn>(bool _isMultiple = false) : IObservable<SorterState<TColumn>>
     where TColumn : unmanaged, Enum {
-    readonly Dictionary<TColumn, SortDirection> _bag = new();
+    readonly Dictionary<TColumn, SortDirection> _bag = [];
     readonly List<TColumn> _priorities = [];
 
     readonly Subject<SorterState<TColumn>> _subject = new();

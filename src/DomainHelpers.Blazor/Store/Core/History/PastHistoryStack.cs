@@ -1,6 +1,6 @@
 namespace DomainHelpers.Blazor.Store.Core.History; 
 internal class PastHistoryStack<T> {
-    readonly List<T> _values = new();
+    readonly List<T> _values = [];
 
     public int GetCount() {
         lock (_values) {

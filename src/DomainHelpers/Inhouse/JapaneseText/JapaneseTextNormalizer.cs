@@ -214,8 +214,8 @@ public static class StringConvExtensions {
     private static Dictionary<string, string> ReplacerNarrowToWide { get; }
 
     static StringConvExtensions() {
-        ReplacerWideToNarrow = new Dictionary<char, string>();
-        ReplacerNarrowToWide = new Dictionary<string, string>();
+        ReplacerWideToNarrow = [];
+        ReplacerNarrowToWide = [];
 
         foreach (var item in DictHalfFullNum) {
             ReplacerNarrowToWide.Add(item.Key, item.Value);

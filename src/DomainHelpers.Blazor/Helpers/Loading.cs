@@ -17,7 +17,7 @@ public readonly record struct LoadingState {
 }
 
 public class Loading {
-    private readonly Dictionary<Ulid, string?> _loadings = new();
+    private readonly Dictionary<Ulid, string?> _loadings = [];
     private readonly object _locker = new();
     private readonly Subject<LoadingState> _subject = new();
 

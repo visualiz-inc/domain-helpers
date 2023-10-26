@@ -4,7 +4,7 @@ internal class ThrottledExecutor<T> {
     DateTime LastInvokeTime;
     Timer? ThrottleTimer;
 
-    readonly List<Action<T>> observers = new();
+    readonly List<Action<T>> observers = [];
     readonly object locker = new();
 
     public ushort ThrottleWindowMs { get; private set; }

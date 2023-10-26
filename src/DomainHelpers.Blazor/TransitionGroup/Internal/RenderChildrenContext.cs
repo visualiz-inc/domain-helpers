@@ -1,8 +1,8 @@
 ﻿namespace DomainHelpers.Blazor.TransitionGroup.Internal; 
 class RenderChildrenContext {
-    public Dictionary<object, int> Keys = new();
+    public Dictionary<object, int> Keys = [];
 
-    public HashSet<object> InsertedKeys = new();
+    public HashSet<object> InsertedKeys = [];
 
     public List<RenderFrameBuilder> Sequence { get; }
 

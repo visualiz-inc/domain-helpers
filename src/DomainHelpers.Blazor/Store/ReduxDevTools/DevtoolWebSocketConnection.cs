@@ -8,8 +8,8 @@ public class DevToolWebSocketConnection
 
     readonly WebSocketServer _server;
     readonly object _locker = new();
-    readonly List<IWebSocketConnection> _webSocketConnections = new();
-    readonly HashSet<IWebSocketConnection> _initializedConnections = new();
+    readonly List<IWebSocketConnection> _webSocketConnections = [];
+    readonly HashSet<IWebSocketConnection> _initializedConnections = [];
 
     public event Action<string, string>? MessageHandled;
 

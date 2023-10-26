@@ -88,7 +88,7 @@ struct Frame {
 };
 
 class RenderFrameBuilder(object key) {
-    readonly List<Frame> _frames = new();
+    readonly List<Frame> _frames = [];
 
     public object Key { get; } = key;
 
