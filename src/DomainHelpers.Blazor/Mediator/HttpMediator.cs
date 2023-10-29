@@ -127,12 +127,12 @@ public class RequestException(
     string? displayMessage = null,
     FailedResponse? failedResponse = null,
     Exception? ex = null
-    ) : GeneralException<ErrorType>(
+) : GeneralException<ErrorType>(
     type,
     message,
     displayMessage,
     default,
     ex
-    ) {
+) {
     public FailedResponse? FailedResponse { get; private set; } = failedResponse;
 }
