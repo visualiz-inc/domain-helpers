@@ -1,4 +1,7 @@
-﻿using System.Linq.Expressions;
+﻿using Microsoft.EntityFrameworkCore;
+using MoriFlocky.Domain.Products;
+using System;
+using System.Linq.Expressions;
 
 namespace DomainHelpers.EntityFrameworkCoreExtensions;
 
@@ -13,17 +16,73 @@ public static class QueryExtensions {
     /// <param name="values">A collection of values to be used for filtering.</param>
     /// <returns>An <see cref="IQueryable{T}"/> that contains elements from the input sequence that satisfy the filter condition.</returns>
     public static IQueryable<T> FilterOr<T, U>(this IQueryable<T> q, Expression<Func<T, U>> selector, IReadOnlyCollection<U>? values) {
-        if (values is null or { Count: 0 }) {
+        if (values == null || values.Count == 0) {
             return q;
         }
 
         var parameter = selector.Parameters.Single();
-        var orExpression = values
-            .Select(value => Expression.Equal(selector.Body, Expression.Constant(value, typeof(U))))
-            .Aggregate(Expression.OrElse);
-        var lambda = Expression.Lambda<Func<T, bool>>(orExpression, parameter);
+        var lambda = Expression.Lambda<Func<T, bool>>(
+            values
+                .Select(value => Expression.Equal(selector.Body, Expression.Constant(value, typeof(U))))
+                .Aggregate(Expression.OrElse),
+            parameter
+        );
 
         return q.Where(lambda);
+    }
+
+    public static IQueryable<T> LikeOr<T>(
+          this IQueryable<T> query,
+          Expression<Func<T, string>> selector,
+          IReadOnlyCollection<string>? values) {
+        if (values == null || !values.Any()) {
+            return query;
+        }
+
+        // Create the initial predicate with the first value to ensure a non-null seed for Aggregate.
+        var firstValue = values.First();
+        var predicate = GetLikePredicate(selector, firstValue);
+
+        // Aggregate the remaining values into the predicate.
+        predicate = values.Skip(1)
+                          .Aggregate(predicate, (current, value) => current.Or(GetLikePredicate(selector, value)));
+
+        return query.Where(predicate);
+    }
+
+    private static Expression<Func<T, bool>> GetLikePredicate<T>(
+        Expression<Func<T, string>> selector,
+        string value
+    ) {
+        var parameter = selector.Parameters.First();
+        var body = Expression.Call(
+            null,
+            typeof(DbFunctionsExtensions).GetMethod(
+                nameof(DbFunctionsExtensions.Like),
+                [
+                    typeof(DbFunctions),
+                    typeof(string),
+                    typeof(string)
+                ]
+            )!,
+            Expression.Property(null, typeof(EF), nameof(EF.Functions)),
+            selector.Body,
+            Expression.Constant($"%{value}%")
+        );
+
+        return Expression.Lambda<Func<T, bool>>(body, parameter);
+    }
+
+    public static Expression<Func<T, bool>> Or<T>(this Expression<Func<T, bool>> expr1, Expression<Func<T, bool>> expr2) {
+        var parameter = Expression.Parameter(typeof(T));
+
+        var leftVisitor = new ReplaceExpressionVisitor(expr1.Parameters[0], parameter);
+        var left = leftVisitor.Visit(expr1.Body);
+
+        var rightVisitor = new ReplaceExpressionVisitor(expr2.Parameters[0], parameter);
+        var right = rightVisitor.Visit(expr2.Body);
+
+        return Expression.Lambda<Func<T, bool>>(Expression.OrElse(left, right), parameter);
     }
 
     /// <summary>
@@ -75,5 +134,14 @@ public static class QueryExtensions {
         var lambda = Expression.Lambda<Func<T, bool>>(rangeExpression, selector.Parameters.Single());
 
         return q.Where(lambda);
+    }
+
+    private class ReplaceExpressionVisitor(Expression oldValue, Expression newValue) : ExpressionVisitor {
+        public override Expression Visit(Expression node) {
+            if (node == oldValue)
+                return newValue;
+
+            return base.Visit(node);
+        }
     }
 }
