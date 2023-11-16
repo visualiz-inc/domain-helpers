@@ -11,11 +11,11 @@
     <ItemGroup>
         <InternalsVisibleTo Include="DomainHelpers.Test" />
 
-        <PackageReference Include="Microsoft.AspNetCore.Components" Version="8.0.0-rc.2.23480.2" />
-        <PackageReference Include="Microsoft.JSInterop" Version="8.0.0-rc.2.23480.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Components" Version="8.0.0" />
+        <PackageReference Include="Microsoft.JSInterop" Version="8.0.0" />
 
         <PackageReference Include="Fleck" Version="1.2.0" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0-rc.2.23479.6" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
 
         <PackageReference Include="MediatR" Version="12.1.1" />
         <PackageReference Include="MudBlazor" Version="6.11.0" />

@@ -40,7 +40,7 @@ public static class QueryExtensions {
         }
 
         // Create the initial predicate with the first value to ensure a non-null seed for Aggregate.
-        var predicate =  values
+        var predicate = values
             .Aggregate(
                 (Expression<Func<T, bool>>)(_ => false),
                 (current, value) => current.Or(GetLikePredicate(selector, value))
