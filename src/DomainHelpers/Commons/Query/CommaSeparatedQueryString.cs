@@ -19,7 +19,7 @@ public class CommaSeparatedQueryString {
     /// <param name="csv">The comma-separated query string.</param>
     public CommaSeparatedQueryString(string? csv) {
         if (csv?.Replace(" ", "").Replace("　", "").Split(Separator) is not [""] and { Length: > 0 } texts) {
-            Queries = texts.ToImmutableArray();
+            Queries = [.. texts];
         }
         else {
             Queries = ImmutableArray.Create<string>();

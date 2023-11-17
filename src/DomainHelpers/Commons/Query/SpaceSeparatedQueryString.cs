@@ -16,7 +16,7 @@ public class SpaceSeparatedQueryString {
     /// <param name="csv">The space-separated query string.</param>
     public SpaceSeparatedQueryString(string? csv) {
         if (csv?.Replace("　", " ").Split(Separator) is not [""] and { Length: > 0 } texts) {
-            Queries = texts.ToImmutableArray();
+            Queries = [.. texts];
         }
         else {
             Queries = ImmutableArray.Create<string>();

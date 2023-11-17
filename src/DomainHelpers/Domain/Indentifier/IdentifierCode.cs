@@ -51,7 +51,7 @@ public abstract class IdentifierCode {
             }
         }
 
-        return blocks.ToImmutableArray();
+        return [.. blocks];
     }
 
     private bool CheckVocabContains(string text) {
