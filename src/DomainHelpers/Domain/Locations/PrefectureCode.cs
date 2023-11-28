@@ -1,4 +1,4 @@
-﻿namespace DomainHelpers.Domain.Locations; 
+﻿namespace DomainHelpers.Domain.Locations;
 /// <summary>
 ///  日本の都道府県コードを表します。
 /// </summary>

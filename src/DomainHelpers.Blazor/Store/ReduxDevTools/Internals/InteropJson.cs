@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace DomainHelpers.Blazor.Store.ReduxDevTools.Internals; 
+namespace DomainHelpers.Blazor.Store.ReduxDevTools.Internals;
 public record StoreAction {
     [JsonPropertyName("action")]
     public required ActionItem Action { get; init; }

@@ -1,6 +1,6 @@
 using DomainHelpers.Blazor.Store.Core.History;
 
-namespace DomainHelpers.Blazor.Store.Core; 
+namespace DomainHelpers.Blazor.Store.Core;
 public abstract class FluxMementoStore<TState, TCommand>
     : AbstractMementoStore<TState, TCommand>
         where TState : class

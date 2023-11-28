@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace DomainHelpers.Commons.Collections.Extensions; 
+namespace DomainHelpers.Commons.Collections.Extensions;
 public class MapExtensions {
     /// <summary>
     /// Initialize map with key and value pairs.

@@ -1,7 +1,7 @@
 using System.Reflection;
 using System.Text.Json.Serialization;
 
-namespace DomainHelpers.Blazor.Store.Core; 
+namespace DomainHelpers.Blazor.Store.Core;
 public enum StateHasChangedType {
     StateHasChanged,
     ForceReplaced,

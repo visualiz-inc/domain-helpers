@@ -74,4 +74,3 @@ public abstract class Entity<TId>(TId id) : Entity {
         }
     }
 }
-

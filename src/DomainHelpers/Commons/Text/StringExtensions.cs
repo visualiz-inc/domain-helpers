@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace DomainHelpers.Commons.Text; 
+namespace DomainHelpers.Commons.Text;
 
 public static class StringExtensions {
     /// <summary>

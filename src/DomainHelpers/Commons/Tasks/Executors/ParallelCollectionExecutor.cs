@@ -1,4 +1,4 @@
-﻿namespace DomainHelpers.Commons.Tasks.Executors; 
+﻿namespace DomainHelpers.Commons.Tasks.Executors;
 public abstract class TaskCollectionHandler {
     public static ParallelCollectionExecutor<T> Create<T>(ICollection<T> tasks, int parallelCount) {
         return new ParallelCollectionExecutor<T>(tasks, parallelCount);

@@ -1,4 +1,4 @@
-﻿namespace DomainHelpers.Commons.Reactive; 
+﻿namespace DomainHelpers.Commons.Reactive;
 public record ObservableSubscription : IDisposable {
     public ObservableSubscription(Action action) {
         Action = action;

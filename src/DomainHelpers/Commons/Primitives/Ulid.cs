@@ -21,12 +21,129 @@ public readonly struct Ulid : IEquatable<Ulid>, IComparable<Ulid> {
     private static readonly byte[] Base32Bytes = Encoding.UTF8.GetBytes(Base32Text);
 
     private static readonly byte[] CharToBase32 = [
-        255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-        255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-        255, 255, 255, 255, 255, 255, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 255, 255, 255, 255, 255, 255, 255, 10, 11, 12,
-        13, 14, 15, 16, 17, 255, 18, 19, 255, 20, 21, 255, 22, 23, 24, 25, 26, 255, 27, 28, 29, 30, 31, 255, 255,
-        255, 255, 255, 255, 10, 11, 12, 13, 14, 15, 16, 17, 255, 18, 19, 255, 20, 21, 255, 22, 23, 24, 25, 26, 255,
-        27, 28, 29, 30, 31
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        255,
+        18,
+        19,
+        255,
+        20,
+        21,
+        255,
+        22,
+        23,
+        24,
+        25,
+        26,
+        255,
+        27,
+        28,
+        29,
+        30,
+        31,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        255,
+        18,
+        19,
+        255,
+        20,
+        21,
+        255,
+        22,
+        23,
+        24,
+        25,
+        26,
+        255,
+        27,
+        28,
+        29,
+        30,
+        31
     ];
 
     private static readonly DateTimeOffset UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
@@ -84,7 +201,7 @@ public readonly struct Ulid : IEquatable<Ulid>, IComparable<Ulid> {
     internal Ulid(long timestampMilliseconds, XorShift64 random)
         : this() {
         // Get memory in stack and copy to ulid(Little->Big reverse order).
-        ref byte fisrtByte = ref Unsafe.As<long, byte>(ref timestampMilliseconds);
+        ref var fisrtByte = ref Unsafe.As<long, byte>(ref timestampMilliseconds);
         timestamp0 = Unsafe.Add(ref fisrtByte, 5);
         timestamp1 = Unsafe.Add(ref fisrtByte, 4);
         timestamp2 = Unsafe.Add(ref fisrtByte, 3);
@@ -99,7 +216,7 @@ public readonly struct Ulid : IEquatable<Ulid>, IComparable<Ulid> {
 
     internal Ulid(long timestampMilliseconds, ReadOnlySpan<byte> randomness)
         : this() {
-        ref byte fisrtByte = ref Unsafe.As<long, byte>(ref timestampMilliseconds);
+        ref var fisrtByte = ref Unsafe.As<long, byte>(ref timestampMilliseconds);
         timestamp0 = Unsafe.Add(ref fisrtByte, 5);
         timestamp1 = Unsafe.Add(ref fisrtByte, 4);
         timestamp2 = Unsafe.Add(ref fisrtByte, 3);
@@ -107,7 +224,7 @@ public readonly struct Ulid : IEquatable<Ulid>, IComparable<Ulid> {
         timestamp4 = Unsafe.Add(ref fisrtByte, 1);
         timestamp5 = Unsafe.Add(ref fisrtByte, 0);
 
-        ref byte src = ref MemoryMarshal.GetReference(randomness); // length = 10
+        ref var src = ref MemoryMarshal.GetReference(randomness); // length = 10
         randomness0 = randomness[0];
         randomness1 = randomness[1];
         Unsafe.WriteUnaligned(ref randomness2,
@@ -120,7 +237,7 @@ public readonly struct Ulid : IEquatable<Ulid>, IComparable<Ulid> {
             throw new ArgumentException("invalid bytes length, length:" + bytes.Length);
         }
 
-        ref byte src = ref MemoryMarshal.GetReference(bytes);
+        ref var src = ref MemoryMarshal.GetReference(bytes);
         Unsafe.WriteUnaligned(ref timestamp0, Unsafe.As<byte, ulong>(ref src)); // timestamp0~randomness1
         Unsafe.WriteUnaligned(ref randomness2,
             Unsafe.As<byte, ulong>(ref Unsafe.Add(ref src, 8))); // randomness2~randomness9
@@ -471,7 +588,7 @@ public readonly struct Ulid : IEquatable<Ulid>, IComparable<Ulid> {
     }
 
     public override bool Equals(object? obj) {
-        return obj is Ulid other ? Equals(other) : false;
+        return obj is Ulid other && Equals(other);
     }
 
     public static bool operator ==(Ulid a, Ulid b) {

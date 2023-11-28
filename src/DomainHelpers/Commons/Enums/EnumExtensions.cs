@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace DomainHelpers.Commons.Enums; 
+namespace DomainHelpers.Commons.Enums;
 public static class EnumExtensions {
     public static IEnumerable<(string Name, TEnum Value)> GetNameAndValues<TEnum>()
         where TEnum : struct, Enum {

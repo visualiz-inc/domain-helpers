@@ -1,4 +1,4 @@
-namespace DomainHelpers.Blazor.Store.Core; 
+namespace DomainHelpers.Blazor.Store.Core;
 public delegate object NextStoreMiddlewareCallback(object? state, Command command);
 
 public delegate RootState NextProviderMiddlewareCallback(RootState? state, IStateChangedEventArgs<object, Command> e);

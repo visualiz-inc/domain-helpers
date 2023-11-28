@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 
-namespace DomainHelpers.Blazor.Store.Core; 
+namespace DomainHelpers.Blazor.Store.Core;
 public record RootState : IReadOnlyDictionary<string, object?> {
     readonly Dictionary<string, object> _rootState;
 

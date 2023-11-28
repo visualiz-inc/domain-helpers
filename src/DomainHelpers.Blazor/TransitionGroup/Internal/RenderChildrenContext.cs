@@ -1,4 +1,4 @@
-﻿namespace DomainHelpers.Blazor.TransitionGroup.Internal; 
+﻿namespace DomainHelpers.Blazor.TransitionGroup.Internal;
 class RenderChildrenContext {
     public Dictionary<object, int> Keys = [];
 

@@ -2,7 +2,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-namespace DomainHelpers.Domain.Authentication; 
+namespace DomainHelpers.Domain.Authentication;
 public class PublicKeyJwtTokenHandler {
     public const string Algorithm = SecurityAlgorithms.HmacSha256;
 

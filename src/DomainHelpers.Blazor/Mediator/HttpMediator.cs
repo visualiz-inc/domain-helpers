@@ -53,7 +53,7 @@ public class HttpMediator(HttpClient httpClient) : IMediator {
             return default!;
         }
 
-        var result =  JsonSerializer.Deserialize<TResponse>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive =true});
+        var result = JsonSerializer.Deserialize<TResponse>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         return result!;
     }
 

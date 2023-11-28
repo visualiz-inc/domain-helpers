@@ -1,4 +1,4 @@
-﻿namespace DomainHelpers.Commons.Query; 
+﻿namespace DomainHelpers.Commons.Query;
 public class SpaceSeparatedQueryString {
     /// <summary>
     /// The separator character used for splitting query strings.

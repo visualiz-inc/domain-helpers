@@ -1,4 +1,4 @@
-namespace DomainHelpers.Blazor.Store.Core.History; 
+namespace DomainHelpers.Blazor.Store.Core.History;
 public interface IHistoryItem<out T> {
     string Name { get; }
 

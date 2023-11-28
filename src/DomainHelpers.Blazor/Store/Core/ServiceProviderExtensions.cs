@@ -1,4 +1,4 @@
-namespace DomainHelpers.Blazor.Store.Core; 
+namespace DomainHelpers.Blazor.Store.Core;
 public static class ServiceProviderExtensions {
     public static IEnumerable<IStore<object, Command>> GetAllStores(this IServiceProvider provider) {
         return provider.GetServices<IStore<object, Command>>();

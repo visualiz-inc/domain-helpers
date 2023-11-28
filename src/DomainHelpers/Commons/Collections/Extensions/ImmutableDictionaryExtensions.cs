@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace DomainHelpers.Commons.Collections.Extensions; 
+namespace DomainHelpers.Commons.Collections.Extensions;
 internal class ImmutableDictionaryExtensions {
     /// <summary>
     /// Initialize immutable map with key and value pairs.

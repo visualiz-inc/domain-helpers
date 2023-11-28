@@ -1,4 +1,4 @@
-namespace DomainHelpers.Blazor.Store.Core.History; 
+namespace DomainHelpers.Blazor.Store.Core.History;
 public record HistoryCommandContext<T> : IHistoryCommandItem<T> where T : notnull {
     private T? _historyState;
 

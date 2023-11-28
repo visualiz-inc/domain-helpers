@@ -1,4 +1,4 @@
-namespace DomainHelpers.Blazor.Store.Core; 
+namespace DomainHelpers.Blazor.Store.Core;
 /// <summary>
 /// Represents a store interface that maintains state and handles commands.
 /// Implements the IObservable and IDisposable interfaces.

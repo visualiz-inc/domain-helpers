@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace DomainHelpers.Commons; 
+namespace DomainHelpers.Commons;
 public static class RangedForeachExtension {
     /// <summary>
     /// Privides ranged foreach with <see cref="Range" />.

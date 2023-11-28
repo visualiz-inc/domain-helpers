@@ -3,7 +3,7 @@
 public static class EnumUtils {
     public static IEnumerable<(string Name, TEnum Value)> GetNameAndValues<TEnum>()
         where TEnum : struct, Enum {
-            return Enum.GetNames<TEnum>().Zip(Enum.GetValues<TEnum>());
+        return Enum.GetNames<TEnum>().Zip(Enum.GetValues<TEnum>());
     }
 
     public static IEnumerable<(string? Name, TEnum Value)> GetDisplayNameAndValues<TEnum>()

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace DomainHelpers.Blazor.Mediator; 
+namespace DomainHelpers.Blazor.Mediator;
 public record FailedResponse {
     public required string Title { get; init; }
 

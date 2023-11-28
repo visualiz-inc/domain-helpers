@@ -1,4 +1,4 @@
-namespace DomainHelpers.Blazor.Store.Core.History; 
+namespace DomainHelpers.Blazor.Store.Core.History;
 internal class PastHistoryStack<T> {
     readonly List<T> _values = [];
 

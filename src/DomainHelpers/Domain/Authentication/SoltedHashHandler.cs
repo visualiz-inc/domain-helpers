@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Security.Cryptography;
 
-namespace DomainHelpers.Domain.Authentication; 
+namespace DomainHelpers.Domain.Authentication;
 /// <summary>
 /// Represents salted hash generator.
 /// </summary>
@@ -26,10 +26,9 @@ public class SaltedPasswordHashHandler {
     /// </summary>
     /// <returns>The random salt.</returns>
     public byte[] GenerateRandomSalt() {
-        using (var gen = RandomNumberGenerator.Create()) {
-            var salt = new byte[128 / 8];
-            gen.GetBytes(salt);
-            return salt;
-        }
+        using var gen = RandomNumberGenerator.Create();
+        var salt = new byte[128 / 8];
+        gen.GetBytes(salt);
+        return salt;
     }
 }

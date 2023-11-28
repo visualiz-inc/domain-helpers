@@ -1,4 +1,4 @@
-﻿namespace DomainHelpers.Commons; 
+﻿namespace DomainHelpers.Commons;
 /// <summary>
 /// Represents pipeline operetor with async operation.
 /// </summary>

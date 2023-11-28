@@ -1,6 +1,6 @@
 using System.Collections.Concurrent;
 
-namespace DomainHelpers.Blazor.Store.Core.Executors; 
+namespace DomainHelpers.Blazor.Store.Core.Executors;
 /// <summary>
 /// Provides a feature to wait for the end of asynchronous processing and connect to the next processing.
 /// </summary>

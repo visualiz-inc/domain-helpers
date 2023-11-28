@@ -32,7 +32,7 @@ public abstract record PrefixedUlid {
     }
 
     public static T Parse<T>(string rawId) where T : PrefixedUlid, new() {
-        if(rawId is null or "") {
+        if (rawId is null or "") {
             return null!;
         }
 
@@ -42,8 +42,9 @@ public abstract record PrefixedUlid {
     }
 
     public static T NewPrefixedUlid<T>() where T : PrefixedUlid, new() {
-        var pid = new T();
-        pid.Value = Ulid.NewUlid();
+        var pid = new T {
+            Value = Ulid.NewUlid()
+        };
         return pid;
     }
 

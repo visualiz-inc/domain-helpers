@@ -43,4 +43,3 @@ public static class UseDomainEntityExtension {
         public override bool GeneratesTemporaryValues { get; }
     }
 }
-

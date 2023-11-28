@@ -1,6 +1,6 @@
 using DomainHelpers.Blazor.Store.Core.History;
 
-namespace DomainHelpers.Blazor.Store.Core; 
+namespace DomainHelpers.Blazor.Store.Core;
 public abstract class MementoStore<TState, TMessage>(
     StateInitializer<TState> initializer,
     HistoryManager historyManager

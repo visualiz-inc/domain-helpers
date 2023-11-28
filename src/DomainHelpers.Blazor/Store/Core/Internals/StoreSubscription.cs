@@ -1,4 +1,4 @@
-namespace DomainHelpers.Blazor.Store.Core.Internals; 
+namespace DomainHelpers.Blazor.Store.Core.Internals;
 internal sealed class StoreSubscription : IDisposable {
     private bool _isDisposed;
 

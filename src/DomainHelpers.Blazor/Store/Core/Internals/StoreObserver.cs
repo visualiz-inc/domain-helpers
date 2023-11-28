@@ -1,4 +1,4 @@
-namespace DomainHelpers.Blazor.Store.Core.Internals; 
+namespace DomainHelpers.Blazor.Store.Core.Internals;
 internal class GeneralObserver<T>(Action<T> action) : IObserver<T> {
     readonly Action<T> _action = action;
 

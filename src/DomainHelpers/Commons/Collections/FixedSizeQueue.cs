@@ -1,4 +1,4 @@
-﻿namespace DomainHelpers.Commons.Collections; 
+﻿namespace DomainHelpers.Commons.Collections;
 public class FixedSizeQueue<T>(int size) {
     public int Size { get; private set; } = size;
 

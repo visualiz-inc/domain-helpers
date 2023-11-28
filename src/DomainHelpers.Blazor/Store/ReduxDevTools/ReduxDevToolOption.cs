@@ -1,4 +1,4 @@
-﻿namespace DomainHelpers.Blazor.Store.ReduxDevTools; 
+﻿namespace DomainHelpers.Blazor.Store.ReduxDevTools;
 
 /// <summary>
 /// Represents the configuration options for the Redux Developer Tool middleware.

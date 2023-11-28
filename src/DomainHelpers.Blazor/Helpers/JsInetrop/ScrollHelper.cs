@@ -1,6 +1,6 @@
 using Microsoft.JSInterop;
 
-namespace DomainHelpers.Blazor.Helpers.JsInetrop; 
+namespace DomainHelpers.Blazor.Helpers.JsInetrop;
 public class ScrollHelper(JSRuntime jsRuntime) {
     private const string FuncName = "ScrollTop";
     private const string Src = $$"""

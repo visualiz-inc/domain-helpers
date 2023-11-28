@@ -14,7 +14,7 @@ public static class OrderByExtensions {
         Expression<Func<T, U>> selector,
         IEnumerable<(TSortProperty, SortDirection)>? sorts
     ) where TSortProperty : Enum {
-        if(sorts?.Count() is null or 0) {
+        if (sorts?.Count() is null or 0) {
             return query;
         }
 

@@ -1,4 +1,4 @@
-﻿namespace DomainHelpers.Blazor.TransitionGroup.Internal; 
+﻿namespace DomainHelpers.Blazor.TransitionGroup.Internal;
 class TransitionGroupContext {
     public HashSet<object> AnimatingElements { get; } = [];
 

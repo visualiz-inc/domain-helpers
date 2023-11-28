@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.RenderTree;
 using System.Diagnostics;
 
-namespace DomainHelpers.Blazor.TransitionGroup; 
+namespace DomainHelpers.Blazor.TransitionGroup;
 
 /// <summary>
 /// The <TransitionGroup> component manages a set of transition components <Transition> in a list.

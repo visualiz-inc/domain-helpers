@@ -1,4 +1,4 @@
-﻿namespace DomainHelpers.Domain; 
+﻿namespace DomainHelpers.Domain;
 
 public interface IUnitOfWorkTransaction : IAsyncDisposable {
     Task CommitAsync(CancellationToken cancellationToken = default);

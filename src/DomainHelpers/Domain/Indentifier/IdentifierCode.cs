@@ -1,7 +1,7 @@
 ﻿using DomainHelpers.Commons;
 using DomainHelpers.Commons.Text;
 
-namespace DomainHelpers.Domain.Indentifier; 
+namespace DomainHelpers.Domain.Indentifier;
 public abstract class IdentifierCode {
     public IdentifierCode(string src) {
         Values = src switch {
@@ -31,7 +31,7 @@ public abstract class IdentifierCode {
     public string? this[int i] => i < Values.Length ? Values[i] : null;
 
     protected virtual bool Validate(string src) {
-        foreach (char c in src) {
+        foreach (var c in src) {
             if (Vocabs.Contains(c) is false) {
                 return false;
             }
@@ -41,9 +41,9 @@ public abstract class IdentifierCode {
     }
 
     protected virtual ImmutableArray<string> Parse(string source) {
-        string[] blocks = source.Split(Separator);
+        var blocks = source.Split(Separator);
 
-        foreach (int i in ..Vocabs.Length) {
+        foreach (var i in ..Vocabs.Length) {
             if (i >= blocks.Length
                 || blocks[i].Length != Vocabs[i]
                 || CheckVocabContains(blocks[i]) is false) {
@@ -55,7 +55,7 @@ public abstract class IdentifierCode {
     }
 
     private bool CheckVocabContains(string text) {
-        foreach (char c in text) {
+        foreach (var c in text) {
             if (Vocabs.Contains(c) is false) {
                 return false;
             }
