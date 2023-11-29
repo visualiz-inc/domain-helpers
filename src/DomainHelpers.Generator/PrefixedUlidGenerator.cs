@@ -99,4 +99,3 @@ public partial class PrefixedUlidGenerator : IIncrementalGenerator {
         context.AddSource($"{fullType}.g.cs", code);
     }
 }
-

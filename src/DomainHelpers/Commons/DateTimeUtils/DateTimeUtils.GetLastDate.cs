@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DomainHelpers.Commons.DateTimeUtils;
+﻿namespace DomainHelpers.Commons.DateTimeUtils;
 
 public static partial class DateTimeUtils {
     public static DateOnly GetLastDate(this DateTime date) {

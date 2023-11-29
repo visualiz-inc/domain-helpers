@@ -1,6 +1,5 @@
 ﻿using DomainHelpers.Commons;
 using DomainHelpers.Domain;
-using DomainHelpers.Domain.Indentifier;
 using Microsoft.EntityFrameworkCore;
 
 namespace DomainHelpers.EntityFrameworkCoreExtensions;

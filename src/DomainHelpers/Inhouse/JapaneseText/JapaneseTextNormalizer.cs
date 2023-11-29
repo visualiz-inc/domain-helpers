@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DomainHelpers.Inhouse.JapaneseText;
+﻿namespace DomainHelpers.Inhouse.JapaneseText;
 
 /// <summary>
 /// 半角全角置換用エクステンション.

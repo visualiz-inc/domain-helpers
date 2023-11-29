@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MoriFlocky.Domain.Products;
-using System;
 using System.Linq.Expressions;
 
 namespace DomainHelpers.EntityFrameworkCoreExtensions;

@@ -72,4 +72,3 @@ public partial class EntityHelperGenerator : IIncrementalGenerator {
         context.AddSource($"{fullType}.g.cs", code);
     }
 }
-

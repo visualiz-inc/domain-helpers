@@ -1,6 +1,4 @@
-﻿using DomainHelpers.Domain.Indentifier;
-
-namespace DomainHelpers.Domain;
+﻿namespace DomainHelpers.Domain;
 
 public abstract class Entity {
     public virtual ValueTask OnSaveAsync() => ValueTask.CompletedTask;
