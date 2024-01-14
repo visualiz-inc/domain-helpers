@@ -125,10 +125,20 @@ public class GeneralEntityRepository<TEntity, TId>(DbContext dbContext) : IRepos
     }
 
     /// <inheritdoc/>
-    public async Task<IReadOnlyList<TEntity>> FindByIdsAsync(IEnumerable<TId> ids, CancellationToken cancellationToken = default) {
+    public async Task<IReadOnlyList<TEntity>> FindByIdsAsync(IEnumerable<TId?> ids, CancellationToken cancellationToken = default) {
         try {
-            var items = await _dbContext.Set<TEntity>().Where(x => ids.Contains(x.Id)).ToArrayAsync();
-            return items;
+            var idNonNull = ids.Where(x => x is not null).ToArray();
+            var items = await _dbContext.Set<TEntity>().Where(x => idNonNull.Contains(x.Id)).ToArrayAsync();
+
+            var set = items.ToDictionary(x => x.Id);
+
+            return [
+                .. ids.Select(x => x is { }
+                    ? set.TryGetValue(x, out var i) 
+                        ? i : default 
+                    : default
+                )
+            ];
         }
         catch (Exception e) {
             throw GeneralException.WithException(e);
