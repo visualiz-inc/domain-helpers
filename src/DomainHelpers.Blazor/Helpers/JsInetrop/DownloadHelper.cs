@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DomainHelpers.Blazor.Helpers.JsInetrop;
 
-public class DownloadHelper (IJSRuntime jsRuntime){
+public class DownloadHelper(IJSRuntime jsRuntime) {
     bool _hasCalled = false;
     public async Task InitializeAsync() {
         var src = """
@@ -22,15 +22,16 @@ public class DownloadHelper (IJSRuntime jsRuntime){
         await jsRuntime.InvokeVoidAsync("eval", src);
     }
 
-    public async Task DownloadAsync(string text,string fileName,string mimeType = "text/csv") {
-        if(_hasCalled is false) {
+    public async Task DownloadAsync(string text, string fileName, string mimeType = "text/csv") {
+        if (_hasCalled is false) {
             _hasCalled = true;
             await InitializeAsync();
         }
 
-        var bytes = Encoding.UTF8.GetBytes(text);
-        var base64 = Convert.ToBase64String(bytes);
-        var dataUrl = $"data:{mimeType};base64,{base64}";
+        var bom = new byte[] { 0xEF, 0xBB, 0xBF };
+        var textBytes = Encoding.UTF8.GetBytes(text);
+        var base64 = Convert.ToBase64String([.. bom, .. textBytes]);
+        var dataUrl = $"data:{mimeType};charset=utf-8;base64,{base64}";
 
         await jsRuntime.InvokeVoidAsync("downloadFile", dataUrl, fileName);
     }
