@@ -2,7 +2,7 @@
 using System.Text.Json.Serialization;
 
 namespace DomainHelpers.Blazor.Store.ReduxDevTools.Internals;
-public record StoreAction {
+public readonly record struct StoreAction {
     [JsonPropertyName("action")]
     public required ActionItem Action { get; init; }
 
@@ -16,13 +16,13 @@ public record StoreAction {
     public required string Type { get; init; }
 }
 
-public record ActionItemFromDevtool(
+public readonly record struct ActionItemFromDevtool(
     string Type,
     JsonElement? Payload,
     string? Source
 );
 
-public record ActionItem(
+public record struct ActionItem(
     [property:JsonPropertyName("type")]
 string? Type,
     [property:JsonPropertyName("payload")]
@@ -33,7 +33,7 @@ string? DeclaredType,
 string StoreName
 );
 
-public record HistoryStateContextJson {
+public readonly record struct HistoryStateContextJson {
     [JsonPropertyName("actionsById")]
     public required Dictionary<int, StoreAction> ActionsById { get; init; }
 
@@ -59,7 +59,7 @@ public record HistoryStateContextJson {
     public bool IsPaused { get; init; }
 }
 
-public record ComputedState(
+public readonly record struct ComputedState(
     [property:JsonPropertyName("state")]
-object State
+    object State
 );

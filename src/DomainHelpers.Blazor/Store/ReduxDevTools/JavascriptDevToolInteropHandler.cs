@@ -67,7 +67,7 @@ internal sealed class JavaScriptDevToolInteropHandler : IDevToolInteropHandler, 
     }
 
     /// <inheritdoc/>
-    public async Task SendAsync(Command? command, HistoryStateContextJson context) {
+    public async Task SendAsync(object? command, HistoryStateContextJson context) {
         if (IsReduxDevToolInstalled is false) {
             return;
         }

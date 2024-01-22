@@ -39,7 +39,7 @@ internal class RemoteDevToolInteropHandler
         await _webSocketConnection.InitializeAsync(state);
     }
 
-    public async Task SendAsync(Command? command, HistoryStateContextJson context) {
+    public async Task SendAsync(object? command, HistoryStateContextJson context) {
         await _webSocketConnection.SendAsync(_instanceId, context);
     }
 

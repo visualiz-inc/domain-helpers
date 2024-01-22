@@ -6,7 +6,7 @@ public interface IDevToolInteropHandler {
 
     Task InitializeAsync(RootState state);
 
-    Task SendAsync(Command? command, HistoryStateContextJson context);
+    Task SendAsync(object? command, HistoryStateContextJson context);
 
     void HandleMessage(string json);
 }

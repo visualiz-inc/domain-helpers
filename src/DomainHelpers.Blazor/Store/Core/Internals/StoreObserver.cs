@@ -1,5 +1,5 @@
 namespace DomainHelpers.Blazor.Store.Core.Internals;
-internal class GeneralObserver<T>(Action<T> action) : IObserver<T> {
+internal readonly struct GeneralObserver<T>(Action<T> action) : IObserver<T> {
     readonly Action<T> _action = action;
 
     public void OnCompleted() {
@@ -15,11 +15,11 @@ internal class GeneralObserver<T>(Action<T> action) : IObserver<T> {
     }
 }
 
-internal class StoreObserver<TState, TCommand>(Action<IStateChangedEventArgs<TState, TCommand>> action)
-    : IObserver<IStateChangedEventArgs<TState, TCommand>>
+internal readonly struct StoreObserver<TState, TMessage>(Action<IStateChangedEventArgs<TState, TMessage>> action)
+    : IObserver<IStateChangedEventArgs<TState, TMessage>>
     where TState : class
-    where TCommand : Command {
-    readonly Action<IStateChangedEventArgs<TState, TCommand>> _action = action;
+    where TMessage : notnull {
+    readonly Action<IStateChangedEventArgs<TState, TMessage>> _action = action;
 
     public void OnCompleted() {
         throw new NotImplementedException();
@@ -29,12 +29,12 @@ internal class StoreObserver<TState, TCommand>(Action<IStateChangedEventArgs<TSt
         throw new NotImplementedException();
     }
 
-    public void OnNext(IStateChangedEventArgs<TState, TCommand> value) {
+    public void OnNext(IStateChangedEventArgs<TState, TMessage> value) {
         _action(value);
     }
 }
 
-internal class StoreProviderObserver(Action<RootStateChangedEventArgs> action) : IObserver<RootStateChangedEventArgs> {
+internal readonly struct StoreProviderObserver(Action<RootStateChangedEventArgs> action) : IObserver<RootStateChangedEventArgs> {
     readonly Action<RootStateChangedEventArgs> _action = action;
 
     public void OnCompleted() {

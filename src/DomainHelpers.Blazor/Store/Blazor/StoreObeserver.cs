@@ -1,7 +1,7 @@
 namespace DomainHelpers.Blazor.Store.Blazor;
-internal class StoreObserver(Action<IStateChangedEventArgs<object, Command>> action)
-        : IObserver<IStateChangedEventArgs<object, Command>> {
-    readonly Action<IStateChangedEventArgs<object, Command>> _action = action;
+internal class StoreObserver(Action<IStateChangedEventArgs<object, object>> action)
+        : IObserver<IStateChangedEventArgs<object, object>> {
+    readonly Action<IStateChangedEventArgs<object, object>> _action = action;
 
     public void OnCompleted() {
         throw new NotSupportedException();
@@ -11,7 +11,7 @@ internal class StoreObserver(Action<IStateChangedEventArgs<object, Command>> act
         throw new NotSupportedException();
     }
 
-    public void OnNext(IStateChangedEventArgs<object, Command> value) {
+    public void OnNext(IStateChangedEventArgs<object, object> value) {
         _action(value);
     }
 }

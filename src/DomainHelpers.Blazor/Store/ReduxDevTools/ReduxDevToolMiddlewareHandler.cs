@@ -47,7 +47,7 @@ public class ReduxDevToolMiddlewareHandler : MiddlewareHandler {
         });
     }
 
-    public override object? HandleStoreDispatch(object? state, Command command, NextStoreMiddlewareCallback next) {
+    public override object? HandleStoreDispatch(object? state, object? command, NextStoreMiddlewareCallback next) {
         if (_liftedStore.IsJumping) {
             return next(null, command);
         }
@@ -57,7 +57,7 @@ public class ReduxDevToolMiddlewareHandler : MiddlewareHandler {
 
     public override RootState? HandleProviderDispatch(
         RootState? state,
-        IStateChangedEventArgs<object, Command> e,
+        IStateChangedEventArgs<object, object> e,
         NextProviderMiddlewareCallback next
     ) {
         if (state is null) {
@@ -91,7 +91,7 @@ public class ReduxDevToolMiddlewareHandler : MiddlewareHandler {
         await _liftedStore.ResetAsync();
     }
 
-    public async Task SendAsync(IStateChangedEventArgs<object, Command> e, RootState rootState, string stackTrace) {
+    public async Task SendAsync(IStateChangedEventArgs<object, object> e, RootState rootState, string stackTrace) {
         if (e.StateChangeType is StateChangeType.ForceReplaced) {
             return;
         }
@@ -108,8 +108,8 @@ public class ReduxDevToolMiddlewareHandler : MiddlewareHandler {
                 });
 
             if (
-                command?.Payload is { } payload
-                && command?.Payload?.TryGetProperty("type", out var p) is true
+                command.Payload is { } payload
+                && command.Payload?.TryGetProperty("type", out var p) is true
                 && p.GetString() is { } val
             ) {
                 switch (val.ToString()) {

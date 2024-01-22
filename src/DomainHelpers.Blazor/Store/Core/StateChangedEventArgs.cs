@@ -1,37 +1,48 @@
 namespace DomainHelpers.Blazor.Store.Core;
+
 public enum StateChangeType {
-    Command,
     StateHasChanged,
     ForceReplaced,
     Restored,
 }
 
-public interface IStateChangedEventArgs<out TState, out TCommand>
+public interface IStateChangedEventArgs<out TMessage>
+    where TMessage : notnull {
+    DateTime Timestamp { get; }
+
+    TMessage? Message { get; }
+
+    object? Sender { get; }
+}
+
+record StateChangedEventArgs<TMessage> : IStateChangedEventArgs<TMessage>
+    where TMessage : notnull {
+    public StateChangeType StateChangeType { get; init; }
+
+    public required TMessage? Message { get; init; }
+
+    public DateTime Timestamp { get; } = DateTime.UtcNow;
+
+    public required object? Sender { get; init; }
+}
+
+public interface IStateChangedEventArgs<out TState, out TMessage> : IStateChangedEventArgs<TMessage>
     where TState : class
-    where TCommand : Command {
+    where TMessage : notnull {
 
     StateChangeType StateChangeType { get; }
-
-    TCommand? Command { get; }
-
 
     TState? LastState { get; }
 
     TState? State { get; }
-
-    DateTime Timestamp { get; }
-
-    IStore<TState, TCommand>? Sender { get; }
 }
 
-record StateChangedEventArgs<TState, TCommand> : IStateChangedEventArgs<TState, TCommand>
+record StateChangedEventArgs<TState, TMessage> : IStateChangedEventArgs<TState, TMessage>
     where TState : class
-    where TCommand : Command {
-    protected object? sender;
-
+    where TMessage : notnull {
     public StateChangeType StateChangeType { get; init; }
 
-    public required TCommand? Command { get; init; }
+    public required TMessage? Message { get; init; }
 
     public required TState? LastState { get; init; }
 
@@ -39,6 +50,5 @@ record StateChangedEventArgs<TState, TCommand> : IStateChangedEventArgs<TState, 
 
     public DateTime Timestamp { get; } = DateTime.UtcNow;
 
-    public IStore<TState, TCommand>? Sender { get; init; }
-
+    public object? Sender { get; init; }
 }

@@ -11,9 +11,9 @@
 /// <param name="initializer">The state initializer for creating the initial state.</param>
 /// <param name="command">The type of message that describes what state change has occurred.</param>
 public class Store<TState, TMessage>(TState initializer)
-    : AbstractStore<TState, Command.StateHasChanged<TState, TMessage>>(initializer, Reducer)
+    : AbstractStore<TState, TMessage>(initializer, Reducer)
     where TState : class
-    where TMessage : notnull {
+    where TMessage : class {
 
     /// <summary>
     /// Reduces the state using the provided StateHasChanged command.
@@ -21,8 +21,8 @@ public class Store<TState, TMessage>(TState initializer)
     /// <param name="state">The current state.</param>
     /// <param name="message">The StateHasChanged command to apply.</param>
     /// <returns>The new state after applying the command.</returns>
-    static TState Reducer(TState state, Command.StateHasChanged<TState, TMessage> message) {
-        return message.State;
+    static TState Reducer(TState state, TMessage? message) {
+        return state;
     }
 
     /// <summary>
@@ -32,8 +32,7 @@ public class Store<TState, TMessage>(TState initializer)
     /// <param name="message">The message that describes what state change has occurred.</param>
     public void Mutate(Func<TState, TState> reducer, TMessage? message = default) {
         var state = State;
-        var type = GetType();
-        ComputedAndApplyState(state, new Command.StateHasChanged<TState, TMessage>(reducer(state), message, type));
+        ComputedAndApplyState(reducer(state), message);
     }
 
     /// <summary>
@@ -42,7 +41,7 @@ public class Store<TState, TMessage>(TState initializer)
     /// <param name="state">The new state to apply.</param>
     /// <param name="message">The message that describes what state change has occurred.</param>
     public void Mutate(TState state, TMessage? command = default) {
-        ComputedAndApplyState(State, new Command.StateHasChanged<TState, TMessage>(state, command, GetType()));
+        ComputedAndApplyState(state, command);
     }
 }
 

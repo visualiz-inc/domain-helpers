@@ -1,5 +1,5 @@
 namespace DomainHelpers.Blazor.Store.Core;
 
-public delegate TState Reducer<TState, TCommand>(TState state, TCommand command)
+public delegate TState Reducer<TState,TMessage>(TState state, TMessage? command)
     where TState : class
-    where TCommand : Command;
+    where TMessage : notnull;

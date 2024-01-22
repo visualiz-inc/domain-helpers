@@ -1,7 +1,8 @@
 namespace DomainHelpers.Blazor.Store.Core;
-public delegate object NextStoreMiddlewareCallback(object? state, Command command);
 
-public delegate RootState NextProviderMiddlewareCallback(RootState? state, IStateChangedEventArgs<object, Command> e);
+public delegate object NextStoreMiddlewareCallback(object? state, object? command);
+
+public delegate RootState NextProviderMiddlewareCallback(RootState? state, IStateChangedEventArgs<object, object> e);
 
 public abstract class MiddlewareHandler : IDisposable {
     /// <summary>
@@ -18,13 +19,13 @@ public abstract class MiddlewareHandler : IDisposable {
 
     public virtual RootState? HandleProviderDispatch(
         RootState? state,
-        IStateChangedEventArgs<object, Command> e,
+        IStateChangedEventArgs<object, object> e,
         NextProviderMiddlewareCallback next
     ) => next(state, e);
 
     public virtual object? HandleStoreDispatch(
         object? state,
-        Command command,
+        object? command,
         NextStoreMiddlewareCallback next
     ) => next(state, command);
 

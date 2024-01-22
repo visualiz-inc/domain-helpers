@@ -23,7 +23,7 @@ public record MementoStoreContext<TState, TPayload> : IMementoStoreContext<TStat
 public abstract class AbstractMementoStore<TState, TMessage>
     : AbstractStore<TState, TMessage>
       where TState : class
-      where TMessage : Command {
+      where TMessage : class {
 
     protected AbstractMementoStore(
         StateInitializer<TState> initializer,

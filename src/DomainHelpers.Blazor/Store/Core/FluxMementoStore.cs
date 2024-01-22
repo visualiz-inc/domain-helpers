@@ -1,10 +1,10 @@
 using DomainHelpers.Blazor.Store.Core.History;
 
 namespace DomainHelpers.Blazor.Store.Core;
-public abstract class FluxMementoStore<TState, TCommand>
-    : AbstractMementoStore<TState, TCommand>
+public abstract class FluxMementoStore<TState, TMessage>
+    : AbstractMementoStore<TState, TMessage>
         where TState : class
-        where TCommand : Command, new() {
+        where TMessage : class {
     /// <summary>
     /// Initializes a new instance of the FluxStore class.
     /// </summary>
@@ -14,7 +14,7 @@ public abstract class FluxMementoStore<TState, TCommand>
     protected FluxMementoStore(
         StateInitializer<TState> initializer,
         HistoryManager historyManager,
-        Reducer<TState, TCommand> reducer
+        Reducer<TState, TMessage> reducer
     ) : base(initializer, historyManager, reducer) {
     }
 
@@ -22,7 +22,7 @@ public abstract class FluxMementoStore<TState, TCommand>
     /// Dispatches a command to the store, which updates the state accordingly.
     /// </summary>
     /// <param name="command">The command to dispatch.</param>
-    public void Dispatch(TCommand command) {
+    public void Dispatch(TMessage command) {
         ComputedAndApplyState(State, command);
     }
 
@@ -30,7 +30,7 @@ public abstract class FluxMementoStore<TState, TCommand>
     /// Dispatches a command to the store using a message loader function, which updates the state accordingly.
     /// </summary>
     /// <param name="messageLoader">The function to generate a command based on the current state.</param>
-    public void Dispatch(Func<TState, TCommand> messageLoader) {
+    public void Dispatch(Func<TState, TMessage> messageLoader) {
         ComputedAndApplyState(State, messageLoader(State));
     }
 }

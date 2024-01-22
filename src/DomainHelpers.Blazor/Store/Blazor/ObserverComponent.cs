@@ -11,7 +11,7 @@ public class ObserverComponent : ComponentBase, IDisposable {
     private bool _isDisposed;
     private IDisposable? _stateSubscription;
     private readonly IDisposable _invokerSubscription;
-    private readonly ThrottledExecutor<IStateChangedEventArgs<object, Command>> _stateHasChangedThrottler = new();
+    private readonly ThrottledExecutor<IStateChangedEventArgs<object>> _stateHasChangedThrottler = new();
     private IReadOnlyCollection<IDisposable>? _disposables;
     private IEnumerable<IWatcher>? _watchers;
 
@@ -54,7 +54,7 @@ public class ObserverComponent : ComponentBase, IDisposable {
             _stateHasChangedThrottler.LatencyMs = LatencyMs;
             _stateHasChangedThrottler.Invoke(e);
         });
-        _disposables = OnHandleDisposable().ToArray();
+        _disposables = [.. OnHandleDisposable()];
 
         _watchers = OnHandleWatchers(new());
     }

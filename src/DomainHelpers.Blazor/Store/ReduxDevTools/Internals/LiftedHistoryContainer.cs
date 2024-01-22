@@ -1,10 +1,11 @@
 ﻿using System.Data;
+using System.Reflection;
 using System.Text.Json;
 
 namespace DomainHelpers.Blazor.Store.ReduxDevTools.Internals;
 internal record HistoryState {
     public required int Id { get; set; }
-    public required Command? Command { get; init; }
+    public required IStateChangedEventArgs<object>? Command { get; init; }
     public required string StoreBagKey { get; init; }
     public required Dictionary<string, object> RootState { get; init; }
     public required string? Stacktrace { get; init; }
@@ -13,19 +14,24 @@ internal record HistoryState {
 
     public HistoryState AsInitial() {
         return this with {
-            Command = new Init(),
+            Command = new StateChangedEventArgs<Init> {
+                Message = new Init(),
+                StateChangeType = StateChangeType.ForceReplaced,
+                Sender = this,
+            },
+            StoreBagKey = "@@INIT",
             Id = 0,
             Timestamp = LiftedHistoryContainer.ToUnixTimeStamp(DateTime.UtcNow),
         };
     }
 }
 
-internal record Init : Command {
-    public override string Type => "@@INIT";
+internal record Init {
+    public string Type { get; } = "@@INIT";
 }
 
 internal sealed class LiftedHistoryContainer : IDisposable {
-    ImmutableArray<HistoryState> _histories = ImmutableArray.Create<HistoryState>();
+    ImmutableArray<HistoryState> _histories = [];
     int _currentCursorId = 0;
     int _sequence = 0;
     IDisposable? _subscription;
@@ -55,9 +61,13 @@ internal sealed class LiftedHistoryContainer : IDisposable {
     public async Task ResetAsync() {
         _currentCursorId = 0;
         _sequence = 0;
-        _histories = ImmutableArray.Create(
+        _histories = [
             new HistoryState() {
-                Command = new Init(),
+                Command = new StateChangedEventArgs<Init> {
+                    Message = new Init(),
+                    StateChangeType = StateChangeType.ForceReplaced,
+                    Sender = this,
+                },
                 StoreBagKey = "",
                 Id = 0,
                 RootState = _rootState.AsDictionary(),
@@ -65,7 +75,7 @@ internal sealed class LiftedHistoryContainer : IDisposable {
                 Timestamp = ToUnixTimeStamp(DateTime.UtcNow),
                 IsSkipped = false,
             }
-        );
+        ];
         await SyncWithPlugin();
         SetStatesToStore(CurrentHistory);
     }
@@ -75,7 +85,7 @@ internal sealed class LiftedHistoryContainer : IDisposable {
         await SyncWithPlugin();
     }
 
-    public async Task PushAsync(IStateChangedEventArgs<object, Command> e, RootState rootState, string stackTrace) {
+    public async Task PushAsync(IStateChangedEventArgs<object, object> e, RootState rootState, string stackTrace) {
         if (IsLocked) {
             await SyncWithPlugin();
             SetStatesToStore(CurrentHistory);
@@ -97,7 +107,7 @@ internal sealed class LiftedHistoryContainer : IDisposable {
         // add new history
         _sequence++;
         _histories = _histories.Add(new() {
-            Command = e.Command,
+            Command = e,
             StoreBagKey = e.Sender?.GetType().Name ?? "Error",
             Id = _sequence,
             RootState = rootState.AsDictionary(),
@@ -256,26 +266,26 @@ internal sealed class LiftedHistoryContainer : IDisposable {
     }
 
     public HistoryStateContextJson Serialize() {
+        var dic = new Dictionary<int, StoreAction>();
+        foreach(var h in _histories) {
+            dic.Add(
+                h.Id,
+                new() {
+                    Action = new(
+                        h.StoreBagKey,
+                        h.Command?.Message?.Payload(),
+                        h.Command?.Message?.GetFullTypeName(),
+                        h.StoreBagKey
+                    ),
+                    Type = "PERFORM_ACTION",
+                    Stack = h.Stacktrace,
+                    Timestamp = h.Timestamp,
+                }
+            );
+        }
+
         return new HistoryStateContextJson() {
-            ActionsById = _histories
-                  .Aggregate(
-                      ImmutableDictionary.Create<int, StoreAction>(),
-                      (x, y) => x.Add(
-                          y.Id,
-                          new() {
-                              Action = new(
-                                  y.Command?.Type,
-                                  y.Command?.Payload,
-                                  y.Command?.GetFullTypeName(),
-                                  y.StoreBagKey
-                              ),
-                              Type = "PERFORM_ACTION",
-                              Stack = y.Stacktrace,
-                              Timestamp = y.Timestamp,
-                          }
-                      )
-                  )
-                  .ToDictionary(x => x.Key, x => x.Value),
+            ActionsById = dic,
             ComputedStates = _histories
                   .Select(history => new ComputedState(history.RootState))
                   .ToArray(),
@@ -307,7 +317,11 @@ internal sealed class LiftedHistoryContainer : IDisposable {
                     StoreBagKey = action.Action.StoreName,
                     RootState = DeserializeStates(storeBag, computedStates[i].GetProperty("state")),
                     Id = id,
-                    Command = DeserializeCommand(action.Action.DeclaredType, action.Action.Payload),
+                    Command = new StateChangedEventArgs<object>() {
+                        Message = DeserializeCommand(action.Action.DeclaredType, action.Action.Payload),
+                        Sender = null,
+                        StateChangeType = StateChangeType.Restored,
+                    },
                     Stacktrace = action.Stack,
                     Timestamp = action.Timestamp,
                     IsSkipped = skipActions.Contains(id),
@@ -329,7 +343,7 @@ internal sealed class LiftedHistoryContainer : IDisposable {
         _subscription = null;
     }
 
-    static Dictionary<string, object> DeserializeStates(Dictionary<string, IStore<object, Command>> storeBag, JsonElement stateJson) {
+    static Dictionary<string, object> DeserializeStates(Dictionary<string, IStore<object, object>> storeBag, JsonElement stateJson) {
         var rootState = new Dictionary<string, object>();
         foreach (var key in stateJson.EnumerateObject()) {
             var storeState = key.Value.Deserialize(storeBag[key.Name].GetStateType())
@@ -341,7 +355,7 @@ internal sealed class LiftedHistoryContainer : IDisposable {
         return rootState;
     }
 
-    static Command DeserializeCommand(string? typeName, object? payload) {
+    static object DeserializeCommand(string? typeName, object? payload) {
         if (typeName is null) {
             return new Init();
         }
@@ -349,7 +363,7 @@ internal sealed class LiftedHistoryContainer : IDisposable {
         foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies()) {
             var type = assembly.GetType(typeName);
             if (type is not null) {
-                var command = (Command?)JsonSerializer.Deserialize(
+                var command = JsonSerializer.Deserialize(
                     JsonSerializer.Serialize(payload),
                     type
                 );
@@ -363,5 +377,40 @@ internal sealed class LiftedHistoryContainer : IDisposable {
 
     public static long ToUnixTimeStamp(DateTime dateTime) {
         return (long)(dateTime - new DateTime(1970, 1, 1)).TotalMilliseconds;
+    }
+}
+
+internal static class Ex {
+    /// <summary>
+    /// Gets the full type name of the command.
+    /// </summary>
+    /// <returns>The full type name as a string.</returns>
+    public static string? GetFullTypeName(this object obj) {
+        return obj.GetType().FullName;
+    }
+
+    /// <summary>
+    /// Gets the payload properties of the command as a dictionary.
+    /// </summary>
+    public static Dictionary<string, object> Payload(this object obj) => GetPayloads(obj);
+
+    /// <summary>
+    /// Gets the payload properties of the command as a collection of key-value pairs.
+    /// </summary>
+    /// <returns>An enumerable collection of key-value pairs representing the payload properties.</returns>
+    static Dictionary<string, object> GetPayloads(this object obj) {
+        var dic = new Dictionary<string, object>();
+        foreach (var property in obj.GetType().GetProperties(BindingFlags.Instance)) {
+            if (property.Name is nameof(Payload) or nameof(Type)) {
+                continue;
+            }
+
+            var value = property.GetValue(obj);
+            if (value is not null && dic.ContainsKey(property.Name)) {
+                dic.Add(property.Name, value);
+            }
+        }
+
+        return dic;
     }
 }

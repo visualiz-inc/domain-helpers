@@ -1,4 +1,6 @@
 ﻿using System.Collections.Concurrent;
+using System.Data;
+using System.Runtime.CompilerServices;
 
 namespace DomainHelpers.Blazor.Store.Core;
 
@@ -16,6 +18,7 @@ public class StateInitializer<TState> where TState : class {
     }
 }
 
+
 /// <summary>
 /// Represents an abstract store that maintains state and handles commands.
 /// Implements the IStore, IObservable, and IDisposable interfaces.
@@ -28,22 +31,24 @@ public class StateInitializer<TState> where TState : class {
 /// <param name="initializer">An initializer that creates an initial state.</param>
 /// <param name="reducer">A reducer that changes a store state.</param>
 /// <exception cref="ArgumentNullException">Thrown when <paramref name="initializer"/> returns null.</exception>
-public abstract class AbstractStore<TState, TCommand>(
+public abstract class AbstractStore<TState, TMessage>(
     StateInitializer<TState> initializer,
-    Reducer<TState, TCommand> reducer
-) : IStore<TState, TCommand>, IDisposable
-        where TState : class
-        where TCommand : Command {
-    readonly ConcurrentDictionary<Guid, IObserver<IStateChangedEventArgs<TState, TCommand>>> _observers = new();
-    readonly Reducer<TState, TCommand> _reducer = (state, command) => {
+    Reducer<TState, TMessage> reducer
+) : StateObservable<TMessage>,
+        IStore<TState, TMessage>,
+        IDisposable
+            where TState : class
+            where TMessage : class {
+
+    readonly Reducer<TState, TMessage> _reducer = (state, command) => {
         return reducer(state, command);
     };
 
     StoreProvider? _provider;
-    Func<TState, TCommand, object?>? _middlewareHandler;
+    Func<TState, TMessage?, object?>? _middlewareHandler;
     IReadOnlyCollection<IDisposable>? _disposables;
 
-    private Func<TState, TCommand, object?> MiddlewareHandler => _middlewareHandler ??= GetMiddlewareInvokeHandler();
+    private Func<TState, TMessage?, object?> MiddlewareHandler => _middlewareHandler ??= GetMiddlewareInvokeHandler();
 
     /// <summary>
     /// Gets the state initializer for the store.
@@ -68,7 +73,7 @@ public abstract class AbstractStore<TState, TCommand>(
     public StoreProvider Provider => _provider
         ?? throw new InvalidDataException("Store has not initialized.");
 
-    public Reducer<object, Command> ReducerHandle => (s, c) => _reducer.Invoke((TState)s, (TCommand)c);
+    public Reducer<object, object> ReducerHandle => (s, c) => _reducer.Invoke((TState)s, (TMessage?)c);
 
     /// <summary>
     /// Disposes the store and its resources.
@@ -86,7 +91,7 @@ public abstract class AbstractStore<TState, TCommand>(
     /// </summary>
     /// <returns>An enumerable of disposable resources.</returns>
     protected virtual IEnumerable<IDisposable> OnHandleDisposable() {
-        return Enumerable.Empty<IDisposable>();
+        return [];
     }
 
     /// <summary>
@@ -94,34 +99,21 @@ public abstract class AbstractStore<TState, TCommand>(
     /// </summary>
     /// <param name="observer">The observer to subscribe to the store.</param>
     /// <returns>An IDisposable instance that can be used to unsubscribe from the store.</returns>
-    public IDisposable Subscribe(IObserver<IStateChangedEventArgs<TState, TCommand>> observer) {
-        var id = Guid.NewGuid();
-        if (_observers.TryAdd(id, observer) is false) {
-            throw new InvalidOperationException("Failed to subscribe observer");
-        }
-
-        return new StoreSubscription(GetType().FullName ?? "AbstractStore.Subscribe", () => {
-            if (_observers.TryRemove(new(id, observer)) is false) {
-                throw new InvalidOperationException("Failed to unsubscribe observer");
+    public IDisposable Subscribe(IObserver<IStateChangedEventArgs<TState, TMessage>> observer) {
+        return base.Subscribe(new GeneralObserver<IStateChangedEventArgs<TMessage>>(e => {
+            if(e is IStateChangedEventArgs<TState, TMessage> e2) {
+               observer.OnNext(e2);
             }
-        });
+        }));
     }
-
-    //public IDisposable Subscribe(IObserver<IStateChangedEventArgs<TState, Command>> observer) {
-    //    var obs = new StoreObserver<TState,Command>(e => {
-    //        if (e is StateChangedEventArgs<TState, TCommand> o) {
-    //            observer.OnNext(o);
-    //        }
-    //    });
-    //}
 
     /// <summary>
     /// Subscribes to the store with the provided observer.
     /// </summary>
     /// <param name="observer">The observer to subscribe to the store.</param>
     /// <returns>An IDisposable instance that can be used to unsubscribe from the store.</returns>
-    public IDisposable Subscribe(Action<IStateChangedEventArgs<TState, TCommand>> observer) {
-        return Subscribe(new GeneralObserver<IStateChangedEventArgs<TState, TCommand>>(observer));
+    public IDisposable Subscribe(Action<IStateChangedEventArgs<TState, TMessage>> observer) {
+        return Subscribe(new GeneralObserver<IStateChangedEventArgs<TState, TMessage>>(observer));
     }
 
     /// <summary>
@@ -130,27 +122,12 @@ public abstract class AbstractStore<TState, TCommand>(
     /// <typeparam name="TStore">The store type to cast to.</typeparam>
     /// <returns>The current store cast to the specified store type.</returns>
     /// <exception cref="InvalidCastException">Thrown when the current store cannot be cast to the specified store type.</exception>
-    public TStore AsStore<TStore>() where TStore : IStore<TState, TCommand> {
+    public TStore AsStore<TStore>() where TStore : IStore<TState, TMessage> {
         if (this is TStore store) {
             return store;
         }
 
         throw new InvalidCastException();
-    }
-
-    /// <summary>
-    /// Notifies that the state of the Store has changed.
-    /// Usually, you don't need to call when you change the state
-    /// via <see cref="FluxStore{TState, TCommand}.Dispatch"/> or <see cref="Store{TState}.Mutate"/>.
-    /// </summary>
-    public void StateHasChanged() {
-        InvokeObserver(new StateChangedEventArgs<TState, TCommand>() {
-            State = State,
-            LastState = State,
-            Command = null,
-            StateChangeType = StateChangeType.StateHasChanged,
-            Sender = this,
-        });
     }
 
     /// <summary>
@@ -161,15 +138,7 @@ public abstract class AbstractStore<TState, TCommand>(
         return typeof(TState);
     }
 
-    /// <summary>
-    /// Gets the type of the command managed by the store.
-    /// </summary>
-    /// <returns>The type of the command.</returns>
-    public Type GetCommandType() {
-        return typeof(TCommand);
-    }
-
-    void IStore<TState, TCommand>.SetStateForceSilently(object state) {
+    void IStore<TState, TMessage>.SetStateForceSilently(object state) {
         if (state is not TState tState) {
             throw new InvalidDataException($"'{state.GetType().FullName}' is not compatible with '{typeof(TState).FullName}'.");
         }
@@ -177,15 +146,15 @@ public abstract class AbstractStore<TState, TCommand>(
         State = tState;
     }
 
-    void IStore<TState, TCommand>.SetStateForce(object state) {
+    void IStore<TState, TMessage>.SetStateForce(object state) {
         if (state is not TState tState) {
             throw new InvalidDataException($"'{state.GetType().FullName}' is not compatible with '{typeof(TState).FullName}'.");
         }
 
         var previous = State;
         State = tState;
-        InvokeObserver(new StateChangedEventArgs<TState, TCommand>() {
-            Command = null,
+        InvokeObserver(new StateChangedEventArgs<TState, TMessage>() {
+            Message = default,
             StateChangeType = StateChangeType.ForceReplaced,
             LastState = previous,
             Sender = this,
@@ -217,7 +186,7 @@ public abstract class AbstractStore<TState, TCommand>(
     /// <param name="state">The current state.</param>
     /// <param name="command">The command for mutating the state.</param>
     /// <returns>An overridden state.</returns>
-    protected virtual TState OnBeforeDispatch(TState state, TCommand command) {
+    protected virtual TState OnBeforeDispatch(TState state, TMessage? command) {
         return state;
     }
 
@@ -227,7 +196,7 @@ public abstract class AbstractStore<TState, TCommand>(
     /// <param name="state"> The computed state via _reducer.</param>
     /// <param name="command"> The command for mutating the state.</param>
     /// <returns> override state.</returns>
-    protected virtual TState OnAfterDispatch(TState state, TCommand command) {
+    protected virtual TState OnAfterDispatch(TState state, TMessage? command) {
         return state;
     }
 
@@ -238,21 +207,22 @@ public abstract class AbstractStore<TState, TCommand>(
 
     }
 
-    internal void ComputedAndApplyState(TState state, TCommand command) {
+    internal void ComputedAndApplyState(TState state, TMessage? command) {
         if (ComputeNewState() is ( { } s, { } e)) {
             State = s;
             InvokeObserver(e);
         }
 
-        (TState?, StateChangedEventArgs<TState, TCommand>?) ComputeNewState() {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        (TState?, StateChangedEventArgs<TState, TMessage>?) ComputeNewState() {
             var previous = state;
             var postState = OnBeforeDispatch(previous, command);
 
             if (MiddlewareHandler.Invoke(postState, command) is TState s) {
                 var newState = OnAfterDispatch(s, command);
-                var e = new StateChangedEventArgs<TState, TCommand> {
+                var e = new StateChangedEventArgs<TState, TMessage> {
                     LastState = previous,
-                    Command = command,
+                    Message = command,
                     State = newState,
                     Sender = this,
                 };
@@ -264,7 +234,7 @@ public abstract class AbstractStore<TState, TCommand>(
         }
     }
 
-    async Task IStore<TState, TCommand>.InitializeAsync(StoreProvider provider) {
+    async Task IStore<TState, TMessage>.InitializeAsync(StoreProvider provider) {
         _provider = provider;
         _disposables = OnHandleDisposable().ToArray();
         try {
@@ -278,30 +248,19 @@ public abstract class AbstractStore<TState, TCommand>(
         }
     }
 
-    internal Func<TState?, TCommand, object?> GetMiddlewareInvokeHandler() {
+    internal Func<TState?, TMessage?, object?> GetMiddlewareInvokeHandler() {
         // process middleware
-        var middleware = _provider?.GetAllMiddleware()
-            ?? Array.Empty<Middleware>();
+        var middleware = _provider?.GetAllMiddleware() ?? [];
         return middleware.Aggregate(
-            (object? s, Command m) => {
-                if ((s, m) is (TState ss, TCommand cc)) {
-                    return (object?)_reducer.Invoke(ss, cc);
+            (object? s, TMessage? m) => {
+                if (s is TState ss) {
+                    return (object?)_reducer.Invoke(ss, m);
                 }
 
                 return null;
             },
             (before, middleware) =>
-                (object? s, Command m) => middleware.Handler.HandleStoreDispatch(
-                    s,
-                    m,
-                    (_s, _m) => before(_s, m)
-                )
+                (object? s, TMessage? m) => middleware.Handler.HandleStoreDispatch(s, m, (_s, _m) => before(_s, m))
         );
-    }
-
-    internal void InvokeObserver(IStateChangedEventArgs<TState, TCommand> e) {
-        foreach (var (_, obs) in _observers) {
-            obs.OnNext(e);
-        }
     }
 }

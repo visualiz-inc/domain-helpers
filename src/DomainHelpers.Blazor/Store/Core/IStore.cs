@@ -1,11 +1,13 @@
 namespace DomainHelpers.Blazor.Store.Core;
+
 /// <summary>
 /// Represents a store interface that maintains state and handles commands.
 /// Implements the IObservable and IDisposable interfaces.
 /// </summary>
-public interface IStore<out TState, out TCommand> : IObservable<IStateChangedEventArgs<TState, TCommand>>, IDisposable
-    where TState : class
-    where TCommand : Command {
+public interface IStore<out TState, out TMessage>
+    : IObservable<IStateChangedEventArgs<TState, TMessage>>, IDisposable
+        where TState : class
+        where TMessage : class {
     /// <summary>
     /// Gets the current state of the store.
     /// </summary>
@@ -31,14 +33,9 @@ public interface IStore<out TState, out TCommand> : IObservable<IStateChangedEve
     internal void SetStateForce(object state);
 
     /// <summary>
-    /// Notifies observers that the state of the store has changed.
-    /// </summary>
-    void StateHasChanged();
-
-    /// <summary>
     /// Gets the reducer function that takes a state object and a command object and returns a new state object.
     /// </summary>
-    Reducer<object, Command> ReducerHandle { get; }
+    Reducer<object, object> ReducerHandle { get; }
 
     /// <summary>
     /// Gets the type of the state managed by the store.
@@ -46,9 +43,4 @@ public interface IStore<out TState, out TCommand> : IObservable<IStateChangedEve
     /// <returns>The Type of the state.</returns>
     Type GetStateType();
 
-    /// <summary>
-    /// Gets the type of the commands used to mutate the state.
-    /// </summary>
-    /// <returns>The Type of the commands.</returns>
-    Type GetCommandType();
 }
