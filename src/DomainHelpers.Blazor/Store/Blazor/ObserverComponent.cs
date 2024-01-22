@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Components;
+using System;
+using System.Collections.Concurrent;
 
 namespace DomainHelpers.Blazor.Store.Blazor;
 
@@ -10,10 +12,11 @@ namespace DomainHelpers.Blazor.Store.Blazor;
 public class ObserverComponent : ComponentBase, IDisposable {
     private bool _isDisposed;
     private IDisposable? _stateSubscription;
-    private readonly IDisposable _invokerSubscription;
-    private readonly ThrottledExecutor<IStateChangedEventArgs<object>> _stateHasChangedThrottler = new();
-    private IReadOnlyCollection<IDisposable>? _disposables;
-    private IEnumerable<IWatcher>? _watchers;
+
+    readonly IDisposable _invokerSubscription;
+    readonly ThrottledExecutor<IStateChangedEventArgs<object>> _stateHasChangedThrottler = new();
+    readonly ConcurrentBag<IDisposable> _disposables = new();
+    readonly ConcurrentBag<IWatcher> _watchers = new();
 
     /// <summary>
     /// Initializes a new instance of <see cref="ObserverComponent"/> class.
@@ -48,24 +51,46 @@ public class ObserverComponent : ComponentBase, IDisposable {
     /// <summary>
     /// Subscribes to state properties.
     /// </summary>
-    protected override void OnInitialized() {
+    protected sealed override void OnInitialized() {
         base.OnInitialized();
         _stateSubscription = StateSubscriber.Subscribe(this, e => {
             _stateHasChangedThrottler.LatencyMs = LatencyMs;
             _stateHasChangedThrottler.Invoke(e);
         });
-        _disposables = [.. OnHandleDisposable()];
 
-        _watchers = OnHandleWatchers(new());
+
+        var eventSubscriber = new EventSubscriber();
+        OnHandleEvents(eventSubscriber);
+        var (disposables, watchers) = eventSubscriber;
+
+        foreach (var d in (IEnumerable<IDisposable>)[.. OnHandleDisposable(), .. disposables]) {
+            _disposables.Add(d);
+        }
+
+        foreach (var w in (IEnumerable<IWatcher>)[.. OnHandleWatchers(new()), .. watchers]) {
+            _watchers.Add(w);
+        }
+
+        Initialized();
     }
 
     /// <inheritdoc />
-    protected override void OnAfterRender(bool firstRender) {
+    protected sealed override void OnAfterRender(bool firstRender) {
         base.OnAfterRender(firstRender);
 
-        foreach (var watcher in _watchers ?? []) {
+        foreach (var watcher in _watchers) {
             watcher.InvokeOnParameterSet();
         }
+
+        AfterRender(firstRender);
+    }
+
+    protected virtual void Initialized() {
+
+    }
+
+    protected virtual void AfterRender(bool firstRender) {
+
     }
 
     /// <summary>
@@ -92,12 +117,49 @@ public class ObserverComponent : ComponentBase, IDisposable {
     /// Handles IDisposable. Generated disposables will be Disposed when the component is destroyed
     /// </summary>
     /// <returns>The disposables.</returns>
+
+    [Obsolete]
     protected virtual IEnumerable<IDisposable> OnHandleDisposable() {
         return [];
     }
 
+    [Obsolete]
     protected virtual IEnumerable<IWatcher> OnHandleWatchers(WatcherFactory watcherFactory) {
         return [];
+    }
+
+    protected virtual void OnHandleEvents(IEventSubscriber eventSubscriber) {
+
+    }
+}
+
+public interface IEventSubscriber {
+    void AddDisposable(IDisposable disposable);
+
+    void Watch<T>(Action<T> action, Func<T> selector, bool once = false);
+}
+
+internal class EventSubscriber : IEventSubscriber {
+    private readonly ConcurrentBag<IDisposable> _disposables = new();
+    private readonly ConcurrentBag<IWatcher> _watchers = new();
+
+    public void Deconstruct(out ConcurrentBag<IDisposable> disposables, out ConcurrentBag<IWatcher> watchers) {
+        disposables = _disposables;
+        watchers = _watchers;
+    }
+
+    public void AddDisposable(IDisposable disposable) {
+        _disposables.Add(disposable);
+    }
+
+    public void AddDisposables(IEnumerable<IDisposable> disposables) {
+        foreach (var item in disposables) {
+            _disposables.Add(item);
+        }
+    }
+
+    public void Watch<T>(Action<T> action, Func<T> selector, bool once = false) {
+        _watchers.Add(new Watcher<T>(action, selector, once));
     }
 }
 
