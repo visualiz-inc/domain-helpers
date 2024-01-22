@@ -59,15 +59,12 @@ public class ObserverComponent : ComponentBase, IDisposable {
         });
 
 
-        var eventSubscriber = new EventSubscriber();
-        OnHandleEvents(eventSubscriber);
-        var (disposables, watchers) = eventSubscriber;
 
-        foreach (var d in (IEnumerable<IDisposable>)[.. OnHandleDisposable(), .. disposables]) {
+        foreach (var d in OnHandleDisposable()) {
             _disposables.Add(d);
         }
 
-        foreach (var w in (IEnumerable<IWatcher>)[.. OnHandleWatchers(new()), .. watchers]) {
+        foreach (var w in OnHandleWatchers(new())) {
             _watchers.Add(w);
         }
 
@@ -128,37 +125,21 @@ public class ObserverComponent : ComponentBase, IDisposable {
         return [];
     }
 
-    protected virtual void OnHandleEvents(IEventSubscriber eventSubscriber) {
+    protected virtual void OnHandleEvents( ) {
 
     }
-}
 
-public interface IEventSubscriber {
-    void AddDisposable(IDisposable disposable);
-
-    void Watch<T>(Action<T> action, Func<T> selector, bool once = false);
-}
-
-internal class EventSubscriber : IEventSubscriber {
-    private readonly ConcurrentBag<IDisposable> _disposables = new();
-    private readonly ConcurrentBag<IWatcher> _watchers = new();
-
-    public void Deconstruct(out ConcurrentBag<IDisposable> disposables, out ConcurrentBag<IWatcher> watchers) {
-        disposables = _disposables;
-        watchers = _watchers;
-    }
-
-    public void AddDisposable(IDisposable disposable) {
+    protected void AddDisposable(IDisposable disposable) {
         _disposables.Add(disposable);
     }
 
-    public void AddDisposables(IEnumerable<IDisposable> disposables) {
+    protected void AddDisposables(IEnumerable<IDisposable> disposables) {
         foreach (var item in disposables) {
             _disposables.Add(item);
         }
     }
 
-    public void Watch<T>(Action<T> action, Func<T> selector, bool once = false) {
+    protected void Watch<T>(Func<T> selector, Action<T> action, bool once = false) {
         _watchers.Add(new Watcher<T>(action, selector, once));
     }
 }
