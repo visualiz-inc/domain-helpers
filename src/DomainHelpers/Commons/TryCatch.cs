@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DomainHelpers.Commons;
+﻿namespace DomainHelpers.Commons;
 
 public class TryCatchUtils {
     public static T? Try<T>(Func<T> func) {
