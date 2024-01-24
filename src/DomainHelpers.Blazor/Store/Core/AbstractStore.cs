@@ -1,10 +1,12 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Data;
 using System.Runtime.CompilerServices;
+using static MudBlazor.CategoryTypes;
 
 namespace DomainHelpers.Blazor.Store.Core;
 
-public class StateInitializer<TState> where TState : class {
+public readonly struct StateInitializer<TState> where TState : class {
     readonly Func<TState> _initializer;
 
     public TState GetState() => _initializer();
@@ -16,8 +18,11 @@ public class StateInitializer<TState> where TState : class {
     public static implicit operator StateInitializer<TState>(TState state) {
         return new StateInitializer<TState>(() => state);
     }
-}
 
+    public static implicit operator StateInitializer<TState>(Func<TState> state) {
+        return new StateInitializer<TState>(state);
+    }
+}
 
 /// <summary>
 /// Represents an abstract store that maintains state and handles commands.
@@ -39,14 +44,11 @@ public abstract class AbstractStore<TState, TMessage>(
         IDisposable
             where TState : class
             where TMessage : class {
+    readonly Reducer<TState, TMessage> _reducer = (state, command) => reducer(state, command);
+    readonly ConcurrentBag<IDisposable> _disposables = [];
 
-    readonly Reducer<TState, TMessage> _reducer = (state, command) => {
-        return reducer(state, command);
-    };
-
-    StoreProvider? _provider;
-    Func<TState, TMessage?, object?>? _middlewareHandler;
-    IReadOnlyCollection<IDisposable>? _disposables;
+    private StoreProvider? _provider;
+    private Func<TState, TMessage?, object?>? _middlewareHandler;
 
     private Func<TState, TMessage?, object?> MiddlewareHandler => _middlewareHandler ??= GetMiddlewareInvokeHandler();
 
@@ -79,10 +81,11 @@ public abstract class AbstractStore<TState, TMessage>(
     /// Disposes the store and its resources.
     /// </summary>
     public void Dispose() {
-        foreach (var d in _disposables ?? []) {
+        foreach (var d in _disposables) {
             d.Dispose();
         }
 
+        _disposables.Clear();
         OnDisposed();
     }
 
@@ -90,6 +93,7 @@ public abstract class AbstractStore<TState, TMessage>(
     /// Handles disposable resources of the store.
     /// </summary>
     /// <returns>An enumerable of disposable resources.</returns>
+    [Obsolete]
     protected virtual IEnumerable<IDisposable> OnHandleDisposable() {
         return [];
     }
@@ -101,8 +105,8 @@ public abstract class AbstractStore<TState, TMessage>(
     /// <returns>An IDisposable instance that can be used to unsubscribe from the store.</returns>
     public IDisposable Subscribe(IObserver<IStateChangedEventArgs<TState, TMessage>> observer) {
         return base.Subscribe(new GeneralObserver<IStateChangedEventArgs<TMessage>>(e => {
-            if(e is IStateChangedEventArgs<TState, TMessage> e2) {
-               observer.OnNext(e2);
+            if (e is IStateChangedEventArgs<TState, TMessage> e2) {
+                observer.OnNext(e2);
             }
         }));
     }
@@ -162,13 +166,46 @@ public abstract class AbstractStore<TState, TMessage>(
         });
     }
 
-    /// <summary>
-    /// Called when the store is initialized asynchronously.
-    /// </summary>
-    /// <param name="provider">The store provider.</param>
-    /// <returns>A Task representing the initialization process.</returns>
-    internal protected virtual Task OnInitializedAsync(StoreProvider provider) {
-        return OnInitializedAsync();
+    internal void ComputedAndApplyState(TState state, TMessage? command) {
+        if (ComputeNewState() is ( { } s, { } e)) {
+            State = s;
+            InvokeObserver(e);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        (TState?, StateChangedEventArgs<TState, TMessage>?) ComputeNewState() {
+            var previous = state;
+            var postState = OnBeforeDispatch(previous, command);
+
+            if (MiddlewareHandler.Invoke(postState, command) is TState s) {
+                var newState = OnAfterDispatch(s, command);
+                var e = new StateChangedEventArgs<TState, TMessage> {
+                    LastState = previous,
+                    Message = command,
+                    State = newState,
+                    Sender = this,
+                };
+
+                return (newState, e);
+            }
+
+            return (null, null);
+        }
+    }
+    internal Func<TState?, TMessage?, object?> GetMiddlewareInvokeHandler() {
+        // process middleware
+        var middleware = _provider?.GetAllMiddleware() ?? [];
+        return middleware.Aggregate(
+            (object? s, TMessage? m) => {
+                if (s is TState ss) {
+                    return (object?)_reducer.Invoke(ss, m);
+                }
+
+                return null;
+            },
+            (before, middleware) =>
+                (object? s, TMessage? m) => middleware.Handler.HandleStoreDispatch(s, m, (_s, _m) => before(_s, m))
+        );
     }
 
     /// <summary>
@@ -176,8 +213,8 @@ public abstract class AbstractStore<TState, TMessage>(
     /// </summary>
     /// <param name="provider">The store provider.</param>
     /// <returns>A Task representing the initialization process.</returns>
-    protected virtual Task OnInitializedAsync() {
-        return Task.CompletedTask;
+    protected virtual ValueTask OnInitializedAsync() {
+        return ValueTask.CompletedTask;
     }
 
     /// <summary>
@@ -207,60 +244,28 @@ public abstract class AbstractStore<TState, TMessage>(
 
     }
 
-    internal void ComputedAndApplyState(TState state, TMessage? command) {
-        if (ComputeNewState() is ( { } s, { } e)) {
-            State = s;
-            InvokeObserver(e);
-        }
+    protected void RegisterDisposable(IDisposable disposable) {
+        _disposables.Add(disposable);
+    }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        (TState?, StateChangedEventArgs<TState, TMessage>?) ComputeNewState() {
-            var previous = state;
-            var postState = OnBeforeDispatch(previous, command);
-
-            if (MiddlewareHandler.Invoke(postState, command) is TState s) {
-                var newState = OnAfterDispatch(s, command);
-                var e = new StateChangedEventArgs<TState, TMessage> {
-                    LastState = previous,
-                    Message = command,
-                    State = newState,
-                    Sender = this,
-                };
-
-                return (newState, e);
-            }
-
-            return (null, null);
+    protected void RegisterDisposable(IEnumerable<IDisposable> disposable) {
+        foreach (var item in disposable) {
+            _disposables.Add(item);
         }
     }
 
-    async Task IStore<TState, TMessage>.InitializeAsync(StoreProvider provider) {
+    async ValueTask IStore<TState, TMessage>.InitializeAsync(StoreProvider provider) {
         _provider = provider;
-        _disposables = OnHandleDisposable().ToArray();
-        try {
-            await OnInitializedAsync(provider);
+
+        foreach (var item in OnHandleDisposable()) {
+            _disposables.Add(item);
         }
-        catch {
-            throw;
+
+        try {
+            await OnInitializedAsync();
         }
         finally {
             IsInitialized = true;
         }
-    }
-
-    internal Func<TState?, TMessage?, object?> GetMiddlewareInvokeHandler() {
-        // process middleware
-        var middleware = _provider?.GetAllMiddleware() ?? [];
-        return middleware.Aggregate(
-            (object? s, TMessage? m) => {
-                if (s is TState ss) {
-                    return (object?)_reducer.Invoke(ss, m);
-                }
-
-                return null;
-            },
-            (before, middleware) =>
-                (object? s, TMessage? m) => middleware.Handler.HandleStoreDispatch(s, m, (_s, _m) => before(_s, m))
-        );
     }
 }

@@ -44,7 +44,7 @@ public static class StoreConfigExtension {
     /// </summary>
     /// <param name="isScoped">If true, registers the stores with a scoped lifetime. Otherwise, registers with a singleton lifetime.</param>
     /// <returns>>The registered IServiceCollection instance from the IServiceCollection.</returns>
-    public static void ScanAssemblyAndAddStores(this IServiceCollection services, Assembly assembly, bool isScoped = true) {
+    public static IServiceCollection ScanAssemblyAndAddStores(this IServiceCollection services, Assembly assembly, bool isScoped = true) {
         var a = assembly.GetTypes().Where(t => t.IsAssignableTo(typeof(IStore<object, object>))).ToArray();
         foreach (var type in assembly.GetTypes().Where(t => t.IsAssignableTo(typeof(IStore<object, object>)))) {
             if (isScoped) {
@@ -56,6 +56,8 @@ public static class StoreConfigExtension {
                     .AddSingleton(p => (IStore<object, object>)p.GetRequiredService(type));
             }
         }
+
+        return services;
     }
 
     /// <summary>

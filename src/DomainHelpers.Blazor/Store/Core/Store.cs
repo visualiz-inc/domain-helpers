@@ -1,4 +1,5 @@
 ﻿namespace DomainHelpers.Blazor.Store.Core;
+
 /// <summary>
 /// Represents a store for managing state of type TState.
 /// You can observe the state by subscribing to the StateChanged event.

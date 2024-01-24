@@ -18,7 +18,7 @@ public interface IStore<out TState, out TMessage>
     /// </summary>
     /// <param name="provider">The StoreProvider used for initialization.</param>
     /// <returns>A Task representing the initialization process.</returns>
-    internal Task InitializeAsync(StoreProvider provider);
+    internal ValueTask InitializeAsync(StoreProvider provider);
 
     /// <summary>
     /// Silently sets the state without invoking state change observers.
