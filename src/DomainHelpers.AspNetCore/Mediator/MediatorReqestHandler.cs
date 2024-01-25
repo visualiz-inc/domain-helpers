@@ -74,7 +74,7 @@ internal class RemoteMediatrRequestHandler(
         catch (Exception ex) {
             _logger.LogError(ex, "Failed to handle request.");
             return ex switch {
-                GeneralException ge => Results.Problem(
+                Error ge => Results.Problem(
                     title: ge.DisplayMessage,
                     detail: ge.FluttenDisplayMessages().JoinStrings(","),
                     statusCode: StatusCodes.Status400BadRequest,

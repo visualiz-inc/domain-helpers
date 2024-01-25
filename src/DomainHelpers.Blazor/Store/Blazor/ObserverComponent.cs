@@ -11,22 +11,20 @@ namespace DomainHelpers.Blazor.Store.Blazor;
 /// </summary>
 public class ObserverComponent : ComponentBase, IDisposable {
     private bool _isDisposed;
-    private IDisposable? _stateSubscription;
 
-    readonly IDisposable _invokerSubscription;
     readonly ThrottledExecutor<IStateChangedEventArgs<object>> _stateHasChangedThrottler = new();
-    readonly ConcurrentBag<IDisposable> _disposables = new();
-    readonly ConcurrentBag<IWatcher> _watchers = new();
+    readonly ConcurrentBag<IDisposable> _disposables = [];
+    readonly ConcurrentBag<IWatcher> _watchers = [];
 
     /// <summary>
     /// Initializes a new instance of <see cref="ObserverComponent"/> class.
     /// </summary>
     public ObserverComponent() {
-        _invokerSubscription = _stateHasChangedThrottler.Subscribe(e => {
+        AddDisposable(_stateHasChangedThrottler.Subscribe(e => {
             if (_isDisposed is false) {
                 InvokeAsync(StateHasChanged);
             }
-        });
+        }));
     }
 
     /// <summary>
@@ -40,7 +38,7 @@ public class ObserverComponent : ComponentBase, IDisposable {
     /// <summary>
     /// Disposes of the component and unsubscribes from any state
     /// </summary>
-    public void Dispose() {
+    void IDisposable.Dispose() {
         if (_isDisposed is false) {
             Dispose(true);
             GC.SuppressFinalize(this);
@@ -53,20 +51,10 @@ public class ObserverComponent : ComponentBase, IDisposable {
     /// </summary>
     protected sealed override void OnInitialized() {
         base.OnInitialized();
-        _stateSubscription = StateSubscriber.Subscribe(this, e => {
+        AddDisposable(StateSubscriber.Subscribe(this, e => {
             _stateHasChangedThrottler.LatencyMs = LatencyMs;
             _stateHasChangedThrottler.Invoke(e);
-        });
-
-
-
-        foreach (var d in OnHandleDisposable()) {
-            _disposables.Add(d);
-        }
-
-        foreach (var w in OnHandleWatchers(new())) {
-            _watchers.Add(w);
-        }
+        }));
 
         Initialized();
     }
@@ -97,35 +85,14 @@ public class ObserverComponent : ComponentBase, IDisposable {
     /// <exception cref="NullReferenceException">Throws when you forgot to call base.InitializeAsync().</exception>
     protected virtual void Dispose(bool disposing) {
         if (disposing) {
-            if (_stateSubscription is null) {
-                throw new NullReferenceException("Have you forgotten to call base.InitializeAsync() in your component?");
-            }
-
-            _invokerSubscription.Dispose();
-            _stateSubscription.Dispose();
-
             foreach (var d in _disposables ?? []) {
                 d.Dispose();
             }
+            _disposables?.Clear();
         }
     }
 
-    /// <summary>
-    /// Handles IDisposable. Generated disposables will be Disposed when the component is destroyed
-    /// </summary>
-    /// <returns>The disposables.</returns>
-
-    [Obsolete]
-    protected virtual IEnumerable<IDisposable> OnHandleDisposable() {
-        return [];
-    }
-
-    [Obsolete]
-    protected virtual IEnumerable<IWatcher> OnHandleWatchers(WatcherFactory watcherFactory) {
-        return [];
-    }
-
-    protected virtual void OnHandleEvents( ) {
+    protected virtual void OnHandleEvents() {
 
     }
 
@@ -144,11 +111,6 @@ public class ObserverComponent : ComponentBase, IDisposable {
     }
 }
 
-public class WatcherFactory {
-    public IWatcher Watch<T>(Action<T> action, Func<T> selector, bool once = false) {
-        return new Watcher<T>(action, selector, once);
-    }
-}
 
 public interface IWatcher {
     internal void InvokeOnParameterSet();

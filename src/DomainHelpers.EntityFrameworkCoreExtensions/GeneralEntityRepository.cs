@@ -17,7 +17,7 @@ public class GeneralEntityRepository<TEntity, TId>(DbContext dbContext) : IRepos
             await SaveChangesAsync(cancellationToken);
         }
         catch (Exception e) {
-            throw GeneralException.WithException(e);
+            throw Error.WithException(e);
         }
     }
 
@@ -31,14 +31,14 @@ public class GeneralEntityRepository<TEntity, TId>(DbContext dbContext) : IRepos
             return entities;
         }
         catch (Exception e) {
-            throw GeneralException.WithException(e);
+            throw Error.WithException(e);
         }
     }
 
     /// <inheritdoc/>
     public virtual async Task SaveAsync(TEntity entity, CancellationToken cancellationToken = default) {
         if (entity.Id is null) {
-            throw GeneralException.WithMessage("Entity Id is null", null);
+            throw Error.WithMessage("Entity Id is null", null);
         }
 
         try {
@@ -46,7 +46,7 @@ public class GeneralEntityRepository<TEntity, TId>(DbContext dbContext) : IRepos
             await SaveChangesAsync(cancellationToken);
         }
         catch (Exception e) {
-            throw GeneralException.WithException(e);
+            throw Error.WithException(e);
         }
     }
 
@@ -58,7 +58,7 @@ public class GeneralEntityRepository<TEntity, TId>(DbContext dbContext) : IRepos
             await SaveChangesAsync(cancellationToken);
         }
         catch (Exception e) {
-            throw GeneralException.WithException(e);
+            throw Error.WithException(e);
         }
     }
 
@@ -70,7 +70,7 @@ public class GeneralEntityRepository<TEntity, TId>(DbContext dbContext) : IRepos
             await SaveChangesAsync(cancellationToken);
         }
         catch (Exception e) {
-            throw GeneralException.WithException(e);
+            throw Error.WithException(e);
         }
     }
 
@@ -84,7 +84,7 @@ public class GeneralEntityRepository<TEntity, TId>(DbContext dbContext) : IRepos
             }
         }
         catch (Exception e) {
-            throw GeneralException.WithException(e);
+            throw Error.WithException(e);
         }
     }
 
@@ -96,7 +96,7 @@ public class GeneralEntityRepository<TEntity, TId>(DbContext dbContext) : IRepos
             await SaveChangesAsync(cancellationToken);
         }
         catch (Exception e) {
-            throw GeneralException.WithException(e);
+            throw Error.WithException(e);
         }
     }
 
@@ -120,7 +120,7 @@ public class GeneralEntityRepository<TEntity, TId>(DbContext dbContext) : IRepos
             return null;
         }
         catch (Exception e) {
-            throw GeneralException.WithException(e);
+            throw Error.WithException(e);
         }
     }
 
@@ -141,7 +141,7 @@ public class GeneralEntityRepository<TEntity, TId>(DbContext dbContext) : IRepos
             ];
         }
         catch (Exception e) {
-            throw GeneralException.WithException(e);
+            throw Error.WithException(e);
         }
     }
 }

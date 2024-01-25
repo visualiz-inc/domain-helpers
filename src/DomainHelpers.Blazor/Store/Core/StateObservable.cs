@@ -3,12 +3,12 @@ using System.Collections.Concurrent;
 
 namespace DomainHelpers.Blazor.Store.Core;
 
-public interface IStateObservable<TMessage> : IObservable<IStateChangedEventArgs<TMessage>>
+public interface IStateObservable<out TMessage> :IObservable<IStateChangedEventArgs<TMessage>>
     where TMessage : notnull {
     /// <summary>
     /// Notifies observers that the state of the store has changed.
     /// </summary>
-    void StateHasChanged(TMessage? message = default);
+    void StateHasChanged();
 }
 
 public abstract class StateObservable<TMessage> : IStateObservable<TMessage>
@@ -21,6 +21,10 @@ public abstract class StateObservable<TMessage> : IStateObservable<TMessage>
             Sender = this,
             StateChangeType = StateChangeType.StateHasChanged,
         });
+    }
+
+    void IStateObservable<TMessage>.StateHasChanged() {
+        StateHasChanged(default);
     }
 
     public IDisposable Subscribe(IObserver<IStateChangedEventArgs<TMessage>> observer) {
@@ -59,6 +63,10 @@ public abstract record EditContext<TMessage> : IStateObservable<TMessage>
             Sender = this,
             StateChangeType = StateChangeType.StateHasChanged,
         });
+    }
+
+    void IStateObservable<TMessage>.StateHasChanged() {
+        StateHasChanged(default);
     }
 
     public IDisposable Subscribe(IObserver<IStateChangedEventArgs<TMessage>> observer) {

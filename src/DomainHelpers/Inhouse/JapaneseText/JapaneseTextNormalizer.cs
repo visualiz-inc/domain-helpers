@@ -86,6 +86,11 @@ public static class StringConvExtensions {
         { "ｬ", "ャ" },
         { "ｭ", "ュ" },
         { "ｮ", "ョ" },
+
+        // あほらしい
+        { "ｰ", "ー" },
+        { "-", "ー" },
+        { "－", "ー" } //　全角ハイフンをノバ脂肪に
     };
 
     public static Dictionary<string, string> DictHalfFullAlphabet { get; } = new() {
@@ -212,18 +217,18 @@ public static class StringConvExtensions {
         ReplacerNarrowToWide = [];
 
         foreach (var item in DictHalfFullNum) {
-            ReplacerNarrowToWide.Add(item.Key, item.Value);
-            ReplacerWideToNarrow.Add(item.Value.ToCharArray().First(), item.Key);
+            ReplacerNarrowToWide.TryAdd(item.Key, item.Value);
+            ReplacerWideToNarrow.TryAdd(item.Value.ToCharArray().First(), item.Key);
         }
 
         foreach (var item in DictHalfFullAlphabet) {
-            ReplacerNarrowToWide.Add(item.Key, item.Value);
-            ReplacerWideToNarrow.Add(item.Value.ToCharArray().First(), item.Key);
+            ReplacerNarrowToWide.TryAdd(item.Key, item.Value);
+            ReplacerWideToNarrow.TryAdd(item.Value.ToCharArray().First(), item.Key);
         }
 
         foreach (var item in DictHalfFullKana) {
-            ReplacerNarrowToWide.Add(item.Key, item.Value);
-            ReplacerWideToNarrow.Add(item.Value.ToCharArray().First(), item.Key);
+            ReplacerNarrowToWide.TryAdd(item.Key, item.Value);
+            ReplacerWideToNarrow.TryAdd(item.Value.ToCharArray().First(), item.Key);
         }
     }
 

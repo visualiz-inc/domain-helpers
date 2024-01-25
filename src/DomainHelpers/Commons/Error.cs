@@ -4,7 +4,7 @@ namespace DomainHelpers.Commons;
 /// <summary>
 ///  Represents the general error.
 /// </summary>
-public class GeneralException : Exception {
+public class Error : Exception {
     public string? DisplayMessage { get; }
 
     public PrefixedUlid EventId { get; }
@@ -12,14 +12,14 @@ public class GeneralException : Exception {
     public object? Payload { get; }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="GeneralException"/> class.
+    /// Initializes a new instance of the <see cref="Error"/> class.
     /// </summary>
     /// <param name="message"></param>
     /// <param name="displayMessage"></param>
     /// <param name="payload"></param>
     /// <param name="eventId"></param>
     /// <param name="exception"></param>
-    public GeneralException(
+    public Error(
         string message,
         string? displayMessage = null,
         object? payload = null,
@@ -39,11 +39,11 @@ public class GeneralException : Exception {
         Data.Add(nameof(Payload), payload);
     }
 
-    public static GeneralException WithDisplayMessage(
+    public static Error WithDisplayMessage(
         string displayMessage,
         PrefixedUlid? eventId = null
     ) {
-        return new GeneralException<object>(
+        return new Error<object>(
             null,
             displayMessage,
             displayMessage,
@@ -51,7 +51,7 @@ public class GeneralException : Exception {
         );
     }
 
-    public static GeneralException<TPayload> WithDisplayMessage<TPayload>(
+    public static Error<TPayload> WithDisplayMessage<TPayload>(
         TPayload exceptionType,
         string displayMessage,
         PrefixedUlid? eventId = null
@@ -64,13 +64,13 @@ public class GeneralException : Exception {
         );
     }
 
-    public static GeneralException WithMessage(
+    public static Error WithMessage(
         string message,
         string? displayMessage,
         Exception? ex = null,
         PrefixedUlid? eventId = null
     ) {
-        return new GeneralException<object>(
+        return new Error<object>(
             null,
             message,
             displayMessage,
@@ -79,7 +79,7 @@ public class GeneralException : Exception {
         );
     }
 
-    public static GeneralException<TPayload> WithMessage<TPayload>(
+    public static Error<TPayload> WithMessage<TPayload>(
         TPayload exceptionType,
         string message,
         string? displayMessage,
@@ -95,13 +95,13 @@ public class GeneralException : Exception {
         );
     }
 
-    public static GeneralException WithException(
+    public static Error WithException(
         Exception ex,
         string? message = null,
         string? displayMessage = null
     ) {
         return ex switch {
-            GeneralException ge => WithChild(
+            Error ge => WithChild(
                 ge,
                 ge.Message,
                 ge.DisplayMessage
@@ -114,14 +114,14 @@ public class GeneralException : Exception {
         };
     }
 
-    public static GeneralException WithChild(
-        GeneralException ex,
+    public static Error WithChild(
+        Error ex,
         string message,
         string? displayMessage = null
     ) {
         return (message, displayMessage) is (null, null)
             ? ex
-            : new GeneralException<object>(
+            : new Error<object>(
                 null,
                 message ?? ex.Message,
                 displayMessage,
@@ -130,9 +130,9 @@ public class GeneralException : Exception {
             );
     }
 
-    public static GeneralException<TPayload> WithChild<TPayload>(
+    public static Error<TPayload> WithChild<TPayload>(
         TPayload payload,
-        GeneralException ex,
+        Error ex,
         string message,
         string? displayMessage = null
     ) {
@@ -150,7 +150,7 @@ public class GeneralException : Exception {
 
         Exception? ex = this;
         while (ex is not null) {
-            if (ex is GeneralException { DisplayMessage: { } message and not "" }) {
+            if (ex is Error { DisplayMessage: { } message and not "" }) {
                 messages.Add(message);
             }
 
@@ -165,13 +165,13 @@ public class GeneralException : Exception {
 /// Represents the general error.
 /// </summary>
 /// <typeparam name="TError">Error info.</typeparam>
-public class GeneralException<TPayload>(
+public class Error<TPayload>(
     TPayload? payload,
     string message,
     string? displayMessage = null,
     PrefixedUlid? eventId = null,
     Exception? error = null
-) : GeneralException(
+) : Error(
     message,
     displayMessage,
     payload,

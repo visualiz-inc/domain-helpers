@@ -11,7 +11,7 @@ public class AppLogger(ILogger<AppLogger> logger, IJSRuntime jsRuntime) {
     private readonly IJSRuntime _jsRuntime = jsRuntime;
 
     public void LogError(Exception ex, string message, bool notify = true) {
-        if (ex is GeneralException ge) {
+        if (ex is Error ge) {
             LogError(ge, message);
         }
         else {
@@ -23,7 +23,7 @@ public class AppLogger(ILogger<AppLogger> logger, IJSRuntime jsRuntime) {
         }
     }
 
-    public void LogError(GeneralException ex, string? message = null) {
+    public void LogError(Error ex, string? message = null) {
         var details = new List<string>();
         var id = ex.EventId.ToString();
         var debugInfo = "";

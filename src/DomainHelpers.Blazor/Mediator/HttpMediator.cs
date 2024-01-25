@@ -38,7 +38,7 @@ public class HttpMediator(HttpClient httpClient) : IMediator {
     /// <exception cref="ApplicationException" >
     /// ハンドルされていないサーバーエラーが発生し，リクエストに失敗した際にスローされます．
     /// </exception>
-    /// <exception cref="GeneralException{FailedResponse}" >
+    /// <exception cref="Error{FailedResponse}" >
     /// Payload:<see cref="FailedResponse"/>
     /// リクエストに失敗した際にスローします．
     /// </exception>
@@ -78,7 +78,7 @@ public class HttpMediator(HttpClient httpClient) : IMediator {
             try {
                 var problem = await httpResponse.Content.ReadFromJsonAsync<FailedResponse?>();
                 if (problem is not null) {
-                    throw GeneralException.WithMessage(
+                    throw Error.WithMessage(
                         problem,
                         problem.Title,
                         problem.Title
@@ -87,9 +87,9 @@ public class HttpMediator(HttpClient httpClient) : IMediator {
 
                 throw new ApplicationException(httpResponse.ReasonPhrase);
             }
-            catch (GeneralException<FailedResponse> ex) {
+            catch (Error<FailedResponse> ex) {
                 throw new RequestException(
-                    ErrorType.Unknown,
+                    ErrorType.BadRequest,
                     httpResponse?.ReasonPhrase ?? "Request error",
                     "リクエストに失敗しました",
                     ex.Payload,
@@ -127,7 +127,7 @@ public class RequestException(
     string? displayMessage = null,
     FailedResponse? failedResponse = null,
     Exception? ex = null
-) : GeneralException<ErrorType>(
+) : Error<ErrorType>(
     type,
     message,
     displayMessage,

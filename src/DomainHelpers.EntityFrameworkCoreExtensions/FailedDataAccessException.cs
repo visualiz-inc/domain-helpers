@@ -8,7 +8,7 @@ namespace DomainHelpers.EntityFrameworkCoreExtensions;
 public class GeneralDataAccessFailedException(
     Exception exception,
     string? displayMessage = "データのアクセスに失敗しました。"
-    ) : GeneralException(
+    ) : Error(
     exception.Message,
     displayMessage,
     null,

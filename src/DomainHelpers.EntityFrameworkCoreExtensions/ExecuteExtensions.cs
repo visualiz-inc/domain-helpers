@@ -5,8 +5,7 @@ namespace DomainHelpers.EntityFrameworkCoreExtensions;
 
 public static class ExecuteExtensions {
     public static async Task<IReadOnlyList<T>> ExecuteQueryAsync<T>(this IQueryable<T> table) {
-        var arr = await table.ToArrayAsync();
-        return arr.ToImmutableArray();
+        return await table.ToArrayAsync();
     }
 
     public static async Task<IReadOnlyList<U>> ExecuteQueryAsync<T, U>(
@@ -14,7 +13,7 @@ public static class ExecuteExtensions {
         Func<T, U> func
     ) {
         var arr = await table.ToArrayAsync();
-        return arr.Select(func).ToImmutableArray();
+        return arr.Select(func).ToArray();
     }
 
     public static async Task<IReadOnlyList<U>> ExecuteQueryAsync<T, U>(
@@ -28,6 +27,6 @@ public static class ExecuteExtensions {
             results.Add(await func(item));
         }
 
-        return results.ToImmutableArray();
+        return results.ToArray();
     }
 }

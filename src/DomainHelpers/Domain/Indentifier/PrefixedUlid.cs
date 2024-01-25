@@ -19,7 +19,7 @@ public abstract record PrefixedUlid {
 
     private void CheckIfValidAndSetUlid(string id) {
         if (id.StartsWith(PrefixWithSeparator) is false) {
-            throw GeneralException.WithDisplayMessage($"Id must start with '{PrefixWithSeparator}'");
+            throw Error.WithDisplayMessage($"Id must start with '{PrefixWithSeparator}'");
         }
 
         var ulidText = id.Replace(PrefixWithSeparator, "");
@@ -27,7 +27,7 @@ public abstract record PrefixedUlid {
             Value = ulid;
         }
         else {
-            throw GeneralException.WithDisplayMessage($"Ulid '{ulidText}' is invalid ");
+            throw Error.WithDisplayMessage($"Ulid '{ulidText}' is invalid ");
         }
     }
 
