@@ -31,7 +31,7 @@ public class Error : Exception {
     ) {
         Payload = payload;
         DisplayMessage = displayMessage;
-        EventId = eventId ?? GeneralExceptionId.CreateNew();
+        EventId = eventId ?? ErrorId.CreateNew();
 
         // Additional data
         Data.Add(nameof(EventId), EventId.ToString());
@@ -47,7 +47,7 @@ public class Error : Exception {
             null,
             displayMessage,
             displayMessage,
-            eventId ?? GeneralExceptionId.CreateNew()
+            eventId ?? ErrorId.CreateNew()
         );
     }
 
@@ -60,7 +60,7 @@ public class Error : Exception {
             exceptionType,
             displayMessage,
             displayMessage,
-            eventId ?? GeneralExceptionId.CreateNew()
+            eventId ?? ErrorId.CreateNew()
         );
     }
 
@@ -74,7 +74,7 @@ public class Error : Exception {
             null,
             message,
             displayMessage,
-            eventId ?? GeneralExceptionId.CreateNew(),
+            eventId ?? ErrorId.CreateNew(),
             ex!
         );
     }
@@ -90,7 +90,7 @@ public class Error : Exception {
             exceptionType,
             message,
             displayMessage,
-            eventId ?? GeneralExceptionId.CreateNew(),
+            eventId ?? ErrorId.CreateNew(),
             ex!
         );
     }

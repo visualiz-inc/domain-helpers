@@ -1,8 +1,6 @@
 ﻿namespace DomainHelpers.Domain;
 
 public abstract class Entity {
-    public virtual ValueTask OnSaveAsync() => ValueTask.CompletedTask;
-
     public override bool Equals(object? obj) {
         if (obj == null || obj is not Entity)
             return false;

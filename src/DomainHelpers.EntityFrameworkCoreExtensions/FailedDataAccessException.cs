@@ -12,7 +12,7 @@ public class GeneralDataAccessFailedException(
     exception.Message,
     displayMessage,
     null,
-    GeneralExceptionId.CreateNew(),
+    ErrorId.CreateNew(),
     exception
     ) {
 }
