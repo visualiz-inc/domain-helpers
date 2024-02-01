@@ -17,6 +17,8 @@ public struct DataSize : IComparable<DataSize> {
 
     private double AsBits => Quantity * CountBitsInUnit(Unit);
 
+    public long AsByte => ConvertToUnit(DataUnit.Byte);
+
     /// <summary>
     /// <para>Create a new instance with the given quantity of the given unit of data.</para>
     /// <para><c>var kilobyte = new DataSize(1, DataUnit.Kilobyte);</c></para>

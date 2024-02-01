@@ -46,7 +46,7 @@ public static class StoreConfigExtension {
     /// <returns>>The registered IServiceCollection instance from the IServiceCollection.</returns>
     public static IServiceCollection ScanAssemblyAndAddStores(this IServiceCollection services, Assembly assembly, bool isScoped = true) {
         var a = assembly.GetTypes().Where(t => t.IsAssignableTo(typeof(IStore<object, object>))).ToArray();
-        foreach (var type in assembly.GetTypes().Where(t => t.IsAssignableTo(typeof(IStore<object, object>)))) {
+        foreach (var type in assembly.GetTypes().Where(t => t.IsAbstract is false).Where(t => t.IsAssignableTo(typeof(IStore<object, object>)))) {
             if (isScoped) {
                 services.AddScoped(type)
                     .AddScoped(p => (IStore<object, object>)p.GetRequiredService(type));
