@@ -54,4 +54,13 @@ public class TryCatchUtils {
             return whenCatch(ex);
         }
     }
+
+    public static async Task<T> Try<T, TException>(Func<Task<T>> func, Func<TException, ValueTask<T>> whenCatch) where TException : Exception {
+        try {
+            return await func();
+        }
+        catch (TException ex) {
+            return await whenCatch(ex);
+        }
+    }
 }

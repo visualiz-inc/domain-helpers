@@ -98,7 +98,7 @@ public struct PostalCode {
     /// </summary>
     /// <returns>期待する値。</returns>
     private string GetWithHphen() {
-        return ToString("N");
+        return ToString();
     }
 
     /// <summary>
@@ -106,7 +106,7 @@ public struct PostalCode {
     /// </summary>
     /// <returns></returns>
     public override string ToString() {
-        return ToString("D");
+        return ToString(PostalCodeFormat.WithHypen);
     }
 
     /// <summary>
@@ -121,11 +121,10 @@ public struct PostalCode {
     /// 書式設定。
     /// </param>
     /// <returns></returns>
-    public string ToString(string format) {
+    public string ToString(PostalCodeFormat format) {
         return format switch {
-            "D" or "d" => Left + "-" + Right,
-            "N" or "n" => Value,
-            _ => throw new ArgumentException("フォーマットの指定が間違っています", nameof(format))
+            PostalCodeFormat.WithHypen => Left + "-" + Right,
+            _ => Value,
         };
     }
 
@@ -147,4 +146,15 @@ public struct PostalCode {
             return false;
         }
     }
+}
+
+public enum PostalCodeFormat {
+    /// <summary>
+    /// 000-0000
+    /// </summary>
+    WithHypen,
+    /// <summary>
+    /// 0000000
+    /// </summary>
+    WithoutHypen
 }
