@@ -2,6 +2,7 @@
 using System.Text.Json.Serialization;
 
 namespace DomainHelpers.Blazor.Store.ReduxDevTools.Internals;
+
 public readonly record struct StoreAction {
     [JsonPropertyName("action")]
     public required ActionItem Action { get; init; }
